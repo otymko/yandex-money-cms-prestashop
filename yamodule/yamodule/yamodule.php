@@ -26,9 +26,8 @@ class yamodule extends PaymentModule
 		'PICKUP' => 902,
 		'PROCESSING' => 903,
 		'DELIVERED' => 904,
-		'UNPAID' => 905,
-		'RESERVATION_EXPIRED' => 906,
-		'RESERVATION' => 907
+		'MAKEORDER' => 905,
+		'UNPAID' => 906,
 	);
 
 	public static $ModuleRoutes = array(
@@ -133,9 +132,8 @@ class yamodule extends PaymentModule
 			'PICKUP' => array('name' => 'YA В пункте самовывоза', 'color' => '#cd98ff', 'id' => 902, 'paid' => true, 'shipped' => true, 'logable' => true, 'delivery' => true),
 			'PROCESSING' => array('name' => 'YA В процессе подготовки', 'color' => '#FF8C00', 'id' => 903, 'paid' => true, 'shipped' => false, 'logable' => false, 'delivery' => true),
 			'DELIVERED' => array('name' => 'YA Доставлен', 'color' => '#108510', 'id' => 904, 'paid' => true, 'shipped' => true, 'logable' => true, 'delivery' => true),
-			'UNPAID' => array('name' => 'YA Не оплачен', 'color' => '#ff1c30', 'id' => 905, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
-			'RESERVATION_EXPIRED' => array('name' => 'YA Резерв отменён', 'color' => '#ff2110', 'id' => 906, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
-			'RESERVATION' => array('name' => 'YA Резерв', 'color' => '#0f00d3', 'id' => 907, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
+			'MAKEORDER' => array('name' => 'YA Заказ создан', 'color' => '#000028', 'id' => 905, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
+			'UNPAID' => array('name' => 'YA Не оплачен', 'color' => '#ff1c30', 'id' => 906, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
 		);
 
 		foreach($status as $k => $s)
@@ -202,7 +200,6 @@ class yamodule extends PaymentModule
 	public function hookdisplayAdminOrder($params)
 	{
 		$ya_order_db = $this->getYandexOrderById((int)$params['id_order']);
-		$html = '';
 		if($ya_order_db['id_market_order'])
 		{
 			$partner = new Partner();
@@ -213,26 +210,26 @@ class yamodule extends PaymentModule
 				$array = array();
 				$state = $ya_order->order->status;
 				if($state == 'PROCESSING')
-					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['UNPAID']);
+					$array = array($this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 				elseif($state == 'DELIVERY')
 				{
-					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERY'], $this->status['UNPAID']);
+					$array = array($this->status['PROCESSING'], $this->status['DELIVERY'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 					if(!isset($ya_order->order->delivery->outletId) || $ya_order->order->delivery->outletId < 1 || $ya_order->order->delivery->outletId == '')
 						$array[] = $this->status['PICKUP'];
 				}
 				elseif($state == 'PICKUP')
-					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['PICKUP'], $this->status['DELIVERY'], $this->status['UNPAID']);
+					$array = array($this->status['PROCESSING'], $this->status['PICKUP'], $this->status['DELIVERY'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 				else
-					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['CANCELLED'], $this->status['DELIVERY'], $this->status['UNPAID']);
+					$array = array($this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['CANCELLED'], $this->status['DELIVERY'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 			}
 		}
 		else
 		{
-			$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['CANCELLED'], $this->status['DELIVERY'], $this->status['UNPAID']);
+			$array = array($this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['CANCELLED'], $this->status['DELIVERY'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 		}
 
 		$array = Tools::jsonEncode($array);
-		$html .= '<script type="text/javascript">
+		$html = '<script type="text/javascript">
 			$(document).ready(function(){
 				var array = JSON.parse("'.$array.'");
 				for(var k in array){
@@ -242,10 +239,9 @@ class yamodule extends PaymentModule
 				$("#id_order_state").trigger("chosen:updated");
 			});
 		</script>';
-		
-		// if(Configuration::get('YA_POKUPKI_SET_CHANGEC') && $ya_order->order->paymentType != 'PREPAID')
-				if(Configuration::get('YA_POKUPKI_SET_CHANGEC'))
-					$html .= $this->displayTabContent($params['id_order']);
+
+		if(Configuration::get('YA_POKUPKI_SET_CHANGEC'))
+			$html .= $this->displayTabContent($params['id_order']);
 		return $html;
 	}
 
@@ -278,8 +274,6 @@ class yamodule extends PaymentModule
 					$ret = $partner->sendOrder($status_flip[$new_os->id], $id_ya_order);
 				elseif($state == 'PICKUP' && ($new_os->id == $this->status['DELIVERED'] || $new_os->id == $this->status['CANCELLED']))
 					$ret = $partner->sendOrder($status_flip[$new_os->id], $id_ya_order);
-				elseif($state == 'RESERVATION_EXPIRED' || $state == 'RESERVATION')
-					return false;
 				else
 					return false;
 			}
@@ -664,6 +658,8 @@ class yamodule extends PaymentModule
 			else
 				$data['description'] = $product['description'];
 			$data['param'] = $params;
+			
+			$data['downloadable'] = 'true';
 		}
 		else
 		{

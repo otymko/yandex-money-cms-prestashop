@@ -79,10 +79,7 @@ class Partner {
 			$params['delivery']['price'] = $order->total_shipping;
 
 		if($type == 'PICKUP')
-		{
-			$params['delivery']['outletId'] = !empty($order_ya_db['outlet']) ? $order_ya_db['outlet'] : Configuration::get('YA_POKUPKI_PUNKT');
-			unset($params['delivery']['serviceName']);
-		}
+			$params['delivery']['outletId'] = $order_ya_db['outlet'];
 		else
 			$params['delivery']['address'] = array(
 					'country' => $country->name,
@@ -93,7 +90,6 @@ class Partner {
 					'recipient' => $address->firstname.' '.$address->lastname,
 					'phone' => $address->phone_mobile ? $address->phone_mobile : $address->phone,
 				);
-
 
 		return $data = $this->SendResponse('/campaigns/'.$this->number.'/orders/'.$order_ya_db['id_market_order'].'/delivery', array(), $params, 'PUT');
 	}
@@ -116,7 +112,6 @@ class Partner {
 		$cart->add();
 		$this->context->cookie->id_cart = (int)$cart->id;
 		$this->context->cookie->write();
-		$buyer = isset($data->$type->buyer) ? $data->$type->buyer : '';
 		$b = array();
 		if($add)
 		{
@@ -125,13 +120,12 @@ class Partner {
 			$subway = isset($delivery->subway) ? ' Метро: '.$delivery->subway : '';
 			$block = isset($delivery->block) ? ' Корпус/Строение: '.$delivery->block : '';
 			$floor = isset($delivery->floor) ? ' Этаж: '.$delivery->floor : '';
-			$house = isset($delivery->house) ? ' Дом: '.$delivery->house : '';
-			$address1 = $street.$subway.$block.$floor.$house;
+			$address1 = $street.$subway.$block.$floor;
 			$customer = new Customer(Configuration::get('YA_POKUPKI_CUSTOMER'));
 			$address = new Address();
-			$address->firstname = $customer->firstname;
-			$address->lastname = $customer->lastname;
-			$address->phone_mobile = isset($buyer->phone) ? $buyer->phone : 999999;
+			$address->firstname = 'test';
+			$address->lastname = 'test';
+			$address->phone_mobile = 999999;
 			$address->postcode = isset($delivery->postcode) ? $delivery->postcode : 000000;
 			$address->address1 = $address1;
 			$address->city = isset($delivery->city) ? $delivery->city : 'Город';
@@ -279,44 +273,10 @@ class Partner {
 		{
 			$status = $data->order->status;
 			if($status == 'CANCELLED')
-			{
-				$sub = $data->order->substatus;
-				if (isset($sub) && $sub == 'RESERVATION_EXPIRED')
-					$order->setCurrentState((int)$this->module->status['RESERVATION_EXPIRED']);
-				else
-					$order->setCurrentState((int)$this->module->status['CANCELLED']);
-			}
+				$order->setCurrentState((int)$this->module->status['CANCELLED']);
 
 			if($status == 'PROCESSING')
-			{
-				$buyer = isset($data->order->buyer) ? $data->order->buyer : '';
-				if (isset($buyer) && !empty($buyer))
-				{
-					$customer = new Customer();
-					$c = $customer->getByEmail($buyer->email);
-					if (isset($c->id) && $c->id > 0)
-						$customer = new Customer($c->id);
-					else
-					{
-						$customer->firstname = $buyer->firstName;
-						$customer->lastname = $buyer->lastName;
-						$customer->email = $buyer->email;
-						$customer->passwd = Tools::encrypt('OPC123456dmo');
-						$customer->newsletter = 1;
-						$customer->optin = 1;
-						$customer->active = 1;
-						$customer->save();
-					}
-					
-					$address = new Address($order->id_address_delivery);
-					$address->id_customer = $customer->id;
-					$order->id_customer = $customer->id;
-					$order->save();
-					$address->save();
-				}
-
 				$order->setCurrentState((int)$this->module->status['PROCESSING']);
-			}
 
 			if($status == 'UNPAID')
 				$order->setCurrentState($this->module->status['UNPAID']);
@@ -375,8 +335,7 @@ class Partner {
 				$order->name = $data->order->paymentType.'_'.$data->order->paymentMethod;
 				$order->module = 'yamodule';
 				$total = $this->context->cart->getOrderTotal(true, Cart::BOTH);
-				$buyer = isset($data->order->buyer) ? $data->order->buyer : '';
-				$res = $order->validateOrder((int)$cart->id, $this->module->status['RESERVATION'], $total, 'Yandex.Market.Order', $message, array(), null, false, ($cart->secure_key ? $cart->secure_key : ($customer->secure_key ? $customer->secure_key : false)));
+				$res = $order->validateOrder((int)$cart->id, $this->module->status['MAKEORDER'], $total, 'Yandex.Market.Order', $message, array(), null, false, ($cart->secure_key ? $cart->secure_key : ($customer->secure_key ? $customer->secure_key : false)));
 				if($res)
 				{
 					$values_to_insert = array(
