@@ -2,7 +2,7 @@
 	<div class="row">
 		<div class="col-xs-12 col-md-6">
 			<form target="" name="yamoney_form{$pt|escape:'html'}" action="https://{if !$DATA_ORG['YA_ORG_TYPE']}demo{/if}money.yandex.ru/eshop.xml" method="post">
-				<input type="hidden" name="cms_name" value="prestashop">
+				<input type="hidden" name="cms_name" value="ya_prestashop">
 				<input type="hidden" value="KASSA_{$id_cart|escape:'html'}" name="label" />
 				<input type="hidden" value="{$pt|escape:'html'}" name="paymentType" />
 				<input type="hidden" name="shopId" value="{$DATA_ORG['YA_ORG_SHOPID']|escape:'html'}"/>
