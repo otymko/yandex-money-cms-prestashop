@@ -1,4 +1,4 @@
-[YandexCMSModule - prestashop](https://github.com/aTastyCookie/yandex_prestashop)
+[YandexCMSModule - prestashop download](https://github.com/aTastyCookie/yandex_prestashop)
 =================
 
 We have compiled all the basic services of Yandex in one of the most convenient and quality service of your store, such as:
