@@ -21,9 +21,18 @@
 >
 > Скриншот настроек: http://i.imgur.com/NmUdOiS.jpg
 
-* [YandexMetrika](https://metrika.yandex.ru/) is a tool for measuring website traffic and analyzing visitor behavior and the effectiveness of advertising. Yandex.Metrica works just like any other web counter: a code embedded on the pages of your website registers and gathers detailed information about each user visit.\
-![yandexmatrika](http://i.imgur.com/pWtH7zA.jpg)
+##[Яндекс.Метрика](https://metrika.yandex.ru/) - бесплатный сервис, предназначенный для оценки посещаемости веб-сайтов, и анализа поведения пользователей.
+> Сохраняйте настройки, смотрите за поведением пользователей https://metrika.yandex.ru/list/
+>
+> Скриншот настроек: http://i.imgur.com/pWtH7zA.jpg
 
-* YandexMarket ([CPC](http://welcome.advertising.yandex.ru/market/), [CPA](http://help.yandex.ru/partnermarket/purchase/about.xml)) comparison service characteristics of the goods and their prices.
-![yandexmarket_cpc](http://i.imgur.com/FFwWlDf.jpg)
-![yandexmarket_cpa](http://i.imgur.com/T6bHlNr.jpg)
+
+##[Яндекс.Маркет](http://market.yandex.ru/) ([CPC](http://welcome.advertising.yandex.ru/market/), [CPA](http://help.yandex.ru/partnermarket/purchase/about.xml)) 
+###CPA или "Выгрузка в YML"
+> Модуль "Яндекс.Маркет CPC" предназначен для обеспечения интеграции с сервисом Яндекс.Маркет и позволяет загружать в маркет поисковой системы товары, размещённые в каталоге для их дальнейшей обработки и добавления в списки выдачи при запросе. Фактически, для сайта с размещённым интернет-магазином этот модуль является способом получения дополнительного числа посетителей, переходящих по ссылкам из сервиса Яндекс.Маркет. Или как говорится выгдузка в YML
+>
+> Скриншот настроек CPC: http://i.imgur.com/FFwWlDf.jpg
+###CPC или "Покупка на Маркете"
+> На сайте Яндекс.Маркета появилась корзина покупок и форма оформления заказа. Покупателю не обязательно переходить на сайт Интернет-магазина, а значит Интернет-магазину уже не обязательно иметь супердизайн. Достаточно экспортировать товары на Яндекс.Маркет, обеспечить интеграцию с "Покупкой на Маркете". Кроме того, возможность заказа на Яндекс.Маркете - это показатель доверия к магазину.
+>
+> Скриншот настроек CPA: http://i.imgur.com/T6bHlNr.jpg
