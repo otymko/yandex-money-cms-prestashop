@@ -2,7 +2,7 @@
 class yml
 {
 	var $from_charset = 'windows-1251';
-	var $shop = array('name' => '', 'company' => '', 'url' => '');
+	var $shop = array('name' => '', 'company' => '', 'url' => '', 'platform' => 'ya_prestashop');
 	var $currencies = array();
 	var $categories = array();
 	var $offers = array();

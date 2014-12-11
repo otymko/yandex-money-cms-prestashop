@@ -34,7 +34,7 @@ class yamodule extends PaymentModule
 	public static $ModuleRoutes = array(
 		'pokupki_cart' => array(
 			'controller' => 'pokupki',
-			'rule' =>  '{module}/{controller}/{type}',
+			'rule' =>  'yamodule/{controller}/{type}',
 			'keywords' => array(
 				'type'   => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'type'),
 				'module'  => array('regexp' => '[\w]+', 'param' => 'module'),
@@ -48,7 +48,7 @@ class yamodule extends PaymentModule
 		),
 		'pokupki_order' => array(
 			'controller' => 'pokupki',
-			'rule' =>  '{module}/{controller}/{type}/{func}',
+			'rule' =>  'yamodule/{controller}/{type}/{func}',
 			'keywords' => array(
 				'type'   => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'type'),
 				'func'   => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'func'),
@@ -62,16 +62,14 @@ class yamodule extends PaymentModule
 			)
 		),
 		'generate_price' => array(
-			'controller' => 'generate',
-			'rule' =>  '{module}/{controller}',
+			'controller' => null,
+			'rule' =>  'yamodule/{controller}',
 			'keywords' => array(
-				'module'  => array('regexp' => '[\w]+', 'param' => 'module'),
 				'controller' => array('regexp' => '[\w]+',  'param' => 'controller')
 			),
 			'params' => array(
 				'fc' => 'module',
 				'module' => 'yamodule',
-				'controller' => 'generate'
 			)
 		),
 	);
