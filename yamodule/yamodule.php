@@ -311,119 +311,124 @@ class yamodule extends PaymentModule
 	{
 		$partner = new Partner();
 		$order_ya_db = $this->getYandexOrderById($id);
-		$ya_order = $partner->getOrder($order_ya_db['id_market_order']);
-		$types = unserialize(Configuration::get('YA_POKUPKI_CARRIER_SERIALIZE'));
-		$state = $ya_order->order->status;
-		$st = array('PROCESSING', 'DELIVERY', 'PICKUP');
-		// Tools::d($ya_order);
-		if(!in_array($state, $st))
-			return false;
-
-		$this->context->controller->AddJS($this->_path.'js/back.js');
-		$this->context->controller->AddCss($this->_path.'css/back.css');
-		$order = new Order($id);
-		$cart = New Cart($order->id_cart);
-		$carriers = $cart->simulateCarriersOutput();
 		$html = '';
-		$i = 1;
-		$tmp[0]['id_carrier'] = 0;
-		$tmp[0]['name'] = $this->l('-- Please select carrier --');
-		$tmp2 = array();
-		foreach($carriers as $c)
+		if ($order_ya_db['id_market_order'])
 		{
-			$id = str_replace(',', '', Cart::desintifier($c['id_carrier']));
-			$type = isset($types[$id]) ? $types[$id] : 'POST';
-			if(!Configuration::get('YA_MARKET_SET_ROZNICA') && $type == 'PICKUP')
-				continue;
+			$ya_order = $partner->getOrder($order_ya_db['id_market_order']);
+			$types = unserialize(Configuration::get('YA_POKUPKI_CARRIER_SERIALIZE'));
+			$state = $ya_order->order->status;
+			$st = array('PROCESSING', 'DELIVERY', 'PICKUP');
+			// Tools::d($ya_order);
+			if(!in_array($state, $st))
+				return false;
 
-			$tmp[$i]['id_carrier'] = $id;
-			$tmp[$i]['name'] = $c['name'];
-			$i++;
+			$this->context->controller->AddJS($this->_path.'js/back.js');
+			$this->context->controller->AddCss($this->_path.'css/back.css');
+			$order = new Order($id);
+			$cart = New Cart($order->id_cart);
+			$carriers = $cart->simulateCarriersOutput();
+			$html = '';
+			$i = 1;
+			$tmp[0]['id_carrier'] = 0;
+			$tmp[0]['name'] = $this->l('-- Please select carrier --');
+			$tmp2 = array();
+			foreach($carriers as $c)
+			{
+				$id = str_replace(',', '', Cart::desintifier($c['id_carrier']));
+				$type = isset($types[$id]) ? $types[$id] : 'POST';
+				if(!Configuration::get('YA_MARKET_SET_ROZNICA') && $type == 'PICKUP')
+					continue;
+
+				$tmp[$i]['id_carrier'] = $id;
+				$tmp[$i]['name'] = $c['name'];
+				$i++;
+			}
+			
+			if(count($tmp) <= 1)
+				return false;
+
+			$fields_form = array(
+				'form' => array(
+					'legend' => array(
+						'title' => $this->l('Carrier Available'),
+						'icon' => 'icon-cogs'
+					),
+					'input' => array(
+						'sel_delivery' => array(
+							'type' => 'select',
+							'label' => $this->l('Carrier'),
+							'name' => 'new_carrier',
+							'required' => true,
+							'default_value' => 0,
+							'class' => 't sel_delivery',
+							'options' => array(
+								'query' => $tmp,
+								'id' => 'id_carrier',
+								'name' => 'name'
+							)
+						),
+						array(
+							'col' => 3,
+							'class' => 't pr_in',
+							'type' => 'text',
+							'desc' => $this->l('Carrier price tax incl.'),
+							'name' => 'price_incl',
+							'label' => $this->l('Price tax incl.'),
+						),
+						array(
+							'col' => 3,
+							'class' => 't pr_ex',
+							'type' => 'text',
+							'desc' => $this->l('Carrier price tax excl.'),
+							'name' => 'price_excl',
+							'label' => $this->l('Price tax excl.'),
+						),
+					),
+					'buttons' => array(
+						'updcarrier' => array(
+							'title' => $this->l('Update carrier'),
+							'name' => 'updcarrier',
+							'type' => 'button',
+							'class' => 'btn btn-default pull-right changec_submit',
+							'icon' => 'process-icon-refresh'
+						)
+					)
+				),
+			);
+
+			$helper = new HelperForm();
+			$helper->show_toolbar = false;
+			$helper->table = $this->table;
+			$helper->module = $this;
+			$helper->identifier = $this->identifier;
+			$helper->submit_action = 'submitChangeCarrier';
+			$helper->currentIndex = AdminController::$currentIndex.'?id_order='.$order->id.'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders');
+			$helper->token = Tools::getAdminTokenLite('AdminOrders');
+			$helper->tpl_vars['fields_value']['price_excl'] = '';
+			$helper->tpl_vars['fields_value']['price_incl'] = '';
+			$helper->tpl_vars['fields_value']['new_carrier'] = 0;
+			$path_module_http = __PS_BASE_URI__.'modules/yamodule/';
+			$html .= '<div class="change_carr">
+					<script type="text/javascript">
+						var notselc = "'.$this->l('Please select carrier').'";
+						var ajaxurl = "'.$path_module_http.'";
+						var idm = "'.(int)$this->context->employee->id.'";
+						var tkn = "'.Tools::getAdminTokenLite('AdminOrders').'";
+						var id_order = "'.(int)$order->id.'";
+					</script>
+					<div id="circularG">
+						<div id="circularG_1" class="circularG"></div>
+						<div id="circularG_2" class="circularG"></div>
+						<div id="circularG_3" class="circularG"></div>
+						<div id="circularG_4" class="circularG"></div>
+						<div id="circularG_5" class="circularG"></div>
+						<div id="circularG_6" class="circularG"></div>
+						<div id="circularG_7" class="circularG"></div>
+						<div id="circularG_8" class="circularG"></div>
+					</div>';
+			$html .= $helper->generateForm(array($fields_form)).'</div>';
 		}
 		
-		if(count($tmp) <= 1)
-			return false;
-
-		$fields_form = array(
-			'form' => array(
-				'legend' => array(
-					'title' => $this->l('Carrier Available'),
-					'icon' => 'icon-cogs'
-				),
-				'input' => array(
-					'sel_delivery' => array(
-						'type' => 'select',
-						'label' => $this->l('Carrier'),
-						'name' => 'new_carrier',
-						'required' => true,
-						'default_value' => 0,
-						'class' => 't sel_delivery',
-						'options' => array(
-							'query' => $tmp,
-							'id' => 'id_carrier',
-							'name' => 'name'
-						)
-					),
-					array(
-						'col' => 3,
-						'class' => 't pr_in',
-						'type' => 'text',
-						'desc' => $this->l('Carrier price tax incl.'),
-						'name' => 'price_incl',
-						'label' => $this->l('Price tax incl.'),
-					),
-					array(
-						'col' => 3,
-						'class' => 't pr_ex',
-						'type' => 'text',
-						'desc' => $this->l('Carrier price tax excl.'),
-						'name' => 'price_excl',
-						'label' => $this->l('Price tax excl.'),
-					),
-				),
-				'buttons' => array(
-					'updcarrier' => array(
-						'title' => $this->l('Update carrier'),
-						'name' => 'updcarrier',
-						'type' => 'button',
-						'class' => 'btn btn-default pull-right changec_submit',
-						'icon' => 'process-icon-refresh'
-					)
-				)
-			),
-		);
-
-		$helper = new HelperForm();
-		$helper->show_toolbar = false;
-		$helper->table = $this->table;
-		$helper->module = $this;
-		$helper->identifier = $this->identifier;
-		$helper->submit_action = 'submitChangeCarrier';
-		$helper->currentIndex = AdminController::$currentIndex.'?id_order='.$order->id.'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders');
-		$helper->token = Tools::getAdminTokenLite('AdminOrders');
-		$helper->tpl_vars['fields_value']['price_excl'] = '';
-		$helper->tpl_vars['fields_value']['price_incl'] = '';
-		$helper->tpl_vars['fields_value']['new_carrier'] = 0;
-		$path_module_http = __PS_BASE_URI__.'modules/yamodule/';
-		$html .= '<div class="change_carr">
-				<script type="text/javascript">
-					var notselc = "'.$this->l('Please select carrier').'";
-					var ajaxurl = "'.$path_module_http.'";
-					var idm = "'.(int)$this->context->employee->id.'";
-					var tkn = "'.Tools::getAdminTokenLite('AdminOrders').'";
-					var id_order = "'.(int)$order->id.'";
-				</script>
-				<div id="circularG">
-					<div id="circularG_1" class="circularG"></div>
-					<div id="circularG_2" class="circularG"></div>
-					<div id="circularG_3" class="circularG"></div>
-					<div id="circularG_4" class="circularG"></div>
-					<div id="circularG_5" class="circularG"></div>
-					<div id="circularG_6" class="circularG"></div>
-					<div id="circularG_7" class="circularG"></div>
-					<div id="circularG_8" class="circularG"></div>
-				</div>';
-		$html .= $helper->generateForm(array($fields_form)).'</div>';
 		return $html;
 	}
 
