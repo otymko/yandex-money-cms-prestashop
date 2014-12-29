@@ -1,5 +1,5 @@
-[YandexCMSModulePrestashop - СКАЧАТЬ](https://github.com/aTastyCookie/yandex_prestashop/archive/master.zip)
-=================
+#[YandexCMSModule Prestashop](https://github.com/aTastyCookie/yandex_prestashop/archive/master.zip) 
+##[ИНСТРУКЦИЯ ПО УСТАНОВКЕ](https://github.com/aTastyCookie/yandex_prestashop/blob/master/HOWTO-INSTALL.md) /  [INSTALLATION MANUAL](https://github.com/aTastyCookie/yandex_prestashop/blob/master/HOWTO-INSTALL.md)
 
 Мы собрали все основные сервисы Яндекса в одном месте,чтобы вам было удобно работать со своим сайтом, сделанном на CMS Prestashop. Подробнее о возможностях этого модуля:
 
