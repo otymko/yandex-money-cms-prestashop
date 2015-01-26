@@ -70,7 +70,7 @@ class hforms {
 					),
 					array(
 						'type' => 'checkbox',
-						'label' => $this->l('Постоплата'),
+						'label' => $this->l('Предоплата'),
 						'name' => 'YA_POKUPKI_POSTOPLATA',
 						'values' => array(
 							'query' => array(

@@ -23,9 +23,7 @@ class yamodulesuccessModuleFrontController extends ModuleFrontController
 			else
 			{
 				$cart = new Cart((int)$ordernumber);
-				$qty = $cart->nbProducts();
-				$this->context->smarty->assign('nbProducts', $qty);
-				if (!Validate::isLoadedObject($cart) || $qty < 1)
+				if (!Validate::isLoadedObject($cart))
 				{
 					if($log_on)
 						$this->module->log_save('yakassa_success: Error '.$this->module->l('Shopping cart does not exist'));

