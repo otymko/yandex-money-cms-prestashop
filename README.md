@@ -11,7 +11,7 @@
 >* **Баланс телефона** - Билайн, МегаФон и МТС
 >* **Интернет банкинг** - Альфа-Клик и Сбербанк Онлайн
 >
-> Скриншот настроек: https://github.com/yandex-money/yandex-money-cms-prestashop/1.jpg
+> Скриншот настроек: https://raw.githubusercontent.com/yandex-money/yandex-money-cms-prestashop/master/1.jpg
 
 ##[Яндекс.Деньги](https://money.yandex.ru/) - начните получать деньги прямо сейчас — от любых пользователей рунета.
 > Переводы будут мгновенно зачисляться на ваш счет в Яндекс.Деньгах.
@@ -19,24 +19,24 @@
 >* **Банковские карты** -  Visa (включая Electron), MasterCard и Maestro любого банка мира
 >* **Электронные деньги** - Яндекс.Деньги
 >
-> Скриншот настроек: https://github.com/yandex-money/yandex-money-cms-prestashop/2.jpg
+> Скриншот настроек: https://raw.githubusercontent.com/yandex-money/yandex-money-cms-prestashop/master/2.jpg
 
 ##[Яндекс.Метрика](https://metrika.yandex.ru/) - бесплатный сервис, предназначенный для оценки посещаемости веб-сайтов, и анализа поведения пользователей.
 > Метрика позволяет находить «узкие места» сайта и оптимизировать их, чтобы увеличивать число покупателей: https://metrika.yandex.ru/list/
 >
-> Скриншот настроек: https://github.com/yandex-money/yandex-money-cms-prestashop/3.jpg
+> Скриншот настроек: https://raw.githubusercontent.com/yandex-money/yandex-money-cms-prestashop/master/3.jpg
 
 ##[Яндекс.Маркет](http://market.yandex.ru/) ([CPC](http://welcome.advertising.yandex.ru/market/), [CPA](http://help.yandex.ru/partnermarket/purchase/about.xml)) 
 ###Модуль CPA – программа "Покупка на Маркете"
 > Модуль позволяет участвовать в программе «Покупка на Маркете». Заказать товары из магазинов, подключённых к программе, можно прямо на Маркете — не переходя на сайт продавца. «Покупка на Маркете» сокращает путь пользователя до покупки и повышает доверие к магазину. 
 > 
-> Скриншот настроек CPA: https://github.com/yandex-money/yandex-money-cms-prestashop/4.jpg
+> Скриншот настроек CPA: https://raw.githubusercontent.com/yandex-money/yandex-money-cms-prestashop/master/4.jpg
 
 
 ###Модуль СРС – размещение на Маркете 
 > Модуль предназначен для размещения товарных предложений на Яндекс.Маркете. Так магазины могут привлекать на свой сайт больше посетителей, действительно заинтересованных в покупке. YML-формат обеспечивает максимально корректную передачу данных о товарах в Маркет.
 > 
-> Скриншот настроек CPC: https://github.com/yandex-money/yandex-money-cms-prestashop/5.jpg
+> Скриншот настроек CPC: https://raw.githubusercontent.com/yandex-money/yandex-money-cms-prestashop/master/5.jpg
 
 
 ##Нашли ошибку или у вас есть предложение по улучшению модуля?
