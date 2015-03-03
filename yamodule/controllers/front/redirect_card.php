@@ -85,7 +85,13 @@ class yamoduleredirect_cardModuleFrontController extends ModuleFrontController
 							sleep(1);
 						}
 					}while ($result->status == "in_progress");
-					if($result->status == 'ext_auth_required')
+
+					if($result->status == 'success')
+					{
+						$this->updateStatus($res);
+						$this->error = false;
+					}
+					elseif($result->status == 'ext_auth_required')
 					{
 						$url = sprintf("%s?%s", $result->acs_uri, http_build_query($result->acs_params));
 						if($this->log_on)
@@ -105,6 +111,18 @@ class yamoduleredirect_cardModuleFrontController extends ModuleFrontController
 		}
     }
 	
+	public function updateStatus(&$resp)
+	{
+		$this->log_on = Configuration::get('YA_P2P_LOGGING_ON');
+		if ($resp->status == 'success')
+		{
+			$this->module->validateOrder((int)$this->context->cart->id, Configuration::get('PS_OS_PAYMENT'), $this->context->cart->getOrderTotal(true, Cart::BOTH), 'Банковская карта', NULL, array(), NULL, false, $this->context->cart->secure_key);
+			if($this->log_on)
+				$this->module->log_save('payment_card: #'.$this->module->currentOrder.' '.$this->module->l('Order success'));
+			Tools::redirect($this->context->link->getPageLink('order-confirmation').'&id_cart='.$this->context->cart->id.'&id_module='.$this->module->id.'&id_order='.$this->module->currentOrder.'&key='.$this->context->cart->secure_key);
+		}
+	}
+
     public function initContent()
     {
         parent::initContent();
