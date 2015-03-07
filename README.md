@@ -1,4 +1,4 @@
-#[YandexCMSModule Prestashop](https://github.com/yandex-money/yandex-money-cms-prestashop/raw/master/yamodule.zip) 
+#[Y.CMS Prestashop](https://github.com/yandex-money/yandex-money-cms-prestashop/raw/master/yamodule.zip) 
 ##[ИНСТРУКЦИЯ ПО УСТАНОВКЕ](https://github.com/yandex-money/yandex-money-cms-prestashop/blob/master/HOWTO-INSTALL.md) /  [INSTALLATION MANUAL](https://github.com/yandex-money/yandex-money-cms-prestashop/blob/master/HOWTO-INSTALL.md)
 
 Мы собрали все основные сервисы Яндекса в одном месте,чтобы вам было удобно работать со своим сайтом, сделанном на CMS Prestashop. Подробнее о возможностях этого модуля:
