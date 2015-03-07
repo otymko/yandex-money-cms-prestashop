@@ -1,4 +1,4 @@
-[YandexCMSModule - prestashop download](https://github.com/yandex-money/yandex-money-cms-prestashop/raw/master/yamodule.zip)
+[Y.CMS Prestashop](https://github.com/yandex-money/yandex-money-cms-prestashop/raw/master/yamodule.zip)
 =================
 
 We have compiled all the basic services of Yandex in one of the most convenient and quality service of your store, such as:
