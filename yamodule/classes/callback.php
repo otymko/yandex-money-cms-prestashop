@@ -153,6 +153,8 @@ class metrika {
 		$curlOpt = array(
 			CURLOPT_HEADER => 0,
             CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_SSL_VERIFYHOST => 0,
             CURLINFO_HEADER_OUT => 1,
 			CURLOPT_USERAGENT => 'php-market',
         );
