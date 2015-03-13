@@ -29,7 +29,6 @@ class YamodulepokupkiModuleFrontController extends ModuleFrontController
 		else
 		{
 			$json = file_get_contents("php://input");
-			//$json = '{"cart":{"currency":"RUR","items":[{"feedId":383880,"offerId":"34c265","feedCategoryId":"3","offerName":"Dr.Web Антивирус","count":1}],"delivery":{"region":{"id":13,"name":"Тамбов","type":"CITY","parent":{"id":10802,"name":"Тамбовская область","type":"SUBJECT_FEDERATION","parent":{"id":3,"name":"Центральный федеральный округ","type":"COUNTRY_DISTRICT","parent":{"id":225,"name":"Россия","type":"COUNTRY"}}}}}}}';
 			$this->module->log_save('pokupki'.$json);
 			if (!$json){
 				header('HTTP/1.0 404 Not Found');

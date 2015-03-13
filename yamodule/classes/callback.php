@@ -151,15 +151,12 @@ class metrika {
 	
 	public static function post($url, $headers, $params, $type){
 		$curlOpt = array(
+			CURLOPT_HEADER => 0,
             CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_FOLLOWLOCATION => 1,
+            CURLOPT_SSL_VERIFYPEER => 0,
+            CURLOPT_SSL_VERIFYHOST => 0,
             CURLINFO_HEADER_OUT => 1,
-            CURLOPT_MAXREDIRS => 3,
-            CURLOPT_CONNECTTIMEOUT => 30,
-            CURLOPT_TIMEOUT => 80,
-            CURLOPT_SSL_VERIFYPEER => true,
 			CURLOPT_USERAGENT => 'php-market',
-            CURLOPT_CAINFO => dirname(__FILE__).'/../lib/data/ca-certificate.crt',
         );
 		
 		switch (strtoupper($type)){

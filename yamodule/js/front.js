@@ -1,7 +1,8 @@
 $(document).ready(function(){
 	if(celi_wishlist)
 	{
-		var old_WishlistCart = WishlistCart;
+		if (typeof WishlistCart != 'undefined')
+			var old_WishlistCart = WishlistCart;
 		WishlistCart = function (id, action, id_product, id_product_attribute, quantity, id_wishlist)
 		{
 			old_WishlistCart(id, action, id_product, id_product_attribute, quantity, id_wishlist);
