@@ -639,40 +639,50 @@ class hforms {
 							'query' => array(
 								array(
 									'id' => 'YANDEX',
-									'name' => $this->l('Яндекс деньги'),
+									'name' => $this->l('Оплата из кошелька в Яндекс.Деньгах.'),
 									'val' => 1
 								),
 								array(
 									'id' => 'CARD',
-									'name' => $this->l('Банковская карта'),
+									'name' => $this->l('Оплата с произвольной банковской карты.'),
 									'val' => 1
 								),
 								array(
 									'id' => 'TERMINAL',
-									'name' => $this->l('Терминал'),
+									'name' => $this->l('Оплата наличными через кассы и терминалы.'),
 									'val' => 1
 								),
 								array(
 									'id' => 'MOBILE',
-									'name' => $this->l('Мобильный телефон'),
+									'name' => $this->l('Платеж со счета мобильного телефона.'),
 									'val' => 1
 								),
 								array(
 									'id' => 'WEBMONEY',
-									'name' => $this->l('Webmoney'),
+									'name' => $this->l('Оплата из кошелька в системе WebMoney.'),
 									'val' => 1
 								),
 								array(
 									'id' => 'SBER',
-									'name' => $this->l('Сбербанк'),
+									'name' => $this->l('Оплата через Сбербанк: оплата по SMS или Сбербанк Онлайн.'),
 									'val' => 1
 								),
 								array(
 									'id' => 'ALFA',
-									'name' => $this->l('Алфа-банк'),
+									'name' => $this->l('Оплата через Альфа-Клик.'),
 									'val' => 1
 								),
-
+								array(
+									'id' => 'PB',
+									'name' => $this->l('Оплата через Промсвязьбанк.'),
+									'val' => 1
+								),
+								array(
+									'id' => 'MA',
+									'name' => $this->l('Оплата через MasterPass.'),
+									'val' => 1
+								),
+								
 							),
 							'id' => 'id',
 							'name' => 'name'
@@ -700,6 +710,7 @@ class hforms {
 						'desc' => $this->l('Ссылка для checkOrder'),
 						'name' => 'YA_ORG_CHECKORDER',
 						'label' => $this->l('checkOrder'),
+						'disabled' => true
 					),
 					array(
 						'col' => 6,
@@ -708,6 +719,7 @@ class hforms {
 						'desc' => $this->l('Ссылка для Payment Aviso'),
 						'name' => 'YA_ORG_AVISO',
 						'label' => $this->l('PaymentAviso'),
+						'disabled' => true
 					),
 					array(
 						'col' => 6,
@@ -716,6 +728,7 @@ class hforms {
 						'desc' => $this->l('Ссылка для fail'),
 						'name' => 'YA_ORG_FAIL',
 						'label' => $this->l('fail'),
+						'disabled' => true
 					),
 					array(
 						'col' => 6,
@@ -724,6 +737,7 @@ class hforms {
 						'desc' => $this->l('Ссылка для success'),
 						'name' => 'YA_ORG_SUCCESS',
 						'label' => $this->l('success'),
+						'disabled' => true
 					),
 				),
 			'submit' => array(

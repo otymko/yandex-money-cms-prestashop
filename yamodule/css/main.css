@@ -2,6 +2,14 @@ p.payment_module a.ym_AC {
 	background: url(../img/card.png) 23px 30px no-repeat #fbfbfb;
 }
 
+p.payment_module a.ym_PB {
+	background: url(../img/card.png) 23px 30px no-repeat #fbfbfb;
+}
+
+p.payment_module a.ym_MA {
+	background: url(../img/card.png) 23px 30px no-repeat #fbfbfb;
+}
+
 p.payment_module a.yandex_money_card {
 	background: url(../img/card.png) 23px 30px no-repeat #fbfbfb;
 }
@@ -38,6 +46,8 @@ p.payment_module a.ym_AC:hover,
 p.payment_module a.yandex_money_card:hover,
 p.payment_module a.ym_WM:hover,
 p.payment_module a.yandex_money_wallet:hover,
+p.payment_module a.ym_PB:hover,
+p.payment_module a.ym_MA:hover,
 p.payment_module a.ym_GP:hover,
 p.payment_module a.ym_PC:hover,
 p.payment_module a.ym_AB:hover,
@@ -57,6 +67,8 @@ p.payment_module a.ym_AC:after,
 p.payment_module a.yandex_money_card:after,
 p.payment_module a.ym_WM:after,
 p.payment_module a.yandex_money_wallet:after,
+p.payment_module a.ym_PB:after,
+p.payment_module a.ym_MA:after,
 p.payment_module a.ym_GP:after,
 p.payment_module a.ym_AB:after,
 p.payment_module a.ym_SB:after,

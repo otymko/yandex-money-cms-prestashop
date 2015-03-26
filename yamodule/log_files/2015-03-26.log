@@ -1,0 +1,24 @@
+2015-03-26 11:03:31 [37.76.175.247] payment_kassa a:0:{}
+2015-03-26 11:04:02 [37.76.175.247] payment_kassa a:0:{}
+2015-03-26 11:05:24 [37.76.175.247] payment_kassa a:1:{s:5:"label";s:9:"KASSA_168";}
+2015-03-26 11:05:24 [37.76.175.247] yamodule: validate response Invalid signature
+2015-03-26 11:05:58 [37.76.175.247] payment_kassa a:1:{s:5:"label";s:9:"KASSA_168";}
+2015-03-26 11:05:58 [37.76.175.247] yamodule: validate response Invalid signature
+2015-03-26 11:06:01 [37.76.175.247] payment_kassa a:1:{s:5:"label";s:9:"KASSA_168";}
+2015-03-26 11:06:01 [37.76.175.247] yamodule: validate response Invalid signature
+2015-03-26 11:06:20 [37.76.175.247] payment_kassa a:1:{s:5:"label";s:9:"KASSA_168";}
+2015-03-26 11:06:40 [37.76.175.247] payment_kassa a:2:{s:5:"label";s:9:"KASSA_168";s:6:"action";s:10:"checkOrder";}
+2015-03-26 11:06:40 [37.76.175.247] payment_kassa: checkOrder invoiceId="" shopId="" check order
+2015-03-26 11:06:58 [37.76.175.247] payment_kassa a:2:{s:5:"label";s:9:"KASSA_168";s:6:"action";s:12:"paymentAviso";}
+2015-03-26 11:06:58 [37.76.175.247] payment_kassa: paymentAviso invoiceId="" shopId="" #108 Order success
+2015-03-26 11:07:20 [37.76.175.247] payment_kassa a:2:{s:5:"label";s:9:"KASSA_168";s:6:"action";s:12:"paymentAviso";}
+2015-03-26 11:09:39 [37.76.175.247] payment_kassa a:2:{s:5:"label";s:9:"KASSA_168";s:6:"action";s:12:"paymentAviso";}
+2015-03-26 11:09:39 [37.76.175.247] payment_kassa: paymentAviso invoiceId="" shopId="" #108 Order success
+2015-03-26 11:59:28 [77.75.157.170] payment_kassa a:44:{s:7:"cdd_moi";s:32:"KASSA_172_260315115907_00000_127";s:18:"shopSumBankPaycash";s:4:"1003";s:15:"requestDatetime";s:29:"2015-03-26T11:59:29.306+03:00";s:17:"merchant_order_id";s:32:"KASSA_172_260315115907_00000_127";s:14:"customerNumber";s:9:"KASSA_172";s:11:"sumCurrency";s:5:"10643";s:11:"shopFailURL";s:38:"http://ya.devpresta.ru/ru/order?step=3";s:12:"cdd_pan_mask";s:11:"444444|4448";s:13:"shopSumAmount";s:4:"5.66";s:21:"cps_user_country_code";s:2:"PL";s:22:"shopSumCurrencyPaycash";s:5:"10643";s:13:"ErrorTemplate";s:11:"ym2xmlerror";s:14:"orderSumAmount";s:4:"5.83";s:7:"cdd_eci";s:1:"5";s:3:"shn";s:15:"labs.mlayer.org";s:11:"cps_user_ip";s:14:"78.132.192.187";s:8:"cms_name";s:13:"ya_prestashop";s:6:"shopId";s:3:"127";s:6:"action";s:10:"checkOrder";s:13:"shopArticleId";s:3:"127";s:23:"orderSumCurrencyPaycash";s:5:"10643";s:13:"cps_changeSum";s:5:"false";s:7:"skr_sum";s:4:"5.83";s:19:"orderSumBankPaycash";s:4:"1003";s:11:"external_id";s:7:"deposit";s:9:"invoiceId";s:13:"2000000434057";s:5:"label";s:9:"KASSA_172";s:7:"cdd_rrn";s:12:"395008466773";s:20:"orderCreatedDatetime";s:29:"2015-03-26T11:59:29.110+03:00";s:16:"paymentPayerCode";s:13:"4100322062290";s:11:"rebillingOn";s:5:"false";s:13:"depositNumber";s:40:"0b4c7fc726731b730874b09b00c533cced3f2df6";s:15:"yandexPaymentId";s:12:"257005752272";s:7:"skr_env";s:7:"desktop";s:3:"md5";s:32:"5AA11530A2C15E950E19A20FB3A87CF3";s:13:"cps_region_id";s:2:"13";s:15:"SuccessTemplate";s:13:"ym2xmlsuccess";s:12:"cdd_exp_date";s:4:"0216";s:10:"cps-source";s:7:"default";s:12:"nst_unilabel";s:36:"1ca5de1b-0001-5000-8000-00000003e427";s:9:"requestid";s:96:"313237313538385f33666337393239623663336465393835616164626334346536323066303931653639613165323036";s:14:"shopSuccessURL";s:49:"http://ya.devpresta.ru/ru/module/yamodule/success";s:4:"scid";s:5:"56909";s:13:"cdd_auth_code";s:6:"460757";}
+2015-03-26 11:59:28 [77.75.157.170] yamodule: validate response Incorrect payment amount
+2015-03-26 12:00:03 [78.132.192.187] payment_kassa a:1:{s:5:"label";s:9:"KASSA_172";}
+2015-03-26 12:00:03 [78.132.192.187] yamodule: validate response Invalid signature
+2015-03-26 12:00:36 [78.132.192.187] payment_kassa a:2:{s:5:"label";s:9:"KASSA_172";s:6:"action";s:12:"paymentAviso";}
+2015-03-26 12:00:36 [78.132.192.187] yamodule: validate response Invalid signature
+2015-03-26 12:01:29 [78.132.192.187] payment_kassa a:2:{s:5:"label";s:9:"KASSA_172";s:6:"action";s:12:"paymentAviso";}
+2015-03-26 12:01:30 [78.132.192.187] payment_kassa: paymentAviso invoiceId="" shopId="" #112 Order success

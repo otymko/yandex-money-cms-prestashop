@@ -83,7 +83,7 @@ class yamodule extends PaymentModule
 	{
 		$this->name = 'yamodule';
 		$this->tab = 'payments_gateways';
-		$this->version = '0.1';
+		$this->version = '1.1';
 		$this->author = 'PS';
 		$this->need_instance = 1;
 		$this->bootstrap = 1;
@@ -1108,6 +1108,8 @@ class yamodule extends PaymentModule
 		Configuration::UpdateValue('YA_ORG_PAYMENT_TERMINAL', Tools::getValue('YA_ORG_PAYMENT_TERMINAL'));
 		Configuration::UpdateValue('YA_ORG_PAYMENT_SBER', Tools::getValue('YA_ORG_PAYMENT_SBER'));
 		Configuration::UpdateValue('YA_ORG_PAYMENT_ALFA', Tools::getValue('YA_ORG_PAYMENT_ALFA'));
+		Configuration::UpdateValue('YA_ORG_PAYMENT_PB', Tools::getValue('YA_ORG_PAYMENT_PB'));
+		Configuration::UpdateValue('YA_ORG_PAYMENT_MA', Tools::getValue('YA_ORG_PAYMENT_MA'));
 		Configuration::UpdateValue('YA_ORG_TYPE', Tools::getValue('YA_ORG_TYPE'));
 		Configuration::UpdateValue('YA_ORG_LOGGING_ON', Tools::getValue('YA_ORG_LOGGING_ON'));
 		Configuration::UpdateValue('YA_ORG_ACTIVE', Tools::getValue('YA_ORG_ACTIVE'));
@@ -1191,6 +1193,8 @@ class yamodule extends PaymentModule
 			'YA_ORG_PAYMENT_WEBMONEY',
 			'YA_ORG_PAYMENT_TERMINAL',
 			'YA_ORG_PAYMENT_SBER',
+			'YA_ORG_PAYMENT_PB',
+			'YA_ORG_PAYMENT_MA',
 			'YA_ORG_PAYMENT_ALFA'
 		));
 		$vars_metrika = Configuration::getMultiple(array(
@@ -1365,6 +1369,8 @@ class yamodule extends PaymentModule
 				'YA_ORG_PAYMENT_WEBMONEY',
 				'YA_ORG_PAYMENT_TERMINAL',
 				'YA_ORG_PAYMENT_SBER',
+				'YA_ORG_PAYMENT_PB',
+				'YA_ORG_PAYMENT_MA',
 				'YA_ORG_PAYMENT_ALFA'
 			));
 
@@ -1372,7 +1378,7 @@ class yamodule extends PaymentModule
 			{
 				$this->smarty->assign(array(
 					'pt' => 'PC',
-					'buttontext' => $this->l('Оплата с кошелька Яндекс (Касса)')
+					'buttontext' => $this->l('Оплата из кошелька в Яндекс.Деньгах.')
 				));
 
 				$display .= $this->display(__FILE__, 'kassa.tpl');
@@ -1382,7 +1388,7 @@ class yamodule extends PaymentModule
 			{
 				$this->smarty->assign(array(
 					'pt' => 'AC',
-					'buttontext' => $this->l('Оплата банковской картой (Касса)')
+					'buttontext' => $this->l('Оплата с произвольной банковской карты.')
 				));
 
 				$display .= $this->display(__FILE__, 'kassa.tpl');
@@ -1392,7 +1398,7 @@ class yamodule extends PaymentModule
 			{
 				$this->smarty->assign(array(
 					'pt' => 'MC',
-					'buttontext' => $this->l('Оплата через СМС (Касса)')
+					'buttontext' => $this->l('Платеж со счета мобильного телефона.')
 				));
 
 				$display .= $this->display(__FILE__, 'kassa.tpl');
@@ -1402,7 +1408,7 @@ class yamodule extends PaymentModule
 			{
 				$this->smarty->assign(array(
 					'pt' => 'WM',
-					'buttontext' => $this->l('Оплата через Webmoney (Касса)')
+					'buttontext' => $this->l('Оплата из кошелька в системе WebMoney.')
 				));
 
 				$display .= $this->display(__FILE__, 'kassa.tpl');
@@ -1412,7 +1418,7 @@ class yamodule extends PaymentModule
 			{
 				$this->smarty->assign(array(
 					'pt' => 'GP',
-					'buttontext' => $this->l('Оплата наличными (Касса)')
+					'buttontext' => $this->l('Оплата наличными через кассы и терминалы.')
 				));
 
 				$display .= $this->display(__FILE__, 'kassa.tpl');
@@ -1422,7 +1428,7 @@ class yamodule extends PaymentModule
 			{
 				$this->smarty->assign(array(
 					'pt' => 'SB',
-					'buttontext' => $this->l('Оплата Сбербанк (Касса)')
+					'buttontext' => $this->l('Оплата через Сбербанк: оплата по SMS или Сбербанк Онлайн.')
 				));
 
 				$display .= $this->display(__FILE__, 'kassa.tpl');
@@ -1431,12 +1437,29 @@ class yamodule extends PaymentModule
 			{
 				$this->smarty->assign(array(
 					'pt' => 'AB',
-					'buttontext' => $this->l('Оплата Альфа-Банк (Касса)')
+					'buttontext' => $this->l('Оплата через Альфа-Клик.')
 				));
 
 				$display .= $this->display(__FILE__, 'kassa.tpl');
 			}
+			if ($payments['YA_ORG_PAYMENT_PB'])
+			{
+				$this->smarty->assign(array(
+					'pt' => 'PB',
+					'buttontext' => $this->l('Оплата через Промсвязьбанк.')
+				));
 
+				$display .= $this->display(__FILE__, 'kassa.tpl');
+			}
+			if ($payments['YA_ORG_PAYMENT_MA'])
+			{
+				$this->smarty->assign(array(
+					'pt' => 'MA',
+					'buttontext' => $this->l('Оплата через MasterPass.')
+				));
+
+				$display .= $this->display(__FILE__, 'kassa.tpl');
+			}
 		}
 
 		$this->context->smarty->assign(array(
