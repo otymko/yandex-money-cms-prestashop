@@ -50,6 +50,12 @@ class yamodulepayment_kassaModuleFrontController extends ModuleFrontController
 				Tools::getValue('customerNumber') . ';' .
 				trim(Configuration::get('YA_ORG_MD5_PASSWORD'))
 			);
+
+			$ord = Order::getOrderByCartId($cart->id);
+
+			if (!$ord)
+				$this->module->validateResponse($this->module->l('Invalid order number'), 1, $action, $shopId, $invoiceId, true);
+
 			if (Tools::strtoupper($signature) != Tools::strtoupper(Tools::getValue('md5')))
 				$this->module->validateResponse($this->module->l('Invalid signature'), 1, $action, $shopId, $invoiceId, true);
 			
@@ -65,9 +71,13 @@ class yamodulepayment_kassaModuleFrontController extends ModuleFrontController
 
 			if ($action == 'paymentAviso') 
 			{
-				$this->module->validateOrder((int)$cart->id, Configuration::get('PS_OS_PAYMENT'), $cart->getOrderTotal(true, Cart::BOTH), 'Yandex.Касса', null, array(), null, false, $cart->secure_key);
+				$history = new OrderHistory();
+				$history->id_order = $ord;
+				$history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $ord);
+				$history->addWithemail(true);
+
 				if($this->log_on)
-					$this->module->log_save('payment_kassa: paymentAviso invoiceId="'.$invoiceId.'" shopId="'.$shopId.'" #'.$this->module->currentOrder.' '.$this->module->l('Order success'));
+					$this->module->log_save('payment_kassa: paymentAviso invoiceId="'.$invoiceId.'" shopId="'.$shopId.'" #'.$ord.' '.$this->module->l('Order success'));
 				$this->module->validateResponse('', 0, $action, $shopId, $invoiceId, true);
 			}
 		}
