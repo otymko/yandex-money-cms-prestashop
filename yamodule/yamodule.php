@@ -685,9 +685,7 @@ class yamodule extends PaymentModule
 			$data['pickup'] = 'true';
 		if (Configuration::get('YA_MARKET_SET_ROZNICA'))
 			$data['store'] = 'true';
-			
-		
-		// $data['downloadable'] = 'true';
+
 		return $data;
 	}
 
@@ -853,15 +851,75 @@ class yamodule extends PaymentModule
 				$this->sendMetrikaData();
 			elseif($this->metrika_valid && !Configuration::get('YA_METRIKA_ACTIVE'))
 				$this->metrika_status .= $this->displayError($this->l('Изменения сохранены, но не отправлены! Включите Метрику!'));
+
+			$this->sendStatistics();
 		}
 		elseif(Tools::isSubmit('submitorgModule'))
+		{
 			$this->org_status = $this->validateKassa();
+			$this->sendStatistics();
+		}
 		elseif(Tools::isSubmit('submitPokupkiModule'))
+		{
 			$this->pokupki_status = $this->validatePokupki();
+			$this->sendStatistics();
+		}
 		elseif(Tools::isSubmit('submitp2pModule'))
+		{
 			$this->p2p_status = $this->validateP2P();
+			$this->sendStatistics();
+		}
 		elseif(Tools::isSubmit('submitmarketModule'))
+		{
 			$this->market_status = $this->validateMarket();
+			$this->sendStatistics();
+		}
+	}
+
+	public function sendStatistics()
+	{
+		$headers = array();
+		$headers[] = 'Content-Type: application/x-www-form-urlencoded';
+
+		include_once(dirname(__FILE__).'/classes/YM_cryptor.php');
+		$array = array(
+			'url' => Tools::getShopDomainSsl(true),
+			'cms' => 'prestashop',
+			'version' => _PS_VERSION_,
+			'email' => $this->context->employee->email,
+			'shopid' => Configuration::get('YA_ORG_SHOPID'),
+			'settings' => array(
+				'kassa' => Configuration::get('YA_ORG_ACTIVE'),
+				'p2p' => Configuration::get('YA_P2P_ACTIVE'),
+				'metrika' => Configuration::get('YA_METRIKA_ACTIVE')
+			)
+		);
+
+		$cryptor = new YM_cryptor();
+		$key_crypt = $array['url'];
+		$cryptor->setKey($key_crypt);
+		$array_crypt = $cryptor->encrypt($array);
+
+		$url = 'https://statcms.yamoney.ru/';
+		$curlOpt = array(
+			CURLOPT_HEADER => false,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYHOST => false,
+			CURLINFO_HEADER_OUT => true,
+			CURLOPT_POST => true,
+		);
+
+		$curlOpt[CURLOPT_HTTPHEADER] = $headers;
+		$curlOpt[CURLOPT_POSTFIELDS] = http_build_query(array('data' => $array_crypt));
+
+		$curl = curl_init($url);
+		curl_setopt_array($curl, $curlOpt);
+		$rbody = curl_exec($curl);
+		$errno = curl_errno($curl);
+		$error = curl_error($curl);
+		$rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		curl_close($curl);
 	}
 
 	public function sendMetrikaData()
