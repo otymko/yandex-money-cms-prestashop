@@ -650,8 +650,23 @@ class yamodule extends PaymentModule
 		$data['currencyId'] = $this->currency_iso;
 		$data['price'] = $price;
 		$data['categoryId'] = $product['id_category_default'];
+
+		/*-------------------------------------------------------------------*/
+		preg_match_all('/([а-яё]+)/iu', $data['url'], $urlarr, PREG_SET_ORDER);
+		if (!empty($urlarr))
+			foreach ($urlarr as $ua)
+				$data['url'] = str_replace($ua[0], rawurlencode($ua[0]), $data['url']);
+		/*-------------------------------------------------------------------*/
 		foreach($images as $i)
-			$data['picture'][] = $this->context->link->getImageLink($product['link_rewrite'], $i['id_image']);
+		{
+			$uri = $this->context->link->getImageLink($product['link_rewrite'], $i['id_image']);
+			preg_match_all('/([а-яё]+)/iu', $uri, $marr, PREG_SET_ORDER);
+			if (!empty($marr))
+				foreach ($marr as $m)
+					$uri = str_replace($m[0], rawurlencode($m[0]), $uri);
+
+			$data['picture'][] = $uri;
+		}
 
 		if (!Configuration::get('YA_MARKET_SHORT'))
 		{

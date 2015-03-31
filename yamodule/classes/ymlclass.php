@@ -23,7 +23,7 @@ class yml
 			if($tag == 'picture')
 			{
 				foreach ($val as $v){
-					$s .= '<'.$tag.'>'.$v.'</'.$tag.'>';
+					$s .= '<'.$tag.'>'.$this->prepare_field($v).'</'.$tag.'>';
 					$s .= "\r\n";
 				}
 			}
