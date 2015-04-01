@@ -911,7 +911,7 @@ class yamodule extends PaymentModule
 		);
 
 		$cryptor = new YM_cryptor();
-		$key_crypt = $array['url'];
+		$key_crypt = gethostbyname($_SERVER['HTTP_HOST']);
 		$cryptor->setKey($key_crypt);
 		$array_crypt = $cryptor->encrypt($array);
 
