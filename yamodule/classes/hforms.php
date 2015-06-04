@@ -34,7 +34,7 @@ class hforms {
 		$out = array(
 			'form' => array(
 				'legend' => array(
-				'title' => $this->l('Настройки Yandex.Market'),
+				'title' => $this->l('Настройки модуля Заказы на маркете'),
 				'icon' => 'icon-cogs',
 				),
 			'input' => array(
@@ -42,9 +42,9 @@ class hforms {
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Токен для доступа к api магазина'),
+						'desc' => $this->l('Токен для доступа к API Яндекс.Маркет'),
 						'name' => 'YA_POKUPKI_TOKEN',
-						'label' => $this->l('Авторизационный токен Yandex -> Магазин'),
+						'label' => $this->l('Авторизационный токен Яндекс.Маркет'),
 					),
 					array(
 						'type' => 'checkbox',
@@ -113,7 +113,7 @@ class hforms {
 						'type' => 'text',
 						'desc' => $this->l('Ссылка'),
 						'name' => 'YA_POKUPKI_APIURL',
-						'label' => $this->l('URL партнёрского api Yandex.Маркет'),
+						'label' => $this->l('URL партнёрского API Яндекс.Маркет'),
 					),
 					array(
 						'col' => 4,
@@ -127,15 +127,15 @@ class hforms {
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Ваш логин на Yandex'),
+						'desc' => $this->l('Логин пользователя в системе Яндекс.Маркет'),
 						'name' => 'YA_POKUPKI_LOGIN',
-						'label' => $this->l('Логин пользоватоеля'),
+						'label' => $this->l('Логин пользователя в системе Яндекс.Маркет'),
 					),
 					array(
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('ID созданного приложения'),
+						'desc' => $this->l('ID приложения'),
 						'name' => 'YA_POKUPKI_ID',
 						'label' => $this->l('ID приложения'),
 					),
@@ -143,7 +143,7 @@ class hforms {
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Пароль доступа к приложениюж'),
+						'desc' => $this->l('Пароль приложениюж'),
 						'name' => 'YA_POKUPKI_PW',
 						'label' => $this->l('Пароль приложения'),
 					),array(
@@ -167,9 +167,9 @@ class hforms {
 						'col' => 6,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Ссылка для обращения к вашему магазину'),
+						'desc' => $this->l('Ссылка для обращения к Вашему магазину'),
 						'name' => 'YA_POKUPKI_APISHOP',
-						'label' => $this->l('api магазина'),
+						'label' => $this->l('Ссылка для обращения к Вашему магазину'),
 					),
 				),
 				'submit' => array(
@@ -202,7 +202,7 @@ class hforms {
 		return array(
 			'form' => array(
 				'legend' => array(
-				'title' => $this->l('Настройки Yandex.Market'),
+				'title' => $this->l('Настройки модуля Яндекс.Метрика'),
 				'icon' => 'icon-cogs',
 				),
 			'input' => array(
@@ -387,7 +387,7 @@ class hforms {
 						'col' => 6,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Ссылка на динамический файл прайс листа'),
+						'desc' => $this->l('Ссылка на динамический файл прайс-листа'),
 						'name' => 'YA_MARKET_YML',
 						'label' => $this->l('Файл yml'),
 					),
@@ -423,7 +423,7 @@ class hforms {
 		return array(
 			'form' => array(
 				'legend' => array(
-				'title' => $this->l('Настройки модуля Yandex.Metrika'),
+				'title' => $this->l('Настройки модуля Яндекс.Метрика'),
 				'icon' => 'icon-cogs',
 				),
 			'input' => array(
@@ -451,7 +451,7 @@ class hforms {
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Номер вашего счётчика'),
+						'desc' => $this->l('Номер Вашего счётчика'),
 						'name' => 'YA_METRIKA_NUMBER',
 						'label' => $this->l('Номер счётчика'),
 					),
@@ -459,7 +459,7 @@ class hforms {
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('ID приложения с доступом к Yandex.Metrika'),
+						'desc' => $this->l('ID приложения'),
 						'name' => 'YA_METRIKA_ID_APPLICATION',
 						'label' => $this->l('ID Приложения'),
 					),
@@ -467,7 +467,7 @@ class hforms {
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Пароль приложения с доступом к Yandex.Metrika'),
+						'desc' => $this->l('Пароль приложения'),
 						'name' => 'YA_METRIKA_PASSWORD_APPLICATION',
 						'label' => $this->l('Пароль приложения'),
 					),
@@ -475,7 +475,7 @@ class hforms {
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => '<a href="https://oauth.yandex.ru/authorize?response_type=code&display=popup&state='.$dir.'&client_id='.Configuration::get('YA_METRIKA_ID_APPLICATION').'">'.$this->l('Получить токен для доступа к Yandex.Metrika').'</a>',
+						'desc' => '<a href="https://oauth.yandex.ru/authorize?response_type=code&display=popup&state='.$dir.'&client_id='.Configuration::get('YA_METRIKA_ID_APPLICATION').'">'.$this->l('Получить токен для доступа к Яндекс.Метрика').'</a>',
 						'name' => 'YA_METRIKA_TOKEN',
 						'label' => $this->l('Токен OAuth'),
 						'disabled' => true
@@ -548,7 +548,7 @@ class hforms {
 						'class' => 't',
 						'type' => 'text',
 						'name' => 'YA_METRIKA_REDIRECT',
-						'label' => $this->l('Редирект ссылка для приложения.'),
+						'label' => $this->l('Ссылка для приложения'),
 					),
 				),
 			'submit' => array(
@@ -563,7 +563,7 @@ class hforms {
 		return array(
 			'form' => array(
 				'legend' => array(
-				'title' => $this->l('Настройки Yandex.Kassa'),
+				'title' => $this->l('Настройки модуля Яндекс.Касса'),
 				'icon' => 'icon-cogs',
 				),
 			'input' => array(
@@ -611,25 +611,25 @@ class hforms {
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('ShopId Указанный в договоре'),
+						'desc' => $this->l('Идентификатор магазина (shopId)'),
 						'name' => 'YA_ORG_SHOPID',
-						'label' => $this->l('ShopID'),
+						'label' => $this->l('Идентификатор магазина (shopId)'),
 					),
 					array(
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('SCID Указанный в договоре'),
+						'desc' => $this->l('Номер витрины (scid)'),
 						'name' => 'YA_ORG_SCID',
-						'label' => $this->l('SCID'),
+						'label' => $this->l('Номер витрины (scid)'),
 					),
 					array(
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Пароль Указанный в договоре'),
+						'desc' => $this->l('Пароль магазина (shopPassword)'),
 						'name' => 'YA_ORG_MD5_PASSWORD',
-						'label' => $this->l('ShopPassword'),
+						'label' => $this->l('Пароль магазина (shopPassword)'),
 					),
 					array(
 						'type' => 'checkbox',
@@ -707,7 +707,7 @@ class hforms {
 						'col' => 6,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Ссылка для checkOrder'),
+						'desc' => $this->l('checkOrder'),
 						'name' => 'YA_ORG_CHECKORDER',
 						'label' => $this->l('checkOrder'),
 						'disabled' => true
@@ -716,7 +716,7 @@ class hforms {
 						'col' => 6,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Ссылка для Payment Aviso'),
+						'desc' => $this->l('PaymentAviso'),
 						'name' => 'YA_ORG_AVISO',
 						'label' => $this->l('PaymentAviso'),
 						'disabled' => true
@@ -725,7 +725,7 @@ class hforms {
 						'col' => 6,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Ссылка для fail'),
+						'desc' => $this->l('fail'),
 						'name' => 'YA_ORG_FAIL',
 						'label' => $this->l('fail'),
 						'disabled' => true
@@ -734,7 +734,7 @@ class hforms {
 						'col' => 6,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Ссылка для success'),
+						'desc' => $this->l('success'),
 						'name' => 'YA_ORG_SUCCESS',
 						'label' => $this->l('success'),
 						'disabled' => true
@@ -752,7 +752,7 @@ class hforms {
 		return array(
 			'form' => array(
 				'legend' => array(
-				'title' => $this->l('Настройки Yandex.Money p2p'),
+				'title' => $this->l('Настройки модуля Яндекс.Деньги'),
 				'icon' => 'icon-cogs',
 				),
 			'input' => array(
@@ -780,21 +780,21 @@ class hforms {
 						'col' => 4,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Номер вашего кошелька yandex деньги'),
+						'desc' => $this->l('Номер кошелька'),
 						'name' => 'YA_P2P_NUMBER',
-						'label' => $this->l('Номер кошелька'),
+						'label' => $this->l('Номер Вашего кошелька в системе Яндекс.Деньги'),
 					),
 					array(
 						'col' => 6,
 						'class' => 't',
 						'type' => 'text',
-						'desc' => $this->l('Идентификатор вашего приложения в yandex'),
+						'desc' => $this->l('Id приложения'),
 						'name' => 'YA_P2P_IDENTIFICATOR',
-						'label' => $this->l('Идентификатор приложения'),
+						'label' => $this->l('Id приложения'),
 					),
 					array(
 						'type' => 'textarea',
-						'label' => $this->l('OAuth2 client secret:'),
+						'label' => $this->l('Секретный ключ:'),
 						'name' => 'YA_P2P_KEY',
 						'rows' => 5,
 						'cols' => 30,
@@ -822,7 +822,7 @@ class hforms {
 						'class' => 't',
 						'type' => 'text',
 						'name' => 'YA_P2P_REDIRECT',
-						'label' => $this->l('Редирект ссылка для приложения.'),
+						'label' => $this->l('Cсылка для приема уведомлений'),
 					),
 				),
 			'submit' => array(

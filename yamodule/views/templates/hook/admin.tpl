@@ -1,10 +1,10 @@
 <div id="tabs">
 	<ul>
-		<li><a href="#moneyorg">{l s='Yandex.Касса' mod='yamodule'}</a></li>
-		<li><a href="#money">{l s='Yandex.Деньги p2p' mod='yamodule'}</a></li>
-		<li><a href="#metrika">{l s='Yandex.Метрика' mod='yamodule'}</a></li>
-		<li><a href="#market">{l s='Yandex.Маркет' mod='yamodule'}</a></li>
-		<li><a href="#marketp">{l s='Yandex.Покупки Маркет' mod='yamodule'}</a></li>
+		<li><a href="#moneyorg">{l s='Яндекс.Касса' mod='yamodule'}</a></li>
+		<li><a href="#money">{l s='Яндекс.Деньги' mod='yamodule'}</a></li>
+		<li><a href="#metrika">{l s='Яндекс.Метрика' mod='yamodule'}</a></li>
+		<li><a href="#market">{l s='Яндекс.Маркет' mod='yamodule'}</a></li>
+		<li><a href="#marketp">{l s='Заказы в Маркете' mod='yamodule'}</a></li>
 	</ul>
 	<div id="money">
 		<div class="errors">{$p2p_status}</div>

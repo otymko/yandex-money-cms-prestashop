@@ -83,8 +83,8 @@ class yamodule extends PaymentModule
 	{
 		$this->name = 'yamodule';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.1';
-		$this->author = 'PS';
+		$this->version = '1.1.1';
+		$this->author = 'Яндекс.Деньги';
 		$this->need_instance = 1;
 		$this->bootstrap = 1;
 		$this->currencies = true;
@@ -92,8 +92,8 @@ class yamodule extends PaymentModule
 
 		parent::__construct();
 
-		$this->displayName = $this->l('Набор модулей от Yandex');
-		$this->description = $this->l('Yandex.Money, Yandex.Kassa, Yandex.Metrika, Yandex.Market, Yandex.Покупки');
+		$this->displayName = $this->l('Y.CMS Prestashop');
+		$this->description = $this->l('Яндекс.Деньги, Яндекс.Касса, Яндекс.Метрика, Яндекс.Маркет, Заказы в Маркете');
 		$this->confirmUninstall = $this->l('Действительно удалить модуль?');
 		if (!sizeof(Currency::checkPaymentCurrencies($this->id)))
 			$this->warning = $this->l('Нет установленной валюты для вашего модуля!');
@@ -904,12 +904,12 @@ class yamodule extends PaymentModule
 			'email' => $this->context->employee->email,
 			'shopid' => Configuration::get('YA_ORG_SHOPID'),
 			'settings' => array(
-				'kassa' => Configuration::get('YA_ORG_ACTIVE'),
-				'p2p' => Configuration::get('YA_P2P_ACTIVE'),
-				'metrika' => Configuration::get('YA_METRIKA_ACTIVE')
+				'kassa' => (bool) Configuration::get('YA_ORG_ACTIVE'),
+				'p2p' => (bool) Configuration::get('YA_P2P_ACTIVE'),
+				'metrika' =>(bool) Configuration::get('YA_METRIKA_ACTIVE')
 			)
 		);
-
+		
 		$cryptor = new YM_cryptor();
 		$key_crypt = gethostbyname($_SERVER['HTTP_HOST']);
 		$cryptor->setKey($key_crypt);
