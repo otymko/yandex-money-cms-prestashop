@@ -202,7 +202,7 @@ class hforms {
 		return array(
 			'form' => array(
 				'legend' => array(
-				'title' => $this->l('Настройки модуля Яндекс.Метрика'),
+				'title' => $this->l('Настройки модуля Яндекс.Маркет'),
 				'icon' => 'icon-cogs',
 				),
 			'input' => array(
