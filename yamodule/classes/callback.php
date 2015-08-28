@@ -2,7 +2,7 @@
 
 class metrika {
 	public $url = 'https://oauth.yandex.ru/';
-	public $url_api = 'http://api-metrika.yandex.ru/';
+	public $url_api = 'https://api-metrika.yandex.ru/management/v1/';
 	public $client_id;
 	public $state;
 	public $errors;
@@ -123,16 +123,16 @@ class metrika {
 	// Редактирование счётчика
 	public function editCounter()
 	{
-		$params = array(
+		$params = array('counter'=>array(
 			'goals_remove' => 0,
 			'code_options' => array(
-				'clickmap' => Configuration::get('YA_METRIKA_SET_CLICKMAP'),
-				'external_links' => Configuration::get('YA_METRIKA_SET_OUTLINK'),
-				'visor' => Configuration::get('YA_METRIKA_SET_WEBVIZOR'),
-				'denial' => Configuration::get('YA_METRIKA_SET_OTKAZI'),
-				'track_hash' => Configuration::get('YA_METRIKA_SET_HASH'),
+				'clickmap' => (string) Configuration::get('YA_METRIKA_SET_CLICKMAP'),
+				'external_links' => (string) Configuration::get('YA_METRIKA_SET_OUTLINK'),
+				'visor' => (string) Configuration::get('YA_METRIKA_SET_WEBVIZOR'),
+				'denial' => (string) Configuration::get('YA_METRIKA_SET_OTKAZI'),
+				'track_hash' => (string) Configuration::get('YA_METRIKA_SET_HASH'),
 			)
-		);
+		));
 		if(count($params)){
 			return $this->SendResponse('counter/'.$this->number, array(), $params, 'PUT');
 		}
@@ -140,10 +140,10 @@ class metrika {
 	
 	public function SendResponse($to, $headers, $params, $type, $pretty = 1)
 	{
-		$response = $this->post($this->url_api.$to.'.json?pretty='.$pretty.'&oauth_token='.$this->token, $headers, $params, $type);
+		$response = $this->post($this->url_api.$to.'?pretty='.$pretty.'&oauth_token='.$this->token, $headers, $params, $type);
 		$data = Tools::jsonDecode($response->body);
 		if($response->status_code == 200){
-			return $data;
+			return $data; 
 		}else{
 			$this->module->log_save($response->body);
 		}

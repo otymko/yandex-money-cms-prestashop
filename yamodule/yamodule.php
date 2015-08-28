@@ -83,7 +83,7 @@ class yamodule extends PaymentModule
 	{
 		$this->name = 'yamodule';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.1.1';
+		$this->version = '1.1.2';
 		$this->author = 'Яндекс.Деньги';
 		$this->need_instance = 1;
 		$this->bootstrap = 1;
@@ -901,6 +901,7 @@ class yamodule extends PaymentModule
 			'url' => Tools::getShopDomainSsl(true),
 			'cms' => 'prestashop',
 			'version' => _PS_VERSION_,
+			'ver_mod' => $this->version,
 			'email' => $this->context->employee->email,
 			'shopid' => Configuration::get('YA_ORG_SHOPID'),
 			'settings' => array(
@@ -993,9 +994,7 @@ class yamodule extends PaymentModule
 			if($response)
 			{
 				$counter = $m->getCounter();
-				if(!empty($counter->counter->code))
-					Configuration::UpdateValue('YA_METRIKA_CODE', $counter->counter->code, true);
-				$m->getCounterCheck();// Обновим состояние
+				if(!empty($counter->counter->code))	Configuration::UpdateValue('YA_METRIKA_CODE', $counter->counter->code, true);
 				$otvet = $m->editCounter();
 				if($otvet->counter->id != Configuration::get('YA_METRIKA_NUMBER'))
 					$error .= $this->displayError($this->l('Сохранение настроек счётчика не выполнено или номер счётчика неверен.'));
