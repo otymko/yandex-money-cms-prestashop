@@ -14,8 +14,7 @@ if($error == ''){
 	$type = $state[2];
 	$m->code = $code;
 	$m->getToken($type);
-	Tools::redirect(_PS_BASE_URL_.__PS_BASE_URI__.$state[0].'/'.Context::getContext()->link->getAdminLink('AdminModules', false)
-			.($m->errors ? '&error='.base64_encode($m->errors) : '').'&configure=yamodule&tab_module=payments_gateways&module_name=yamodule&token='.Tools::getAdminToken('AdminModules'.(int)Tab::getIdFromClassName('AdminModules').(int)$state[1]));
+	Tools::redirect(_PS_BASE_URL_.__PS_BASE_URI__.$state[0].'/'.Context::getContext()->link->getAdminLink('AdminModules', false).($m->errors ? '&error='.base64_encode($m->errors) : '').'&configure=yamodule&tab_module=payments_gateways&module_name=yamodule&token='.Tools::getAdminToken('AdminModules'.(int)Tab::getIdFromClassName('AdminModules').(int)$state[1]));
 }
 else
 	die('error #'.$error.' error description: '.Tools::getValue('error_description'));

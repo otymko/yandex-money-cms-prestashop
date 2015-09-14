@@ -83,7 +83,7 @@ class yamodule extends PaymentModule
 	{
 		$this->name = 'yamodule';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.1.2';
+		$this->version = '1.1.3';
 		$this->author = 'Яндекс.Деньги';
 		$this->need_instance = 1;
 		$this->bootstrap = 1;

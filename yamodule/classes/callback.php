@@ -50,8 +50,8 @@ class metrika {
 	{
 		$params = array(
 			'grant_type' => 'authorization_code',
-			'client_id' => $this->client_id,
-			'client_secret' => $this->client_secret,
+			'client_id' => ($type == 'pokupki')?Configuration::get('YA_POKUPKI_ID'):$this->client_id,
+			'client_secret' => ($type == 'pokupki')?Configuration::get('YA_POKUPKI_PW'):$this->client_secret,
 			'code' => $this->code
 		);
 		$response = $this->post($this->url.'token', array(), $params, 'POST');
