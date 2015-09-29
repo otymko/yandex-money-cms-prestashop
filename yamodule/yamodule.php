@@ -83,7 +83,7 @@ class yamodule extends PaymentModule
 	{
 		$this->name = 'yamodule';
 		$this->tab = 'payments_gateways';
-		$this->version = '1.1.3';
+		$this->version = '1.2.0';
 		$this->author = 'Яндекс.Деньги';
 		$this->need_instance = 1;
 		$this->bootstrap = 1;
@@ -1182,6 +1182,8 @@ class yamodule extends PaymentModule
 		Configuration::UpdateValue('YA_ORG_PAYMENT_ALFA', Tools::getValue('YA_ORG_PAYMENT_ALFA'));
 		Configuration::UpdateValue('YA_ORG_PAYMENT_PB', Tools::getValue('YA_ORG_PAYMENT_PB'));
 		Configuration::UpdateValue('YA_ORG_PAYMENT_MA', Tools::getValue('YA_ORG_PAYMENT_MA'));
+		Configuration::UpdateValue('YA_ORG_PAYMENT_QW', Tools::getValue('YA_ORG_PAYMENT_QW'));
+		Configuration::UpdateValue('YA_ORG_PAYMENT_QP', Tools::getValue('YA_ORG_PAYMENT_QP'));
 		Configuration::UpdateValue('YA_ORG_TYPE', Tools::getValue('YA_ORG_TYPE'));
 		Configuration::UpdateValue('YA_ORG_LOGGING_ON', Tools::getValue('YA_ORG_LOGGING_ON'));
 		Configuration::UpdateValue('YA_ORG_ACTIVE', Tools::getValue('YA_ORG_ACTIVE'));
@@ -1267,6 +1269,8 @@ class yamodule extends PaymentModule
 			'YA_ORG_PAYMENT_SBER',
 			'YA_ORG_PAYMENT_PB',
 			'YA_ORG_PAYMENT_MA',
+			'YA_ORG_PAYMENT_QW',
+			'YA_ORG_PAYMENT_QP',
 			'YA_ORG_PAYMENT_ALFA'
 		));
 		$vars_metrika = Configuration::getMultiple(array(
@@ -1443,6 +1447,8 @@ class yamodule extends PaymentModule
 				'YA_ORG_PAYMENT_SBER',
 				'YA_ORG_PAYMENT_PB',
 				'YA_ORG_PAYMENT_MA',
+				'YA_ORG_PAYMENT_QW',
+				'YA_ORG_PAYMENT_QP',
 				'YA_ORG_PAYMENT_ALFA'
 			));
 
@@ -1523,13 +1529,26 @@ class yamodule extends PaymentModule
 
 				$display .= $this->display(__FILE__, 'kassa.tpl');
 			}
-			if ($payments['YA_ORG_PAYMENT_MA'])
-			{
+			if ($payments['YA_ORG_PAYMENT_MA']){
 				$this->smarty->assign(array(
 					'pt' => 'MA',
 					'buttontext' => $this->l('Оплата через MasterPass.')
 				));
-
+				$display .= $this->display(__FILE__, 'kassa.tpl');
+			}
+			
+			if ($payments['YA_ORG_PAYMENT_QW']){
+				$this->smarty->assign(array(
+					'pt' => 'QW',
+					'buttontext' => $this->l('Оплата через QIWI Wallet.')
+				));
+				$display .= $this->display(__FILE__, 'kassa.tpl');
+			}
+			if ($payments['YA_ORG_PAYMENT_QP']){
+				$this->smarty->assign(array(
+					'pt' => 'QP',
+					'buttontext' => $this->l('Оплата через доверительный платеж (Куппи.ру).')
+				));
 				$display .= $this->display(__FILE__, 'kassa.tpl');
 			}
 		}

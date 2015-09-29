@@ -691,6 +691,16 @@ class hforms {
 									'name' => $this->l('Оплата через MasterPass.'),
 									'val' => 1
 								),
+								array(
+									'id' => 'QW',
+									'name' => $this->l('Оплата через QIWI Wallet.'),
+									'val' => 1
+								),
+								array(
+									'id' => 'QP',
+									'name' => $this->l('Оплата через доверительный платеж (Куппи.ру).'),
+									'val' => 1
+								),
 								
 							),
 							'id' => 'id',
