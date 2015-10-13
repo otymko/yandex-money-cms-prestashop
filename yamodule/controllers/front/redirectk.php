@@ -75,7 +75,7 @@ class yamoduleredirectkModuleFrontController extends ModuleFrontController
 				$payments['pt'] = Tools::getValue('type');
 			}
 
-			$this->module->validateOrder((int)$cart->id, _PS_OS_PREPARATION_, $cart->getOrderTotal(true, Cart::BOTH), $this->module->displayName, NULL, array(), NULL, false, $cart->secure_key);	
+			//$this->module->validateOrder((int)$cart->id, _PS_OS_PREPARATION_, $cart->getOrderTotal(true, Cart::BOTH), $this->module->displayName, NULL, array(), NULL, false, $cart->secure_key);	
 
 		}
 

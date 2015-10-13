@@ -33,7 +33,7 @@ class yamodulesuccessModuleFrontController extends ModuleFrontController
 				}
 				else
 				{
-					$ordernumber = Order::getOrderByCartId($cart->id);
+					$ordernumber = (int) $cart->id;
 					if (!$ordernumber)
 					{
 						if($log_on)

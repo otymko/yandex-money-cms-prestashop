@@ -50,8 +50,7 @@ class yamodulepayment_kassaModuleFrontController extends ModuleFrontController
 				Tools::getValue('customerNumber') . ';' .
 				trim(Configuration::get('YA_ORG_MD5_PASSWORD'))
 			);
-
-			$ord = Order::getOrderByCartId($cart->id);
+			$ord = ($action =='paymentAviso')?new Order((int) $cart->id):$this->module->validateOrder($cart->id, _PS_OS_PREPARATION_, $cart->getOrderTotal(true, Cart::BOTH), $this->module->displayName);
 
 			if (!$ord)
 				$this->module->validateResponse($this->module->l('Invalid order number'), 1, $action, $shopId, $invoiceId, true);
@@ -72,12 +71,12 @@ class yamodulepayment_kassaModuleFrontController extends ModuleFrontController
 			if ($action == 'paymentAviso') 
 			{
 				$history = new OrderHistory();
-				$history->id_order = $ord;
-				$history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $ord);
+				$history->id_order = $ord->id;
+				$history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $ord->id);
 				$history->addWithemail(true);
 
 				if($this->log_on)
-					$this->module->log_save('payment_kassa: paymentAviso invoiceId="'.$invoiceId.'" shopId="'.$shopId.'" #'.$ord.' '.$this->module->l('Order success'));
+					$this->module->log_save('payment_kassa: paymentAviso invoiceId="'.$invoiceId.'" shopId="'.$shopId.'" #'.$ord->id.' '.$this->module->l('Order success'));
 				$this->module->validateResponse('', 0, $action, $shopId, $invoiceId, true);
 			}
 		}
