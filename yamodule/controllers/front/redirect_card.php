@@ -76,11 +76,10 @@ class yamoduleredirect_cardModuleFrontController extends ModuleFrontController
 						$process_options = array(
 							"request_id" => $request_id,
 							'ext_auth_success_uri' => $this->context->link->getModuleLink('yamodule', 'payment_card', array(), true),
-							// 'ext_auth_fail_uri' => $this->context->link->getPageLink('order', true, null, 'step=3')
 							'ext_auth_fail_uri' => $this->context->link->getModuleLink('yamodule', 'payment_card', array(), true)
 						);	
 						
-						$result = $external_payment->process($process_options);						
+						$result = $external_payment->process($process_options);					
 						if($result->status == "in_progress") {
 							sleep(1);
 						}
@@ -116,7 +115,14 @@ class yamoduleredirect_cardModuleFrontController extends ModuleFrontController
 		$this->log_on = Configuration::get('YA_P2P_LOGGING_ON');
 		if ($resp->status == 'success')
 		{
-			$this->module->validateOrder((int)$this->context->cart->id, Configuration::get('PS_OS_PAYMENT'), $this->context->cart->getOrderTotal(true, Cart::BOTH), 'Банковская карта', NULL, array(), NULL, false, $this->context->cart->secure_key);
+			$cart = $this->context->cart;
+			$ord = ($cart->orderExists())?new Order((int)Order::getOrderByCartId($cart->id)):$this->module->validateOrder($cart->id,_PS_OS_PREPARATION_, $cart->getOrderTotal(true, Cart::BOTH), $this->module->displayName." Банковская карта", NULL, array(), NULL, false, $cart->secure_key);
+			if ($ord){
+				$history = new OrderHistory();
+				$history->id_order = $ord->id;
+				$history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $ord->id);
+				$history->addWithemail(true);
+			}
 			if($this->log_on)
 				$this->module->log_save('payment_card: #'.$this->module->currentOrder.' '.$this->module->l('Order success'));
 			Tools::redirect($this->context->link->getPageLink('order-confirmation').'&id_cart='.$this->context->cart->id.'&id_module='.$this->module->id.'&id_order='.$this->module->currentOrder.'&key='.$this->context->cart->secure_key);

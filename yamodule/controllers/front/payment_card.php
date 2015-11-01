@@ -12,7 +12,6 @@ class yamodulepayment_cardModuleFrontController extends ModuleFrontController
 
 	public function postProcess()
 	{
-
 		parent::postProcess();
 		$this->log_on = Configuration::get('YA_P2P_LOGGING_ON');
 		$cart = $this->context->cart;
@@ -54,10 +53,20 @@ class yamodulepayment_cardModuleFrontController extends ModuleFrontController
 
 	public function updateStatus(&$resp)
 	{
+
 		$this->log_on = Configuration::get('YA_P2P_LOGGING_ON');
 		if ($resp->status == 'success')
 		{
-			$this->module->validateOrder((int)$this->context->cart->id, Configuration::get('PS_OS_PAYMENT'), $this->context->cart->getOrderTotal(true, Cart::BOTH), 'Банковская карта', NULL, array(), NULL, false, $this->context->cart->secure_key);
+			$cart = $this->context->cart;
+			if ($cart->id>0){
+				$ord = ($cart->orderExists())?new Order((int)Order::getOrderByCartId($cart->id)):$this->module->validateOrder($cart->id,Configuration::get('PS_OS_PAYMENT'), $cart->getOrderTotal(true, Cart::BOTH), $this->module->displayName." Банковская карта", NULL, array(), NULL, false, $cart->secure_key);
+				if ($ord){
+					$history = new OrderHistory();
+					$history->id_order = $ord->id;
+					$history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $ord->id);
+					$history->addWithemail(true);
+				}
+			}
 			if($this->log_on)
 				$this->module->log_save('payment_card: #'.$this->module->currentOrder.' '.$this->module->l('Order success'));
 			Tools::redirect($this->context->link->getPageLink('order-confirmation').'&id_cart='.$this->context->cart->id.'&id_module='.$this->module->id.'&id_order='.$this->module->currentOrder.'&key='.$this->context->cart->secure_key);

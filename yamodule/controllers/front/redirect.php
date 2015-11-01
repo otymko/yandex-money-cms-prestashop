@@ -55,8 +55,8 @@ class yamoduleredirectModuleFrontController extends ModuleFrontController
 			elseif($type=='card')
 			{
 				if($log_on)
-					$this->module->log_save('p2p_redirect: '.$this->module->l('Type card'));
-				$auth_url = API::buildObtainTokenUrl(Configuration::get('YA_P2P_IDENTIFICATOR'), $this->context->link->getModuleLink('yamodule', 'redirect_card', array(), true), $scope);       
+					$this->module->log_save('redirect: '.$this->module->l('Type card'));
+			  Tools::redirect($this->context->link->getModuleLink('yamodule', 'redirect_card', array('code'=>true, 'cnf'=>true), true) , '');
 			}
 			
 			if($log_on)

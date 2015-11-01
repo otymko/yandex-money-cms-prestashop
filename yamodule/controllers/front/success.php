@@ -42,7 +42,7 @@ class yamodulesuccessModuleFrontController extends ModuleFrontController
 					}
 					else
 					{
-						$order = new Order((int)$ordernumber);
+						$order = new Order((int)Order::getOrderByCartId($cart->id));
 						$customer = new Customer((int)$order->id_customer);
 						if ($order->hasBeenPaid())
 						{

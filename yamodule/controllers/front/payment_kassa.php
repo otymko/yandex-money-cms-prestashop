@@ -50,7 +50,7 @@ class yamodulepayment_kassaModuleFrontController extends ModuleFrontController
 				Tools::getValue('customerNumber') . ';' .
 				trim(Configuration::get('YA_ORG_MD5_PASSWORD'))
 			);
-			$ord = ($action =='paymentAviso')?new Order((int) $cart->id):$this->module->validateOrder($cart->id,_PS_OS_PREPARATION_, $cart->getOrderTotal(true, Cart::BOTH), $this->module->displayName, NULL, array(), NULL, false, $cart->secure_key);
+			$ord = ($cart->orderExists())?new Order((int)Order::getOrderByCartId($cart->id)):$this->module->validateOrder($cart->id,_PS_OS_PREPARATION_, $cart->getOrderTotal(true, Cart::BOTH), $this->module->displayName, NULL, array(), NULL, false, $cart->secure_key);
 
 			if (!$ord)
 				$this->module->validateResponse($this->module->l('Invalid order number'), 1, $action, $shopId, $invoiceId, true);
