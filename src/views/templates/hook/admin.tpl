@@ -7,7 +7,9 @@
 * @copyright © 2015 NBCO Yandex.Money LLC
 * @license   https://money.yandex.ru/doc.xml?id=527052
 *}
-
+{if $update_status}
+<div class="alert alert-warning">У вас неактуальная версия модуля. Вы можете <a target='_blank' href='https://github.com/yandex-money/yandex-money-cms-prestashop/releases'>загрузить и установить</a> новую ({$update_status})</div>
+{/if}
 <div id="tabs" class="yan_tabs">
 	<ul>
 		<li><a href="#moneyorg">{l s='Яндекс.Касса' mod='yamodule'}</a></li>

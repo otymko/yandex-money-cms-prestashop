@@ -18,6 +18,9 @@ class Yamodule extends PaymentModule
     private $metrika_status = '';
     private $pokupki_status = '';
     private $metrika_valid;
+	 private $update_status;
+	 private $update_text;
+	 
     public $cryptor;
 
     public $status = array(
@@ -96,7 +99,7 @@ class Yamodule extends PaymentModule
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.3.1';
+        $this->version = '1.3.2';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -1154,20 +1157,19 @@ class Yamodule extends PaymentModule
             } elseif ($this->metrika_valid && !Configuration::get('YA_METRIKA_ACTIVE')) {
                 $this->metrika_status .= $this->displayError($this->l('The changes have saved but not sent! Turn On The Metric!'));
             }
-
-            $this->sendStatistics();
+				$this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitorgModule')) {
             $this->org_status = $this->validateKassa();
-            $this->sendStatistics();
+            $this->update_status = $this->sendStatistics();//$this->sendStatistics();
         } elseif (Tools::isSubmit('submitPokupkiModule')) {
             $this->pokupki_status = $this->validatePokupki();
-            $this->sendStatistics();
+            $this->update_status = $this->sendStatistics();//$this->sendStatistics();
         } elseif (Tools::isSubmit('submitp2pModule')) {
             $this->p2p_status = $this->validateP2P();
-            $this->sendStatistics();
+            $this->update_status = $this->sendStatistics();//$this->sendStatistics();
         } elseif (Tools::isSubmit('submitmarketModule')) {
             $this->market_status = $this->validateMarket();
-            $this->sendStatistics();
+            $this->update_status = $this->sendStatistics();//$this->sendStatistics();
         }
     }
 
@@ -1208,9 +1210,15 @@ class Yamodule extends PaymentModule
         $curl = curl_init($url);
         curl_setopt_array($curl, $curlOpt);
         $rbody = curl_exec($curl);
+		  $rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-
-        return $rbody;
+		  
+		  $json=json_decode($rbody);
+			if ($rcode==200 && isset($json->new_version)){
+				return $json->new_version;
+			}else{
+				return false;
+			}
     }
 
     public function sendMetrikaData()
@@ -1666,6 +1674,7 @@ class Yamodule extends PaymentModule
             'mws_sign' => Configuration::get('yamodule_mws_csr_sign'),
             'mws_cert' => Configuration::get('yamodule_mws_cert') ? true : false,
             'this_path' => $this->_path,
+				'update_status' => $this->update_status,		
             'metrika_status' => $this->metrika_status,
             'market_status' => $this->market_status,
             'pokupki_status' => $this->pokupki_status,
