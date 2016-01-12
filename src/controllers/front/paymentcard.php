@@ -67,6 +67,7 @@ class YamodulePaymentCardModuleFrontController extends ModuleFrontController
             if ($cart->id>0) {
                 if ($cart->orderExists()) {
                     $ord = new Order((int)Order::getOrderByCartId($cart->id));
+                    $id_order = $ord->id;
                 } else {
                     $ord = $this->module->validateOrder(
                         $cart->id,
@@ -79,12 +80,14 @@ class YamodulePaymentCardModuleFrontController extends ModuleFrontController
                         false,
                         $cart->secure_key
                     );
+
+                    $id_order = $this->module->currentOrder;
                 }
 
                 if ($ord) {
                     $history = new OrderHistory();
-                    $history->id_order = $ord->id;
-                    $history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $ord->id);
+                    $history->id_order = $id_order;
+                    $history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $id_order);
                     $history->addWithemail(true);
                 }
             }
