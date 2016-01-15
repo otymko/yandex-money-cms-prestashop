@@ -17,7 +17,7 @@ $yamodule = new yamodule();
 $m = new Metrika();
 $code = Tools::getValue('code');
 $error = Tools::getValue('error');
-$state = Tools::getValue('state');
+$state = base64_decode(Tools::getValue('state'));
 $response = $m->run();
 if ($error == '') {
     $state = explode('_', $yamodule->cryptor->decrypt($state));

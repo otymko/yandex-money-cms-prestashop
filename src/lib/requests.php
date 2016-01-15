@@ -44,7 +44,6 @@ class requests
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-        curl_setopt($curl, CURLOPT_CAINFO, dirname(__FILE__) . '/data/ca-certificate.crt');
         curl_setopt($curl, CURLINFO_HEADER_OUT, true);
         $rbody = curl_exec($curl);
         $errno = curl_errno($curl);
