@@ -23,7 +23,7 @@ class Hforms
         $yamodule = new Yamodule();
         $dir = _PS_ADMIN_DIR_;
         $dir = explode('/', $dir);
-        $dir = $yamodule->cryptor->encrypt(end($dir).'_'.Context::getContext()->cookie->id_employee.'_pokupki');
+        $dir = base64_encode($yamodule->cryptor->encrypt(end($dir).'_'.Context::getContext()->cookie->id_employee.'_pokupki'));
         $carriers = Carrier::getCarriers(Context::getContext()->language->id, true, false, false, null, 5);
         $type = array(
             array(
