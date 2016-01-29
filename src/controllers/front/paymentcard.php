@@ -59,50 +59,40 @@ class YamodulePaymentCardModuleFrontController extends ModuleFrontController
         }
     }
 
-    public function updateStatus(&$resp)
-    {
-        $this->log_on = Configuration::get('YA_P2P_LOGGING_ON');
-        if ($resp->status == 'success') {
-            $cart = $this->context->cart;
-            if ($cart->id>0) {
-                if ($cart->orderExists()) {
-                    $ord = new Order((int)Order::getOrderByCartId($cart->id));
-                    $id_order = $ord->id;
-                } else {
-                    $ord = $this->module->validateOrder(
-                        $cart->id,
-                        Configuration::get('PS_OS_PAYMENT'),
-                        $cart->getOrderTotal(true, Cart::BOTH),
-                        $this->module->displayName." Банковская карта",
-                        null,
-                        array(),
-                        null,
-                        false,
-                        $cart->secure_key
-                    );
+	public function updateStatus(&$resp){
+		$this->log_on = Configuration::get('YA_P2P_LOGGING_ON');
+		if ($resp->status == 'success') {
+			$cart = $this->context->cart;
+			$link = $this->context->link->getPageLink('order-confirmation').'&id_cart='
+			.$cart->id.'&id_module='.$this->module->id.'&id_order='
+			.$this->module->currentOrder.'&key='.$cart->secure_key;
 
-                    $id_order = $this->module->currentOrder;
-                }
+			if ($cart->id > 0) {
+				if (!$cart->orderExists()) {
+					$ord = $this->module->validateOrder(
+						$cart->id,
+						Configuration::get('PS_OS_PAYMENT'),
+						$cart->getOrderTotal(true, Cart::BOTH),
+						$this->module->displayName." Банковская карта",
+						null,
+						array(),
+						null,
+						false,
+						$cart->secure_key
+					);
 
-                if ($ord) {
-                    $history = new OrderHistory();
-                    $history->id_order = $id_order;
-                    $history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $id_order);
-                    $history->addWithemail(true);
-                }
-            }
-            if ($this->log_on) {
-                $this->module->logSave(
-                    'payment_card: #'.$this->module->currentOrder.' '.$this->module->l('Order success')
-                );
-            }
-            Tools::redirect(
-                $this->context->link->getPageLink('order-confirmation').'&id_cart='
-                .$this->context->cart->id.'&id_module='.$this->module->id.'&id_order='
-                .$this->module->currentOrder.'&key='.$this->context->cart->secure_key
-            );
-        }
-    }
+					$id_order = $this->module->currentOrder;
+				}
+				if ($this->log_on) {
+					$this->module->logSave(
+					'payment_card: #'.$this->module->currentOrder.' '.$this->module->l('Order success')
+					);
+				}
+				Tools::redirect($link);
+			}
+		}
+	}
+
 
     public function initContent()
     {

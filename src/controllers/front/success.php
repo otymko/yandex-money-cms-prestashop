@@ -18,7 +18,11 @@ class YamoduleSuccessModuleFrontController extends ModuleFrontController
     {
         parent::initContent();
         $log_on = Configuration::get('YA_ORG_LOGGING_ON');
-        $data = explode('_', Tools::getValue(!empty(Tools::getValue('label'))?'label':'customerNumber'));
+        if(Tools::getValue('label')){
+				$data = explode('_', Tools::getValue('label'));
+		  }else{
+				$data = explode('_', Tools::getValue('customerNumber'));
+		  }
         if (!empty($data) && isset($data[1])) {
             $ordernumber = $data['1'];
             $this->context->smarty->assign('ordernumber', $ordernumber);
