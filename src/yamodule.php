@@ -99,7 +99,7 @@ class Yamodule extends PaymentModule
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.3.6';
+        $this->version = '1.3.6.1';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -1660,7 +1660,7 @@ class Yamodule extends PaymentModule
 
         $vars_pokupki['YA_POKUPKI_FD'] = 'JSON';
         $vars_pokupki['YA_POKUPKI_TA'] = 'URL';
-        $vars_org['YA_ORG_TEXT_INSIDE'] = '<span class="text_inside">'.$this->l('Доступные вам способы оплаты и тарифы фиксируются на стороне Яндекс.Кассы. Чтобы их поменять, напишите менеджеру Кассы на merchants@yamoney.ru или позвоните по телефону 8 800 250-66-99.').'</span>';
+        $vars_org['YA_ORG_TEXT_INSIDE'] = '<span class="text_inside"><b>'.$this->l('Внимание! Этот режим должен быть включен и на стороне сервиса Яндекс.Касса.').'</b><br>'.$this->l('Чтобы активировать этот сценарий, напишите менеджеру Кассы на ').'<a href="mailto:merchants@yamoney.ru">merchants@yamoney.ru</a><br>'.$this->l(' или позвоните по телефону 8 800 250-66-99.').'</span>';
 
         $this->context->smarty->assign(array(
             'YA_ORG_ACTIVE' => $vars_org['YA_ORG_ACTIVE'],
