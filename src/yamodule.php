@@ -1210,7 +1210,7 @@ class Yamodule extends PaymentModule
         $curl = curl_init($url);
         curl_setopt_array($curl, $curlOpt);
         $rbody = curl_exec($curl);
-		  $rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        $rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 		  
 		  $json=json_decode($rbody);
@@ -1660,9 +1660,10 @@ class Yamodule extends PaymentModule
 
         $vars_pokupki['YA_POKUPKI_FD'] = 'JSON';
         $vars_pokupki['YA_POKUPKI_TA'] = 'URL';
-        $vars_org['YA_ORG_TEXT_INSIDE'] = '<span class="text_inside"><b>'.$this->l('Внимание! Этот режим должен быть включен и на стороне сервиса Яндекс.Касса.').'</b><br>'.$this->l('Чтобы активировать этот сценарий, напишите менеджеру Кассы на ').'<a href="mailto:merchants@yamoney.ru">merchants@yamoney.ru</a><br>'.$this->l(' или позвоните по телефону 8 800 250-66-99.').'</span>';
-
+        $vars_org['YA_ORG_TEXT_INSIDE'] = "Shop ID, scid, ShopPassword можно посмотреть в <a href='https://money.yandex.ru/joinups' target='_blank'>личном кабинете</a> после подключения Яндекс.Кассы.";
+        $vars_p2p['YA_P2P_TEXT_INSIDE'] = "ID и секретное слово вы получите после <a href='https://sp-money.yandex.ru/myservices/online.xml' target='_blank'>регистрации приложения</a> на сайте Яндекс.Денег";
         $this->context->smarty->assign(array(
+            'ya_version' => $this->version,
             'YA_ORG_ACTIVE' => $vars_org['YA_ORG_ACTIVE'],
             'YA_ORG_SHOPID' => $vars_org['YA_ORG_SHOPID'],
             'orders_link' => $this->context->link->getAdminLink('AdminOrders', false)
@@ -2000,17 +2001,18 @@ class Yamodule extends PaymentModule
         $helper->fields_value = $vars;
         $p2p_redirect = $this->context->link->getModuleLink($this->name, 'redirect');
         $kassa_check = $this->context->link->getModuleLink($this->name, 'paymentkassa');
-        $kassa_aviso = $this->context->link->getModuleLink($this->name, 'paymentkassa');
-        $kassa_success = $this->context->link->getModuleLink($this->name, 'success');
-        $kassa_fail = $this->context->link->getModuleLink($this->name, 'fail');
+        //$kassa_aviso = $this->context->link->getModuleLink($this->name, 'paymentkassa');
+        //$kassa_success = '';//$this->context->link->getModuleLink($this->name, 'success');
+        //$kassa_fail = $this->context->link->getModuleLink($this->name, 'fail');
         $api_pokupki = _PS_BASE_URL_.__PS_BASE_URI__.'yamodule/pokupki';
         $redir = _PS_BASE_URL_.__PS_BASE_URI__.'modules/yamodule/callback.php';
         $market_list = $this->context->link->getModuleLink($this->name, 'generate');
         $helper->fields_value['YA_MARKET_YML'] = $market_list;
         $helper->fields_value['YA_ORG_CHECKORDER'] = $kassa_check;
-        $helper->fields_value['YA_ORG_AVISO'] = $kassa_aviso;
-        $helper->fields_value['YA_ORG_FAIL'] = $kassa_fail;
-        $helper->fields_value['YA_ORG_SUCCESS'] = $kassa_success;
+        //$helper->fields_value['YA_ORG_AVISO'] = $kassa_aviso;
+        //$helper->fields_value['YA_ORG_FAIL'] = $kassa_fail;
+        //TODO
+        $helper->fields_value['YA_ORG_SUCCESS'] = "Страницы с динамическими адресами";
         $helper->fields_value['YA_P2P_REDIRECT'] = $p2p_redirect;
         $helper->fields_value['YA_POKUPKI_APISHOP'] = $api_pokupki;
         $helper->fields_value['YA_MARKET_REDIRECT'] = $helper->fields_value['YA_METRIKA_REDIRECT'] = $redir;

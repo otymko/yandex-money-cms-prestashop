@@ -600,14 +600,10 @@ class Hforms
     {
         return array(
             'form' => array(
-                'legend' => array(
-                'title' => $this->l('The module settings Yandex.Cash'),
-                'icon' => 'icon-cogs',
-                ),
-            'input' => array(
+                'input' => array(
                     array(
                         'type' => 'radio',
-                        'label' => $this->l('Activity:'),
+                        'label' => $this->l('Включить приём платежей через Яндекс.Кассу:'),
                         'name' => 'YA_ORG_ACTIVE',
                         'required' => false,
                         'class' => 't',
@@ -616,18 +612,18 @@ class Hforms
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
+                                'label' => $this->l('Да')
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
+                                'label' => $this->l('Нет')
                             )
-                        ),
+                        )
                     ),
                     array(
                         'type' => 'radio',
-                        'label' => $this->l('Hours of operation:'),
+                        'label' => '',
                         'name' => 'YA_ORG_TYPE',
                         'required' => false,
                         'class' => 't',
@@ -636,68 +632,91 @@ class Hforms
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Work')
+                                'label' => $this->l("Рабочий режим")
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Test')
+                                'label' => $this->l("Тестовый режим")
                             )
                         ),
                     ),
                     array(
+                        'col' => 6,
+                        'class' => 't',
+                        'type' => 'text',
+                        'desc' => $this->l("Скопируйте эту ссылку в поля Check URL и Aviso URL в настройках личного кабинета Яндекс.Кассы"),
+                        'name' => 'YA_ORG_CHECKORDER',
+                        'label' => "checkUrl/avisoUrl",
+                        'disabled' => true
+                    ),
+                    array(
+                        'col' => 6,
+                        'class' => 't',
+                        'type' => 'text',
+                        'desc' => $this->l("Включите «Использовать страницы успеха и ошибки с динамическими адресами» в настройках личного кабинета Яндекс.Кассы"),
+                        'name' => 'YA_ORG_SUCCESS',
+                        'values' => array('value'=> $this->l('Страницы с динамическими адресами')),
+                        'label' => "successUrl/failUrl",
+                        'disabled' => true
+                    ),
+                    //
+                    array(
                         'col' => 4,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l('The ID of the shop (shopId)'),
+                        'desc' => $this->l('Идентификатор магазина'),
                         'name' => 'YA_ORG_SHOPID',
-                        'label' => $this->l('The ID of the shop (shopId)'),
+                        'label' => $this->l('shop ID'),
                     ),
                     array(
                         'col' => 4,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l('The room showcases (scid)'),
+                        'desc' => $this->l('Номер витрины магазина'),
                         'name' => 'YA_ORG_SCID',
-                        'label' => $this->l('The room showcases (scid)'),
+                        'label' => $this->l('Scid'),
                     ),
                     array(
                         'col' => 4,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l('Password store (shopPassword)'),
+                        'desc' => $this->l('Секретное слово'),
                         'name' => 'YA_ORG_MD5_PASSWORD',
-                        'label' => $this->l('Password store (shopPassword)'),
+                        'label' => $this->l('shopPassword'),
                     ),
+                    array(
+                        'col' => 9,
+                        'class' => 't',
+                        'type' => 'free',
+                        'name' => 'YA_ORG_TEXT_INSIDE',
+                    ),
+                    //
                     array(
                         'type' => 'radio',
-                        'label' => $this->l('Режим оплаты:'),
+                        'label' => $this->l('Сценарий оплаты:'),
+                        'desc' => "<a href='https://tech.yandex.ru/money/doc/payment-solution/payment-form/payment-form-docpage/' target='_blank'>".$this->l('Подробнее о сценариях оплаты')."</a>",
                         'name' => 'YA_ORG_INSIDE',
                         'required' => false,
                         'class' => 't',
                         'is_bool' => true,
                         'values' => array(
                             array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l('Выбор способов оплаты на стороне магазина')
-                            ),
-                            array(
                                 'id' => 'active_off',
                                 'value' => 0,
                                 'label' => $this->l('Выбор способов оплаты на стороне сервиса Яндекс.Касса')
+                            ),
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Выбор способов оплаты на стороне магазина')
                             )
                         ),
                     ),
                     array(
-                        'col' => 9,
-                        'class' => 't text_inside',
-                        'type' => 'free',
-                        'name' => 'YA_ORG_TEXT_INSIDE',
-                    ),
-                    array(
                         'type' => 'checkbox',
-                        'label' => $this->l('Methods of payment'),
+                        'label' => '',
+                        'desc' => $this->l('Отметьте способы оплаты, которые указаны в вашем договоре с Яндекс.Деньгами'),
                         'name' => 'YA_ORG_PAYMENT',
                         'values' => array(
                             'query' => array(
@@ -756,7 +775,7 @@ class Hforms
                                     'name' => $this->l('Payment through a trusted payment (Kuppi.ru).'),
                                     'val' => 1
                                 ),
-                                
+
                             ),
                             'id' => 'id',
                             'name' => 'name'
@@ -766,14 +785,15 @@ class Hforms
                         'col' => 4,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l('Minimum order amount'),
+                        'desc' => $this->l(''),
                         'name' => 'YA_ORG_MIN',
-                        'label' => $this->l('Minimum order amount'),
+                        'label' => $this->l('Минимальная сумма заказа'),
                     ),
                     array(
                         'type' => 'checkbox',
-                        'label' => $this->l('Keep a log of logs'),
+                        'label' => $this->l('Запись отладочной информации'),
                         'name' => 'YA_ORG_LOGGING',
+                        'desc' => $this->l('Настройку нужно будет поменять, только если попросят специалисты Яндекс.Денег'),
                         'values' => array(
                             'query' => array(
                                 array(
@@ -784,48 +804,12 @@ class Hforms
                             'id' => 'id',
                             'name' => 'name'
                         ),
-                    ),
-                    array(
-                        'col' => 6,
-                        'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('CheckOrder'),
-                        'name' => 'YA_ORG_CHECKORDER',
-                        'label' => $this->l('CheckOrder'),
-                        'disabled' => true
-                    ),
-                    array(
-                        'col' => 6,
-                        'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('PaymentAviso'),
-                        'name' => 'YA_ORG_AVISO',
-                        'label' => $this->l('PaymentAviso'),
-                        'disabled' => true
-                    ),
-                    array(
-                        'col' => 6,
-                        'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('Fail'),
-                        'name' => 'YA_ORG_FAIL',
-                        'label' => $this->l('Fail'),
-                        'disabled' => true
-                    ),
-                    array(
-                        'col' => 6,
-                        'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('Success'),
-                        'name' => 'YA_ORG_SUCCESS',
-                        'label' => $this->l('Success'),
-                        'disabled' => true
-                    ),
+                    )
                 ),
-            'submit' => array(
+                'submit' => array(
                     'title' => $this->l('Save'),
                 ),
-            ),
+            )
         );
     }
 
@@ -833,14 +817,10 @@ class Hforms
     {
         return array(
             'form' => array(
-                'legend' => array(
-                'title' => $this->l('The module settings Yandex.Money'),
-                'icon' => 'icon-cogs',
-                ),
-            'input' => array(
+                'input' => array(
                     array(
                         'type' => 'radio',
-                        'label' => $this->l('Activity:'),
+                        'label' => $this->l('Включить прием платежей в кошелек на Яндексе'),
                         'name' => 'YA_P2P_ACTIVE',
                         'required' => false,
                         'class' => 't',
@@ -849,51 +829,66 @@ class Hforms
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
+                                'label' => $this->l('Да')
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
+                                'label' => $this->l('Нет')
                             )
                         ),
+                    ),
+                    array(
+                        'col' => 6,
+                        'class' => 't',
+                        'desc' => "Скопируйте эту ссылку в поле Redirect URL на <a href='https://sp-money.yandex.ru/myservices/online.xml' target='_blank'>".$this->l("странице регистрации приложения")."</a>",
+                        'type' => 'text',
+                        'name' => 'YA_P2P_REDIRECT',
+                        'label' => $this->l('RedirectURL'),
                     ),
                     array(
                         'col' => 4,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l('The number of purse'),
+                        'desc' => $this->l(''),
                         'name' => 'YA_P2P_NUMBER',
-                        'label' => $this->l('The number of Your purse in system Yandex.Money'),
+                        'label' => $this->l('Номер кошелька'),
                     ),
                     array(
                         'col' => 6,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l('Application Id'),
+                        'desc' => $this->l(''),
                         'name' => 'YA_P2P_IDENTIFICATOR',
-                        'label' => $this->l('Application Id'),
+                        'label' => $this->l('Id приложения'),
                     ),
                     array(
                         'type' => 'textarea',
-                        'label' => $this->l('Secret key:'),
+                        'label' => $this->l('Секретное слово'),
                         'name' => 'YA_P2P_KEY',
                         'rows' => 5,
                         'cols' => 30,
-                        'desc' => $this->l('The secret key is received after you create your application.'),
+                        'desc' => $this->l(''),
                         'class' => 't'
+                    ),
+                    array(
+                        'col' => 9,
+                        'class' => 't',
+                        'type' => 'free',
+                        'name' => 'YA_P2P_TEXT_INSIDE',
                     ),
                     array(
                         'col' => 4,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l('Minimum order amount'),
+                        'desc' => $this->l(''),
                         'name' => 'YA_P2P_MIN',
                         'label' => $this->l('Minimum order amount'),
                     ),
                     array(
                         'type' => 'checkbox',
-                        'label' => $this->l('Keep a log of logs'),
+                        'label' => $this->l('Запись отладочной информации'),
+                        'desc' => $this->l('Настройку нужно будет поменять, только если попросят специалисты Яндекс.Денег'),
                         'name' => 'YA_P2P_LOGGING',
                         'values' => array(
                             'query' => array(
@@ -906,13 +901,6 @@ class Hforms
                             'id' => 'id',
                             'name' => 'name'
                         ),
-                    ),
-                    array(
-                        'col' => 6,
-                        'class' => 't',
-                        'type' => 'text',
-                        'name' => 'YA_P2P_REDIRECT',
-                        'label' => $this->l('Link to receive notifications'),
                     ),
                 ),
             'submit' => array(

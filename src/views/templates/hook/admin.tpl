@@ -11,6 +11,8 @@
 <div class="alert alert-warning">У вас неактуальная версия модуля. Вы можете <a target='_blank' href='https://github.com/yandex-money/yandex-money-cms-prestashop/releases'>загрузить и установить</a> новую ({$update_status})</div>
 {/if}
 <div id="tabs" class="yan_tabs">
+	<p>Работая с модулем, вы автоматически соглашаетесь с <a href='https://money.yandex.ru/doc.xml?id=527052' target='_blank'>условиями его использования</a>.</p>
+	<p>Версия модуля <span id='ya_version'>{$ya_version}</span></p>
 	<ul>
 		<li><a href="#moneyorg">{l s='Яндекс.Касса' mod='yamodule'}</a></li>
 		<li><a href="#mws">{l s='Яндекс.Касса: Управление.Заказами' mod='yamodule'}</a></li>
@@ -21,10 +23,12 @@
 	</ul>
 	<div id="money">
 		<div class="errors">{$p2p_status|escape:'quotes':'UTF-8'}</div>
+		<p>Для работы с модулем нужно <a href='https://money.yandex.ru/new' target='_blank'>открыть кошелек</a> на Яндексе и <a href='https://sp-money.yandex.ru/myservices/online.xml' target='_blank'>зарегистрировать приложение</a> на сайте Яндекс.Денег</p>
 		{$money_p2p|default:'':'UTF-8'}
 	</div>
 	<div id="moneyorg">
 		<div class="errors">{$org_status|escape:'quotes':'UTF-8'}</div>
+		<p>Для работы с модулем нужно подключить магазин к <a target="_blank" href="https://kassa.yandex.ru/">Яндекс.Кассе</a>.</p>
 		{$money_org|default:'':'UTF-8'}
 	</div>
 	<div id="mws">

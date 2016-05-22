@@ -39,7 +39,6 @@ class YamodulePaymentCardModuleFrontController extends ModuleFrontController
         $this->module->payment_status = false;
         $requestId = $this->module->cryptor->decrypt(urldecode($this->context->cookie->ya_encrypt_CRequestId));
         $res = new stdClass();
-        Tools::p($_REQUEST);
         $res->status = Tools::getValue('status');
         $res->error = Tools::getValue('reason');
         if (!empty($requestId)) {
