@@ -99,7 +99,7 @@ class Yamodule extends PaymentModule
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.3.6.1';
+        $this->version = '1.3.6.2';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -287,7 +287,7 @@ class Yamodule extends PaymentModule
         $customer->active = 0;
         $customer->add();
         Configuration::updateValue('YA_POKUPKI_CUSTOMER', $customer->id);
-        Configuration::updateValue('YA_ORG_INSIDE', 1);
+        Configuration::updateValue('YA_ORG_INSIDE', 0);
 
         return true;
     }
@@ -1704,6 +1704,8 @@ class Yamodule extends PaymentModule
         }
 
         if ($toYandex) {
+            ob_start();
+            ob_clean();
             header("Content-type: text/xml; charset=utf-8");
             $output = '<?xml version="1.0" encoding="UTF-8"?> ';
             $output .= '<'.$action.'Response performedDatetime="'.date(DATE_ATOM).'" ';
@@ -1711,8 +1713,9 @@ class Yamodule extends PaymentModule
             $output .= 'invoiceId="'.$invoiceId.'" ';
             $output .= 'shopId="'.$shopId.'" ';
             $output .= 'message="'.$message.'"/>';
-            
-            die($output);
+            echo $output;
+            ob_end_flush();
+            die();
         }
     }
 

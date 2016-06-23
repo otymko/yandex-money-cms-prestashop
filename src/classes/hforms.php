@@ -603,7 +603,7 @@ class Hforms
                 'input' => array(
                     array(
                         'type' => 'radio',
-                        'label' => $this->l('Включить приём платежей через Яндекс.Кассу:'),
+                        'label' => $this->l('Включить приём платежей через Яндекс.Кассу'),
                         'name' => 'YA_ORG_ACTIVE',
                         'required' => false,
                         'class' => 't',
@@ -694,7 +694,7 @@ class Hforms
                     //
                     array(
                         'type' => 'radio',
-                        'label' => $this->l('Сценарий оплаты:'),
+                        'label' => $this->l('Сценарий оплаты'),
                         'desc' => "<a href='https://tech.yandex.ru/money/doc/payment-solution/payment-form/payment-form-docpage/' target='_blank'>".$this->l('Подробнее о сценариях оплаты')."</a>",
                         'name' => 'YA_ORG_INSIDE',
                         'required' => false,
