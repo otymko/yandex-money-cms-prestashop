@@ -9,7 +9,7 @@
 */
 
 $(document).ready(function(){
-	if(celi_wishlist)
+	if(typeof celi_wishlist != 'undefined' && celi_wishlist)
 	{
 		if (typeof WishlistCart != 'undefined')
 			var old_WishlistCart = WishlistCart;
@@ -32,7 +32,7 @@ $(document).ready(function(){
 		}
 	}
 	
-	if(celi_cart)
+	if(typeof celi_cart != 'undefined' && celi_cart)
 	{
 		var old_addCart = ajaxCart.add;
 		ajaxCart.add = function (idProduct, idCombination, addedFromProductPage, callerElement, quantity, wishlist)
