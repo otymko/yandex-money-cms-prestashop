@@ -715,6 +715,23 @@ class Hforms
                     ),
                     array(
                         'type' => 'checkbox',
+                        'label' => $this->l('Кнопка "Оплатить через Яндекс"'),
+                        'name' => 'YA_ORG_PAYLOGO',
+                        'class' => 'text-inside',
+                        'desc' => $this->l('Настройку нужно будет поменять, только если попросят специалисты Яндекс.Денег'),
+                        'values' => array(
+                            'query' => array(
+                                array(
+                                    'id' => 'ON',
+                                    'name' => ''
+                                ),
+                            ),
+                            'id' => 'id',
+                            'name' => 'name'
+                        ),
+                    ),
+                    array(
+                        'type' => 'checkbox',
                         'label' => '',
                         'desc' => $this->l('Отметьте способы оплаты, которые указаны в вашем договоре с Яндекс.Деньгами'),
                         'name' => 'YA_ORG_PAYMENT',

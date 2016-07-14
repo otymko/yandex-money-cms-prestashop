@@ -38,11 +38,11 @@ function hideMethods()
 	{
 		$('#YA_ORG_PAYMENT_YANDEX').parents('.form-group').first().slideDown('slow');
 		$('.text_inside').parents('.form-group').first().slideUp('slow');
-	}
-	else
-	{
+		$('#YA_ORG_PAYLOGO_ON').parents('.form-group').first().slideUp('slow');
+	} else {
 		$('#YA_ORG_PAYMENT_YANDEX').parents('.form-group').first().slideUp('slow');
 		$('.text_inside').parents('.form-group').first().slideDown('slow');
+		$('#YA_ORG_PAYLOGO_ON').parents('.form-group').first().slideDown('slow');
 	}
 
 	return inside;

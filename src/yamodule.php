@@ -99,7 +99,7 @@ class Yamodule extends PaymentModule
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.3.6.2';
+        $this->version = '1.3.7';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -1495,6 +1495,7 @@ class Yamodule extends PaymentModule
         Configuration::UpdateValue('YA_ORG_PAYMENT_QP', Tools::getValue('YA_ORG_PAYMENT_QP'));
         Configuration::UpdateValue('YA_ORG_TYPE', Tools::getValue('YA_ORG_TYPE'));
         Configuration::UpdateValue('YA_ORG_LOGGING_ON', Tools::getValue('YA_ORG_LOGGING_ON'));
+        Configuration::UpdateValue('YA_ORG_PAYLOGO_ON', Tools::getValue('YA_ORG_PAYLOGO_ON'));
         Configuration::UpdateValue('YA_ORG_ACTIVE', Tools::getValue('YA_ORG_ACTIVE'));
         Configuration::UpdateValue('YA_ORG_INSIDE', Tools::getValue('YA_ORG_INSIDE'));
 
@@ -1583,6 +1584,7 @@ class Yamodule extends PaymentModule
             'YA_ORG_MIN',
             'YA_ORG_TYPE',
             'YA_ORG_INSIDE',
+            'YA_ORG_PAYLOGO_ON',
             'YA_ORG_LOGGING_ON',
             'YA_ORG_PAYMENT_YANDEX',
             'YA_ORG_PAYMENT_CARD',
@@ -1808,6 +1810,7 @@ class Yamodule extends PaymentModule
 
             $this->context->smarty->assign(array(
                 'DATA_ORG' => $vars_org,
+                'yandex_logo' => Configuration::get('YA_ORG_PAYLOGO_ON'),
                 'id_cart' => $params['cart']->id,
                 'customer' => new Customer($params['cart']->id_customer),
                 'address' => new Address($this->context->cart->id_address_delivery),
