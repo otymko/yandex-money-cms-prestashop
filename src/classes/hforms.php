@@ -715,10 +715,10 @@ class Hforms
                     ),
                     array(
                         'type' => 'checkbox',
-                        'label' => $this->l('Кнопка "Оплатить через Яндекс"'),
+                        'label' => $this->l('Использовать кнопку "Оплатить через Яндекс"'),
                         'name' => 'YA_ORG_PAYLOGO',
                         'class' => 'text-inside',
-                        'desc' => $this->l('Настройку нужно будет поменять, только если попросят специалисты Яндекс.Денег'),
+                        'desc' => $this->l('Изменяет стандартный дизайн кнопки оплаты'),
                         'values' => array(
                             'query' => array(
                                 array(
