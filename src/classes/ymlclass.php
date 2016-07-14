@@ -172,7 +172,7 @@ class Yml
     public function getXmlHeader()
     {
         return '<?xml version="1.0" encoding="windows-1251"?>'
-            .'<!DOCTYPE yml_catalog SYSTEM "shops.dtd"><yml_catalog date="'.date('Y-m-d H:i').'">';
+            .'<yml_catalog date="'.date('Y-m-d H:i').'">';
     }
 
     public function getXmlShop()
