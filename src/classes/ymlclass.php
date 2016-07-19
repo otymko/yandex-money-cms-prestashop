@@ -142,6 +142,7 @@ class Yml
             'weight',
             'dimensions',
             'param',
+            'barcode',
             'sales_notes',
             'country_of_origin'
         );
