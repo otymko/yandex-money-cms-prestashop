@@ -58,39 +58,38 @@ class YamodulePaymentCardModuleFrontController extends ModuleFrontController
         }
     }
 
-	public function updateStatus(&$resp){
-		$this->log_on = Configuration::get('YA_P2P_LOGGING_ON');
-		if ($resp->status == 'success') {
-			$cart = $this->context->cart;
-			$link = $this->context->link->getPageLink('order-confirmation').'&id_cart='
-			.$cart->id.'&id_module='.$this->module->id.'&id_order='
-			.$this->module->currentOrder.'&key='.$cart->secure_key;
+    public function updateStatus(&$resp)
+    {
+        $this->log_on = Configuration::get('YA_P2P_LOGGING_ON');
+        if ($resp->status == 'success') {
+            $cart = $this->context->cart;
+            $link = $this->context->link->getPageLink('order-confirmation').'&id_cart='
+                .$cart->id.'&id_module='.$this->module->id.'&id_order='
+                .$this->module->currentOrder.'&key='.$cart->secure_key;
 
-			if ($cart->id > 0) {
-				if (!$cart->orderExists()) {
-					$ord = $this->module->validateOrder(
-						$cart->id,
-						Configuration::get('PS_OS_PAYMENT'),
-						$cart->getOrderTotal(true, Cart::BOTH),
-						$this->module->displayName." Банковская карта",
-						null,
-						array(),
-						null,
-						false,
-						$cart->secure_key
-					);
-
-					$id_order = $this->module->currentOrder;
-				}
-				if ($this->log_on) {
-					$this->module->logSave(
-					'payment_card: #'.$this->module->currentOrder.' '.$this->module->l('Order success')
-					);
-				}
-				Tools::redirect($link);
-			}
-		}
-	}
+            if ($cart->id > 0) {
+                if (!$cart->orderExists()) {
+                    $this->module->validateOrder(
+                        $cart->id,
+                        Configuration::get('PS_OS_PAYMENT'),
+                        $cart->getOrderTotal(true, Cart::BOTH),
+                        $this->module->displayName." Банковская карта",
+                        null,
+                        array(),
+                        null,
+                        false,
+                        $cart->secure_key
+                    );
+                }
+                if ($this->log_on) {
+                    $this->module->logSave(
+                        'payment_card: #'.$this->module->currentOrder.' '.$this->module->l('Order success')
+                    );
+                }
+                Tools::redirect($link);
+            }
+        }
+    }
 
 
     public function initContent()

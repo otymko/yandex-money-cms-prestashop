@@ -8,11 +8,11 @@
 * @license   https://money.yandex.ru/doc.xml?id=527052
 *}
 {if $update_status}
-<div class="alert alert-warning">У вас неактуальная версия модуля. Вы можете <a target='_blank' href='https://github.com/yandex-money/yandex-money-cms-prestashop/releases'>загрузить и установить</a> новую ({$update_status})</div>
+<div class="alert alert-warning">{l s='У вас неактуальная версия модуля. Вы можете' mod='yamodule'} <a target='_blank' href='https://github.com/yandex-money/yandex-money-cms-prestashop/releases'>{l s='загрузить и установить' mod='yamodule'}</a> {l s='новую' mod='yamodule'} ({$update_status|default:'':'UTF-8'|escape:'htmlall':'UTF-8})</div>
 {/if}
 <div id="tabs" class="yan_tabs">
 	<p>Работая с модулем, вы автоматически соглашаетесь с <a href='https://money.yandex.ru/doc.xml?id=527052' target='_blank'>условиями его использования</a>.</p>
-	<p>Версия модуля <span id='ya_version'>{$ya_version}</span></p>
+	<p>Версия модуля <span id='ya_version'>{$ya_version|default:'':'UTF-8'|escape:'htmlall':'UTF-8}</span></p>
 	<ul>
 		<li><a href="#moneyorg">{l s='Яндекс.Касса' mod='yamodule'}</a></li>
 		<li><a href="#mws">{l s='Яндекс.Касса: Управление.Заказами' mod='yamodule'}</a></li>
@@ -24,12 +24,12 @@
 	<div id="money">
 		<div class="errors">{$p2p_status|escape:'quotes':'UTF-8'}</div>
 		<p>Для работы с модулем нужно <a href='https://money.yandex.ru/new' target='_blank'>открыть кошелек</a> на Яндексе и <a href='https://sp-money.yandex.ru/myservices/online.xml' target='_blank'>зарегистрировать приложение</a> на сайте Яндекс.Денег</p>
-		{$money_p2p|default:'':'UTF-8'}
+		{$money_p2p|default:'':'UTF-8'|escape:'htmlall':'UTF-8}
 	</div>
 	<div id="moneyorg">
 		<div class="errors">{$org_status|escape:'quotes':'UTF-8'}</div>
 		<p>Для работы с модулем нужно подключить магазин к <a target="_blank" href="https://kassa.yandex.ru/">Яндекс.Кассе</a>.</p>
-		{$money_org|default:'':'UTF-8'}
+		{$money_org|default:'':'UTF-8'|escape:'htmlall':'UTF-8}
 	</div>
 	<div id="mws">
 		<div class="errors">{$mws_status|escape:'quotes':'UTF-8'}</div>
@@ -97,16 +97,16 @@
 	</div>
 	<div id="metrika">
 		<div class="errors">{$metrika_status|escape:'quotes':'UTF-8'}</div>
-		{$money_metrika|default:'':'UTF-8'}
+		{$money_metrika|default:'':'UTF-8'|escape:'htmlall':'UTF-8}
 		<div id="iframe_container"></div>
 	</div>
 	<div id="market">
 		<div class="errors">{$market_status|escape:'quotes':'UTF-8'}</div>
-		{$money_market|default:'':'UTF-8'}
+		{$money_market|default:'':'UTF-8'|escape:'htmlall':'UTF-8}
 	</div>
 	<div id="marketp">
 		<div class="errors">{$pokupki_status|escape:'quotes':'UTF-8'}</div>
-		{$money_marketp|default:'':'UTF-8'}
+		{$money_marketp|default:'':'UTF-8'|escape:'htmlall':'UTF-8}
 	</div>
 </div>
 {literal}

@@ -70,7 +70,10 @@ class YamodulePaymentKassaModuleFrontController extends ModuleFrontController
                     $cart->id,
                     _PS_OS_PREPARATION_,
                     $cart->getOrderTotal(true, Cart::BOTH),
-                    'Яндекс.Касса ('.$this->module->settingsPaymentOptions(Tools::getValue('paymentType')).')',
+                    'Яндекс.Касса ('.
+                    $this->module->settingsPaymentOptions(
+                        Tools::getValue('paymentType')
+                    ).')',
                     null,
                     array(),
                     null,

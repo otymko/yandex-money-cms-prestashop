@@ -143,11 +143,17 @@ class YamoduleRedirectWalletModuleFrontController extends ModuleFrontController
                     if ($this->log_on) {
                         $this->module->logSave('wallet_redirect: '.$this->module->l('Hold_for_pickup'));
                     }
-                    $this->errors[] = $this->module->l('The recipient is not found, the transfer will be made on demand. The successful implementation.');
+                    $this->errors[] = $this->module->l(
+                        'The recipient is not found, the transfer '.
+                        'will be made on demand. The successful implementation.'
+                    );
                     if ($this->log_on) {
                         $this->module->logSave(
                             'wallet_redirect: hold_for_pickup '
-                            .$this->module->l('The recipient is not found, the transfer will be made on demand. The successful implementation.')
+                            .$this->module->l(
+                                'The recipient is not found, the transfer '.
+                                'will be made on demand. The successful implementation.'
+                            )
                         );
                     }
                         $this->error = true;

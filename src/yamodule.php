@@ -1,13 +1,13 @@
 <?php
 /**
-* Module is prohibited to sales! Violation of this condition leads to the deprivation of the license!
-*
-* @category  Front Office Features
-* @package   Yandex Payment Solution
-* @author    Yandex.Money <cms@yamoney.ru>
-* @copyright © 2015 NBCO Yandex.Money LLC
-* @license   https://money.yandex.ru/doc.xml?id=527052
-*/
+ * Module is prohibited to sales! Violation of this condition leads to the deprivation of the license!
+ *
+ * @category  Front Office Features
+ * @package   Yandex Payment Solution
+ * @author    Yandex.Money <cms@yamoney.ru>
+ * @copyright © 2015 NBCO Yandex.Money LLC
+ * @license   https://money.yandex.ru/doc.xml?id=527052
+ */
 
 class Yamodule extends PaymentModule
 {
@@ -18,9 +18,9 @@ class Yamodule extends PaymentModule
     private $metrika_status = '';
     private $pokupki_status = '';
     private $metrika_valid;
-	 private $update_status;
-	 private $update_text;
-	 
+    private $update_status;
+    private $update_text;
+
     public $cryptor;
 
     public $status = array(
@@ -103,6 +103,7 @@ class Yamodule extends PaymentModule
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
+        $this->module_key = "f51f5c45095c7d4eec9d2266901d793e";
         $this->currencies = true;
         $this->currencies_mode = 'checkbox';
 
@@ -110,7 +111,9 @@ class Yamodule extends PaymentModule
 
         $this->cryptor = $this->getCryptor();
         $this->displayName = $this->l('Y.CMS Prestashop');
-        $this->description = $this->l('Yandex.Money, Yandex.Service, Yandex.Metrika, Yandex.Market Orders in the Market');
+        $this->description = $this->l(
+            'Yandex.Money, Yandex.Service, Yandex.Metrika, Yandex.Market Orders in the Market'
+        );
         $this->confirmUninstall = $this->l('Really uninstall the module?');
         if (!sizeof(Currency::checkPaymentCurrencies($this->id))) {
             $this->warning = $this->l('There is no set currency for your module!');
@@ -145,14 +148,14 @@ class Yamodule extends PaymentModule
     public function install()
     {
         if (!parent::install()
-        || !$this->registerHook('displayPayment')
-        || !$this->registerHook('paymentReturn')
-        || !$this->registerHook('displayFooter')
-        || !$this->registerHook('displayHeader')
-        || !$this->registerHook('ModuleRoutes')
-        || !$this->registerHook('displayOrderConfirmation')
-        || !$this->registerHook('displayAdminOrder')
-        || !$this->registerHook('actionOrderStatusUpdate')
+            || !$this->registerHook('displayPayment')
+            || !$this->registerHook('paymentReturn')
+            || !$this->registerHook('displayFooter')
+            || !$this->registerHook('displayHeader')
+            || !$this->registerHook('ModuleRoutes')
+            || !$this->registerHook('displayOrderConfirmation')
+            || !$this->registerHook('displayAdminOrder')
+            || !$this->registerHook('actionOrderStatusUpdate')
         ) {
             return false;
         }
@@ -388,7 +391,7 @@ class Yamodule extends PaymentModule
                 $("#id_order_state").trigger("chosen:updated");
             });
         </script>';
-        
+
         // if(Configuration::get('YA_POKUPKI_SET_CHANGEC') && $ya_order->order->paymentType != 'PREPAID')
         if (Configuration::get('YA_POKUPKI_SET_CHANGEC')) {
             $html .= $this->displayTabContent($params['id_order']);
@@ -415,9 +418,18 @@ class Yamodule extends PaymentModule
         $mws->CertPem = Configuration::get('yamodule_mws_cert');
 
         $success = false;
-        $mws_payment = $mws->request('listOrders', array('orderNumber' => 'KASSA_'.$params['order']->id_cart), false, false);
+        $mws_payment = $mws->request(
+            'listOrders',
+            array(
+                'orderNumber' => 'KASSA_'.$params['order']->id_cart
+            ),
+            false,
+            false
+        );
         if (!isset($mws_payment['invoiceId']) || !$mws_payment['invoiceId']) {
-            $errors[] = $this->l('The problem with the certificate, no payment under this order or specified wrong ID of the store');
+            $errors[] = $this->l(
+                'The problem with the certificate, no payment under this order or specified wrong ID of the store'
+            );
         }
 
         if (empty($errors) && Tools::isSubmit('return_sum')) {
@@ -606,7 +618,7 @@ class Yamodule extends PaymentModule
                 $tmp[$i]['name'] = $c['name'];
                 $i++;
             }
-            
+
             if (count($tmp) <= 1) {
                 return false;
             }
@@ -693,7 +705,7 @@ class Yamodule extends PaymentModule
                     </div>';
             $html .= $helper->generateForm(array($fields_form)).'</div>';
         }
-        
+
         return $html;
     }
 
@@ -783,7 +795,7 @@ class Yamodule extends PaymentModule
                 }
             }
         }
-        
+
         if ($result['status']) {
             $this->sendCarrierToYandex($order);
         }
@@ -821,7 +833,7 @@ class Yamodule extends PaymentModule
 
         if (Configuration::get('YA_METRIKA_CODE') != '') {
             return '<p style="display:none;"><script type="text/javascript">'.$data
-                .'</script>'.Configuration::get('YA_METRIKA_CODE').'</p>';
+            .'</script>'.Configuration::get('YA_METRIKA_CODE').'</p>';
         }
     }
 
@@ -852,7 +864,8 @@ class Yamodule extends PaymentModule
             }
 
             if ($combination['minimal_quantity'] > 1) {
-                $data['sales_notes'] = $this->l('Minimum order').' '.$combination['minimal_quantity'].' '.$this->l('of the product (s)');
+                $data['sales_notes'] = $this->l('Minimum order').' '.$combination['minimal_quantity'].' '.
+                    $this->l('of the product (s)');
             }
         } else {
             $quantity = (int)$product['quantity'];
@@ -868,7 +881,8 @@ class Yamodule extends PaymentModule
             }
 
             if ($product['minimal_quantity'] > 1) {
-                $data['sales_notes'] = $this->l('Minimum order').' '.$product['minimal_quantity'].' '.$this->l('of the product (s)');
+                $data['sales_notes'] = $this->l('Minimum order').' '.$product['minimal_quantity'].' '.
+                    $this->l('of the product (s)');
             }
         }
 
@@ -892,7 +906,7 @@ class Yamodule extends PaymentModule
             }
         }
 
-        
+
         if ($product['features']) {
             foreach ($product['features'] as $feature) {
                 $params[$feature['name']] = $feature['value'];
@@ -954,7 +968,7 @@ class Yamodule extends PaymentModule
         } else {
             $data['name'] = $product['name'];
         }
-            
+
         $data['vendor'] = $product['manufacturer_name'];
         $data['barcode'] = $barcode;
         $data['delivery'] = 'false';
@@ -1055,12 +1069,11 @@ class Yamodule extends PaymentModule
                         foreach ($combinations as $combination) {
                             $comb_array[$combination['id_product_attribute']]['id_product_attribute']
                                 = $combination['id_product_attribute'];
-                            $comb_array[$combination['id_product_attribute']]['price']
-                                = Product::getPriceStatic(
-                                    $product['id_product'],
-                                    true,
-                                    $combination['id_product_attribute']
-                                );
+                            $comb_array[$combination['id_product_attribute']]['price'] = Product::getPriceStatic(
+                                $product['id_product'],
+                                true,
+                                $combination['id_product_attribute']
+                            );
 
                             $comb_array[$combination['id_product_attribute']]['reference'] = $combination['reference'];
                             $comb_array[$combination['id_product_attribute']]['ean13'] = $combination['ean13'];
@@ -1073,11 +1086,19 @@ class Yamodule extends PaymentModule
                             if (!isset($comb_array[$combination['id_product_attribute']]['comb_url'])) {
                                 $comb_array[$combination['id_product_attribute']]['comb_url'] = '';
                             }
-                            $comb_array[$combination['id_product_attribute']]['comb_url']
-                                .= '/'.Tools::str2url($combination['group_name']).'-'.str_replace(
+                            $comb_array[$combination['id_product_attribute']]['comb_url'] .= '/'.
+                                Tools::str2url(
+                                    $combination['group_name']
+                                ).'-'.str_replace(
                                     Configuration::get('PS_ATTRIBUTE_ANCHOR_SEPARATOR'),
                                     '_',
-                                    Tools::str2url(str_replace(array(',', '.'), '-', $combination['attribute_name']))
+                                    Tools::str2url(
+                                        str_replace(
+                                            array(',', '.'),
+                                            '-',
+                                            $combination['attribute_name']
+                                        )
+                                    )
                                 );
                         }
 
@@ -1155,9 +1176,13 @@ class Yamodule extends PaymentModule
             if ($this->metrika_valid && Configuration::get('YA_METRIKA_ACTIVE')) {
                 $this->sendMetrikaData();
             } elseif ($this->metrika_valid && !Configuration::get('YA_METRIKA_ACTIVE')) {
-                $this->metrika_status .= $this->displayError($this->l('The changes have saved but not sent! Turn On The Metric!'));
+                $this->metrika_status .= $this->displayError(
+                    $this->l(
+                        'The changes have saved but not sent! Turn On The Metric!'
+                    )
+                );
             }
-				$this->update_status = $this->sendStatistics();
+            $this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitorgModule')) {
             $this->org_status = $this->validateKassa();
             $this->update_status = $this->sendStatistics();//$this->sendStatistics();
@@ -1191,7 +1216,7 @@ class Yamodule extends PaymentModule
                 'metrika' =>(bool) Configuration::get('YA_METRIKA_ACTIVE')
             )
         );
-        
+
         $array_crypt = base64_encode(serialize($array));
 
         $url = 'https://statcms.yamoney.ru/v2/';
@@ -1209,16 +1234,16 @@ class Yamodule extends PaymentModule
 
         $curl = curl_init($url);
         curl_setopt_array($curl, $curlOpt);
-        $rbody = curl_exec($curl);
-        $rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        curl_exec($curl);
+        //$rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
-		  
-		  $json=json_decode($rbody);
-			if ($rcode==200 && isset($json->new_version)){
-				return $json->new_version;
-			}else{
-				return false;
-			}
+        /*
+          $json=json_decode($rbody);
+            if ($rcode==200 && isset($json->new_version)){
+                return $json->new_version;
+            }else{*/
+        return false;
+        //	}
     }
 
     public function sendMetrikaData()
@@ -1227,45 +1252,45 @@ class Yamodule extends PaymentModule
         $response = $m->run();
         $data = array(
             'YA_METRIKA_CART' =>  array(
-                    'name' => 'YA_METRIKA_CART',
-                    'flag' => 'basket',
-                    'type' => 'action',
-                    'class' => 1,
-                    'depth' => 0,
-                    'conditions' => array(
-                        array(
-                            'url' => 'metrikaCart',
-                            'type' => 'exact'
-                        )
+                'name' => 'YA_METRIKA_CART',
+                'flag' => 'basket',
+                'type' => 'action',
+                'class' => 1,
+                'depth' => 0,
+                'conditions' => array(
+                    array(
+                        'url' => 'metrikaCart',
+                        'type' => 'exact'
                     )
+                )
 
             ),
             'YA_METRIKA_ORDER' => array(
-                    'name' => 'YA_METRIKA_ORDER',
-                    'flag' => 'order',
-                    'type' => 'action',
-                    'class' => 1,
-                    'depth' => 0,
-                    'conditions' => array(
-                        array(
-                            'url' => 'metrikaOrder',
-                            'type' => 'exact'
-                        )
+                'name' => 'YA_METRIKA_ORDER',
+                'flag' => 'order',
+                'type' => 'action',
+                'class' => 1,
+                'depth' => 0,
+                'conditions' => array(
+                    array(
+                        'url' => 'metrikaOrder',
+                        'type' => 'exact'
                     )
+                )
 
             ),
             'YA_METRIKA_WISHLIST' => array(
-                    'name' => 'YA_METRIKA_WISHLIST',
-                    'flag' => '',
-                    'type' => 'action',
-                    'class' => 1,
-                    'depth' => 0,
-                    'conditions' => array(
-                        array(
-                            'url' => 'metrikaWishlist',
-                            'type' => 'exact'
-                        )
+                'name' => 'YA_METRIKA_WISHLIST',
+                'flag' => '',
+                'type' => 'action',
+                'class' => 1,
+                'depth' => 0,
+                'conditions' => array(
+                    array(
+                        'url' => 'metrikaWishlist',
+                        'type' => 'exact'
                     )
+                )
 
             ),
         );
@@ -1280,7 +1305,11 @@ class Yamodule extends PaymentModule
                 }
                 $otvet = $m->editCounter();
                 if ($otvet->counter->id != Configuration::get('YA_METRIKA_NUMBER')) {
-                    $error .= $this->displayError($this->l('Saving the settings the meter is not the meter number is incorrect.'));
+                    $error .= $this->displayError(
+                        $this->l(
+                            'Saving the settings the meter is not the meter number is incorrect.'
+                        )
+                    );
                 } else {
                     $tmp_goals = $m->getCounterGoals();
                     $goals = array();
@@ -1304,11 +1333,19 @@ class Yamodule extends PaymentModule
                 $error .= $this->displayError($m->errors);
             }
         } else {
-            $error .= $this->displayError($this->l('The token for authorization is missing! Get the token and repeat!'));
+            $error .= $this->displayError(
+                $this->l(
+                    'The token for authorization is missing! Get the token and repeat!'
+                )
+            );
         }
 
         if ($error == '') {
-            $this->metrika_status .= $this->displayConfirmation($this->l('Data was successfully sent and saved! Code metrici updated pages automatically.'));
+            $this->metrika_status .= $this->displayConfirmation(
+                $this->l(
+                    'Data was successfully sent and saved! Code metrici updated pages automatically.'
+                )
+            );
         } else {
             $this->metrika_status .= $error;
         }
@@ -1662,8 +1699,13 @@ class Yamodule extends PaymentModule
 
         $vars_pokupki['YA_POKUPKI_FD'] = 'JSON';
         $vars_pokupki['YA_POKUPKI_TA'] = 'URL';
-        $vars_org['YA_ORG_TEXT_INSIDE'] = "Shop ID, scid, ShopPassword можно посмотреть в <a href='https://money.yandex.ru/joinups' target='_blank'>личном кабинете</a> после подключения Яндекс.Кассы.";
-        $vars_p2p['YA_P2P_TEXT_INSIDE'] = "ID и секретное слово вы получите после <a href='https://sp-money.yandex.ru/myservices/online.xml' target='_blank'>регистрации приложения</a> на сайте Яндекс.Денег";
+        $vars_org['YA_ORG_TEXT_INSIDE'] = "Shop ID, scid, ShopPassword можно посмотреть".
+            " в <a href='https://money.yandex.ru/joinups' target='_blank'>личном кабинете</a>".
+            " после подключения Яндекс.Кассы.";
+        $vars_p2p['YA_P2P_TEXT_INSIDE'] = "ID и секретное слово вы получите после".
+            " <a href='https://sp-money.yandex.ru/myservices/online.xml'".
+            " target='_blank'>регистрации приложения</a>".
+            " на сайте Яндекс.Денег";
         $this->context->smarty->assign(array(
             'ya_version' => $this->version,
             'YA_ORG_ACTIVE' => $vars_org['YA_ORG_ACTIVE'],
@@ -1671,13 +1713,13 @@ class Yamodule extends PaymentModule
             'orders_link' => $this->context->link->getAdminLink('AdminOrders', false)
                 .'&token='.Tools::getAdminTokenLite('AdminOrders'),
             'ajax_limk_ym' => $this->context->link->getAdminLink('AdminModules', false)
-            .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='
-            .$this->name.'&token='.Tools::getAdminTokenLite('AdminModules'),
+                .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='
+                .$this->name.'&token='.Tools::getAdminTokenLite('AdminModules'),
             'mws_cn' => '/business/ps/yacms-'.$vars_org['YA_ORG_SHOPID'],
             'mws_sign' => Configuration::get('yamodule_mws_csr_sign'),
             'mws_cert' => Configuration::get('yamodule_mws_cert') ? true : false,
             'this_path' => $this->_path,
-				'update_status' => $this->update_status,		
+            'update_status' => $this->update_status,
             'metrika_status' => $this->metrika_status,
             'market_status' => $this->market_status,
             'pokupki_status' => $this->pokupki_status,
@@ -1745,7 +1787,8 @@ class Yamodule extends PaymentModule
             'GP' => 'Оплата наличными через кассы и терминалы',
             'MC' => 'Оплата со счета мобильного телефона',
             'WM' => 'Оплата из кошелька в системе WebMoney',
-            'SB' => 'Оплата через Сбербанк: оплата по SMS или Сбербанк Онлайн',
+            'SB' => 'Оплата через Сбербанк: '.
+                'оплата по SMS или Сбербанк Онлайн',
             'AB' => 'Оплата через Альфа-Клик',
             'MC' => 'Платеж со счета мобильного телефона',
             'MA' => 'Оплата через MasterPass',
@@ -1815,7 +1858,8 @@ class Yamodule extends PaymentModule
                 'customer' => new Customer($params['cart']->id_customer),
                 'address' => new Address($this->context->cart->id_address_delivery),
                 'total_to_pay' => number_format($total_to_pay, 2, '.', ''),
-                'this_path_ssl' => Tools::getShopDomainSsl(true, true) . __PS_BASE_URI__ . 'modules/' . $this->name . '/',
+                'this_path_ssl' => Tools::getShopDomainSsl(true, true)
+                    . __PS_BASE_URI__ . 'modules/' . $this->name . '/',
                 'shop_name' => Configuration::get('PS_SHOP_NAME')
             ));
 
@@ -1910,7 +1954,7 @@ class Yamodule extends PaymentModule
                     ));
                     $display .= $this->display(__FILE__, 'kassa.tpl');
                 }
-                
+
                 if ($payments['YA_ORG_PAYMENT_QW']) {
                     $this->smarty->assign(array(
                         'pt' => 'QW',
@@ -2050,21 +2094,53 @@ class Yamodule extends PaymentModule
     public function descriptionError($error)
     {
         $error_array = array(
-            'invalid_request' => $this->l('Your request is missing required parameters or settings are incorrect or invalid values'),
-            'invalid_scope' => $this->l('The scope parameter is missing or has an invalid value or a logical contradiction'),
-            'unauthorized_client' => $this->l('Invalid parameter client_id, or the application does not have the right to request authorization (such as its client_id blocked Yandex.Money)'),
+            'invalid_request' => $this->l(
+                'Your request is missing required parameters or settings are incorrect or invalid values'
+            ),
+            'invalid_scope' => $this->l(
+                'The scope parameter is missing or has an invalid value or a logical contradiction'
+            ),
+            'unauthorized_client' => $this->l(
+                'Invalid parameter client_id, or the application does not have the'.
+                ' right to request authorization (such as its client_id blocked Yandex.Money)'
+            ),
             'access_denied' => $this->l('Has declined a request authorization application'),
-            'invalid_grant' => $this->l('The issue access_token denied. Issued a temporary token is not Google search or expired, or on the temporary token is issued access_token (second request authorization token with the same time token)'),
+            'invalid_grant' => $this->l(
+                'The issue access_token denied. Issued a temporary token is not '.
+                'Google search or expired, or on the temporary token is issued access_token (second '.
+                'request authorization token with the same time token)'
+            ),
             'illegal_params' => $this->l('Required payment options are not available or have invalid values.'),
             'illegal_param_label' => $this->l('Invalid parameter value label'),
             'phone_unknown' => $this->l('A phone number is not associated with a user account or payee'),
-            'payment_refused' => $this->l('The store refused to accept payment (for example, a user tried to pay for a product that isn\'t in the store)'),
-            'limit_exceeded' => $this->l('Exceeded one of the limits on operations: on the amount of the transaction for authorization token issued; transaction amount for the period of time for the token issued by the authorization; Yandeks.Deneg restrictions for different types of operations.'),
-            'authorization_reject' => $this->l('In payment authorization is denied. Possible reasons are: transaction with the current parameters is not available to the user; person does not accept the Agreement on the use of the service "shops".'),
+            'payment_refused' => $this->l(
+                'The store refused to accept payment (for example, a user tried '.
+                'to pay for a product that isn\'t in the store)'
+            ),
+            'limit_exceeded' => $this->l(
+                'Exceeded one of the limits on operations: on the amount of the '.
+                'transaction for authorization token issued; transaction amount for the period of time'.
+                ' for the token issued by the authorization; Yandeks.Deneg restrictions '.
+                'for different types of operations.'
+            ),
+            'authorization_reject' => $this->l(
+                'In payment authorization is denied. Possible reasons are:'.
+                ' transaction with the current parameters is not available to the user; person does not'.
+                ' accept the Agreement on the use of the service "shops".'
+            ),
             'contract_not_found' => $this->l('None exhibited a contract with a given request_id'),
-            'not_enough_funds' => $this->l('Insufficient funds in the account of the payer. Need to recharge and carry out a new delivery'),
-            'not-enough-funds' => $this->l('Insufficient funds in the account of the payer. Need to recharge and carry out a new delivery'),
-            'money_source_not_available' => $this->l('The requested method of payment (money_source) is not available for this payment'),
+            'not_enough_funds' => $this->l(
+                'Insufficient funds in the account of the payer. '.
+                'Need to recharge and carry out a new delivery'
+            ),
+            'not-enough-funds' => $this->l(
+                'Insufficient funds in the account of the payer.'.
+                ' Need to recharge and carry out a new delivery'
+            ),
+            'money_source_not_available' => $this->l(
+                'The requested method of payment (money_source) '.
+                'is not available for this payment'
+            ),
             'illegal_param_csc' => $this->l('Tsutstvuet or an invalid parameter value cs'),
             'payment_refused' => $this->l('Shop for whatever reason, refused to accept payment.')
         );
@@ -2081,8 +2157,14 @@ class Yamodule extends PaymentModule
         $error = array(
             '0' => $this->l('Technical error or refund denied for this method of payment'),
             '10' => $this->l('Error parsing XML document. '),
-            '50' => $this->l('It is impossible to open the digital signature PKCS#7 data integrity error digital signature'),
-            '51' => $this->l('The TSA is not confirmed (the data of the digital signature do not match with the transferred document)'),
+            '50' => $this->l(
+                'It is impossible to open the digital signature PKCS#7 '.
+                'data integrity error digital signature'
+            ),
+            '51' => $this->l(
+                'The TSA is not confirmed (the data of the digital signature'.
+                ' do not match with the transferred document)'
+            ),
             '53' => $this->l('The request signed by the certificate that is unknown to Yandex.Money'),
             '55' => $this->l('Have expired certificate store'),
             '110' => $this->l('The store does not have rights to perform the operation requested.'),
@@ -2110,7 +2192,10 @@ class Yamodule extends PaymentModule
             '212' => $this->l('The logical contradiction between the range of dates of payment and the "paid"'),
             '213' => $this->l('There are no condition sample'),
             '214' => $this->l('In the query by order number (orderNumber) do not specify the ID of the shop (shopId)'),
-            '215' => $this->l('In the request for transaction number (invoiceId) is not specified, the ID of the shop (shopId)'),
+            '215' => $this->l(
+                'In the request for transaction number'.
+                ' (invoiceId) is not specified, the ID of the shop (shopId)'
+            ),
             '216' => $this->l('The result contains too many items'),
             '217' => $this->l('Invalid value for the partial'),
             '402' => $this->l('Incorrect value amount'),

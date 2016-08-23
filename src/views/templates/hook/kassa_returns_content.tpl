@@ -47,7 +47,7 @@
 				<td style="width: 350px;">
 					<div class="input-group">
 						<span class="input-group-addon"> руб</span>
-						<input type="text" name="return_sum" class='control-form' value="{$doc->total_paid_tax_incl|replace:',':'.' - $return_total|replace:',':'.'}" id="return_sum" />
+						<input type="text" name="return_sum" class='control-form' value="{$doc->total_paid_tax_incl|replace:',':'.'|escape:'htmlall':'UTF-8' - $return_total|replace:',':'.'|escape:'htmlall':'UTF-8'}" id="return_sum" />
 					</div>
 				</td>
 			</tr>

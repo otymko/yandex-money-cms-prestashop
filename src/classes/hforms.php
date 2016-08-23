@@ -23,7 +23,11 @@ class Hforms
         $yamodule = new Yamodule();
         $dir = _PS_ADMIN_DIR_;
         $dir = explode('/', $dir);
-        $dir = base64_encode($yamodule->cryptor->encrypt(end($dir).'_'.Context::getContext()->cookie->id_employee.'_pokupki'));
+        $dir = base64_encode(
+            $yamodule->cryptor->encrypt(
+                end($dir).'_'.Context::getContext()->cookie->id_employee.'_pokupki'
+            )
+        );
         $carriers = Carrier::getCarriers(Context::getContext()->language->id, true, false, false, null, 5);
         $type = array(
             array(
@@ -389,7 +393,8 @@ class Hforms
                                 array(
                                     'id' => 'ALLCURRENCY',
                                     'val' => 1,
-                                    'name' => $this->l('Unload all currencies? (If not, will be uploaded only by default)')
+                                    'name' =>
+                                        $this->l('Unload all currencies? (If not, will be uploaded only by default)')
                                 ),
                                 array(
                                     'id' => 'GZIP',
@@ -454,7 +459,11 @@ class Hforms
         $yamodule = new Yamodule();
         $dir = _PS_ADMIN_DIR_;
         $dir = explode('/', $dir);
-        $dir = base64_encode($yamodule->cryptor->encrypt(end($dir).'_'.Context::getContext()->cookie->id_employee.'_metrika'));
+        $dir = base64_encode(
+            $yamodule->cryptor->encrypt(
+                end($dir).'_'.Context::getContext()->cookie->id_employee.'_metrika'
+            )
+        );
         return array(
             'form' => array(
                 'legend' => array(
@@ -603,7 +612,10 @@ class Hforms
                 'input' => array(
                     array(
                         'type' => 'radio',
-                        'label' => $this->l('Включить приём платежей через Яндекс.Кассу'),
+                        'label' => $this->l(
+                            'Включить приём'.
+                            ' платежей через Яндекс.Кассу'
+                        ),
                         'name' => 'YA_ORG_ACTIVE',
                         'required' => false,
                         'class' => 't',
@@ -645,7 +657,11 @@ class Hforms
                         'col' => 6,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l("Скопируйте эту ссылку в поля Check URL и Aviso URL в настройках личного кабинета Яндекс.Кассы"),
+                        'desc' => $this->l(
+                            "Скопируйте эту ссылку".
+                            " в поля Check URL и".
+                            " Aviso URL в настройках личного кабинета Яндекс.Кассы"
+                        ),
                         'name' => 'YA_ORG_CHECKORDER',
                         'label' => "checkUrl/avisoUrl",
                         'disabled' => true
@@ -654,9 +670,18 @@ class Hforms
                         'col' => 6,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l("Включите «Использовать страницы успеха и ошибки с динамическими адресами» в настройках личного кабинета Яндекс.Кассы"),
+                        'desc' => $this->l(
+                            "Включите «Использовать ".
+                            "страницы успеха и ошибки с динамическими".
+                            " адресами» в настройках ".
+                            "личного кабинета Яндекс.Кассы"
+                        ),
                         'name' => 'YA_ORG_SUCCESS',
-                        'values' => array('value'=> $this->l('Страницы с динамическими адресами')),
+                        'values' => array(
+                            'value'=> $this->l(
+                                'Страницы с динамическими адресами'
+                            )
+                        ),
                         'label' => "successUrl/failUrl",
                         'disabled' => true
                     ),
@@ -695,7 +720,9 @@ class Hforms
                     array(
                         'type' => 'radio',
                         'label' => $this->l('Сценарий оплаты'),
-                        'desc' => "<a href='https://tech.yandex.ru/money/doc/payment-solution/payment-form/payment-form-docpage/' target='_blank'>".$this->l('Подробнее о сценариях оплаты')."</a>",
+                        'desc' => "<a href='https://tech.yandex.ru/money/doc/payment-solution".
+                            "/payment-form/payment-form-docpage/' target='_blank'>".
+                            $this->l('Подробнее о сценариях оплаты')."</a>",
                         'name' => 'YA_ORG_INSIDE',
                         'required' => false,
                         'class' => 't',
@@ -704,21 +731,28 @@ class Hforms
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Выбор способов оплаты на стороне сервиса Яндекс.Касса')
+                                'label' => $this->l(
+                                    'Выбор способов оплаты'.
+                                    ' на стороне сервиса Яндекс.Касса'
+                                )
                             ),
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Выбор способов оплаты на стороне магазина')
+                                'label' => $this->l(
+                                    'Выбор способов оплаты на стороне магазина'
+                                )
                             )
                         ),
                     ),
                     array(
                         'type' => 'checkbox',
-                        'label' => $this->l('Использовать кнопку "Оплатить через Яндекс"'),
+                        'label' => $this->l(
+                            'Назвать кнопку оплаты «Заплатить через Яндекс»'
+                        ),
                         'name' => 'YA_ORG_PAYLOGO',
                         'class' => 'text-inside',
-                        'desc' => $this->l('Изменяет стандартный дизайн кнопки оплаты'),
+                        'desc' => $this->l(''),
                         'values' => array(
                             'query' => array(
                                 array(
@@ -733,7 +767,11 @@ class Hforms
                     array(
                         'type' => 'checkbox',
                         'label' => '',
-                        'desc' => $this->l('Отметьте способы оплаты, которые указаны в вашем договоре с Яндекс.Деньгами'),
+                        'desc' => $this->l(
+                            'Отметьте способы оплаты,'.
+                            ' которые указаны в вашем '.
+                            'договоре с Яндекс.Деньгами'
+                        ),
                         'name' => 'YA_ORG_PAYMENT',
                         'values' => array(
                             'query' => array(
@@ -810,7 +848,10 @@ class Hforms
                         'type' => 'checkbox',
                         'label' => $this->l('Запись отладочной информации'),
                         'name' => 'YA_ORG_LOGGING',
-                        'desc' => $this->l('Настройку нужно будет поменять, только если попросят специалисты Яндекс.Денег'),
+                        'desc' => $this->l(
+                            'Настройку нужно будет поменять,'.
+                            ' только если попросят специалисты Яндекс.Денег'
+                        ),
                         'values' => array(
                             'query' => array(
                                 array(
@@ -837,7 +878,9 @@ class Hforms
                 'input' => array(
                     array(
                         'type' => 'radio',
-                        'label' => $this->l('Включить прием платежей в кошелек на Яндексе'),
+                        'label' => $this->l(
+                            'Включить прием платежей в кошелек на Яндексе'
+                        ),
                         'name' => 'YA_P2P_ACTIVE',
                         'required' => false,
                         'class' => 't',
@@ -858,7 +901,9 @@ class Hforms
                     array(
                         'col' => 6,
                         'class' => 't',
-                        'desc' => "Скопируйте эту ссылку в поле Redirect URL на <a href='https://sp-money.yandex.ru/myservices/online.xml' target='_blank'>".$this->l("странице регистрации приложения")."</a>",
+                        'desc' => "Скопируйте эту ссылку в поле Redirect URL на ".
+                            "<a href='https://sp-money.yandex.ru/myservices/online.xml' target='_blank'>"
+                            .$this->l("странице регистрации приложения")."</a>",
                         'type' => 'text',
                         'name' => 'YA_P2P_REDIRECT',
                         'label' => $this->l('RedirectURL'),
@@ -905,7 +950,8 @@ class Hforms
                     array(
                         'type' => 'checkbox',
                         'label' => $this->l('Запись отладочной информации'),
-                        'desc' => $this->l('Настройку нужно будет поменять, только если попросят специалисты Яндекс.Денег'),
+                        'desc' => $this->l('Настройку нужно будет поменять, ".
+                            "только если попросят специалисты Яндекс.Денег'),
                         'name' => 'YA_P2P_LOGGING',
                         'values' => array(
                             'query' => array(
