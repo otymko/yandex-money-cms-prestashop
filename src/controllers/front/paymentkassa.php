@@ -26,6 +26,9 @@ class YamodulePaymentKassaModuleFrontController extends ModuleFrontController
             $this->module->logSave('payment_kassa '.$dd);
         }
         $data = explode('_', Tools::getValue('customerNumber'));
+        $action = Tools::getValue('action');
+        $shopId = Tools::getValue('shopId');
+        $invoiceId = Tools::getValue('invoiceId');
         if (!empty($data) && $data[0] == 'KASSA') {
             $cart = new Cart($data[1]);
             if ($cart->id_customer == 0
@@ -33,12 +36,14 @@ class YamodulePaymentKassaModuleFrontController extends ModuleFrontController
                 || $cart->id_address_invoice == 0
                 || !$this->module->active
             ) {
-                Tools::redirect('index.php?controller=order&step=1');
+                $this->module->validateResponse('Incorrect module setting', 200, $action, $shopId, $invoiceId, true);
+                //Tools::redirect('index.php?controller=order&step=1');
             }
 
             $customer = new Customer($cart->id_customer);
             if (!Validate::isLoadedObject($customer)) {
-                Tools::redirect('index.php?controller=order&step=1');
+                $this->module->validateResponse('Incorrect consumer', 200, $action, $shopId, $invoiceId, true);
+                //Tools::redirect('index.php?controller=order&step=1');
             }
 
             $total_to_pay = $cart->getOrderTotal(true);
@@ -50,9 +55,6 @@ class YamodulePaymentKassaModuleFrontController extends ModuleFrontController
             }
             $total_to_pay = number_format($total_to_pay, 2, '.', '');
             $amount = Tools::getValue('orderSumAmount');
-            $action = Tools::getValue('action');
-            $shopId = Tools::getValue('shopId');
-            $invoiceId = Tools::getValue('invoiceId');
             $signature = md5(
                 $action . ';' .
                 $amount . ';' .
@@ -140,7 +142,8 @@ class YamodulePaymentKassaModuleFrontController extends ModuleFrontController
                 $this->module->validateResponse('', 0, $action, $shopId, $invoiceId, true);
             }
         } else {
-            Tools::redirect('index.php?controller=order&step=3');
+            $this->module->validateResponse('Incorrect customerNumber', 200, $action, $shopId, $invoiceId, true);
+            //Tools::redirect('index.php?controller=order&step=3');
         }
     }
 }
