@@ -99,7 +99,7 @@ class Yamodule extends PaymentModule
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.3.7';
+        $this->version = '1.3.8';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -1543,19 +1543,19 @@ class Yamodule extends PaymentModule
         if (Tools::getValue('YA_ORG_SHOPID') == '') {
             $errors .= $this->displayError($this->l('ShopId not filled!'));
         } else {
-            Configuration::UpdateValue('YA_ORG_SHOPID', Tools::getValue('YA_ORG_SHOPID'));
+            Configuration::UpdateValue('YA_ORG_SHOPID', trim(Tools::getValue('YA_ORG_SHOPID')));
         }
 
         if (Tools::getValue('YA_ORG_SCID') == '') {
             $errors .= $this->displayError($this->l('SCID is not filled!'));
         } else {
-            Configuration::UpdateValue('YA_ORG_SCID', Tools::getValue('YA_ORG_SCID'));
+            Configuration::UpdateValue('YA_ORG_SCID', trim(Tools::getValue('YA_ORG_SCID')));
         }
 
         if (Tools::getValue('YA_ORG_MD5_PASSWORD') == '') {
             $errors .= $this->displayError($this->l('The password is not filled!'));
         } else {
-            Configuration::UpdateValue('YA_ORG_MD5_PASSWORD', Tools::getValue('YA_ORG_MD5_PASSWORD'));
+            Configuration::UpdateValue('YA_ORG_MD5_PASSWORD', trim(Tools::getValue('YA_ORG_MD5_PASSWORD')));
         }
 
         if ($errors == '') {
@@ -1581,13 +1581,13 @@ class Yamodule extends PaymentModule
         if (Tools::getValue('YA_P2P_IDENTIFICATOR') == '') {
             $errors .= $this->displayError($this->l('The application ID is not filled in!'));
         } else {
-            Configuration::UpdateValue('YA_P2P_IDENTIFICATOR', Tools::getValue('YA_P2P_IDENTIFICATOR'));
+            Configuration::UpdateValue('YA_P2P_IDENTIFICATOR', trim(Tools::getValue('YA_P2P_IDENTIFICATOR')));
         }
 
         if (Tools::getValue('YA_P2P_KEY') == '') {
             $errors .= $this->displayError($this->l('O2Auth key is not filled!'));
         } else {
-            Configuration::UpdateValue('YA_P2P_KEY', Tools::getValue('YA_P2P_KEY'));
+            Configuration::UpdateValue('YA_P2P_KEY', trim(Tools::getValue('YA_P2P_KEY')));
         }
 
         if ($errors == '') {
