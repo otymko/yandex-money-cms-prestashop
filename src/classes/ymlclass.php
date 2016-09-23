@@ -136,6 +136,7 @@ class Yml
             'vendor',
             'vendorCode',
             'model',
+            'group_id',
             'description',
             'sales_notes',
             'downloadable',

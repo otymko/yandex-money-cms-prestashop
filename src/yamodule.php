@@ -867,6 +867,7 @@ class Yamodule extends PaymentModule
                 $data['sales_notes'] = $this->l('Minimum order').' '.$combination['minimal_quantity'].' '.
                     $this->l('of the product (s)');
             }
+            $data['group_id'] = $product['id_product'];
         } else {
             $quantity = (int)$product['quantity'];
             $url = $product['link'];
