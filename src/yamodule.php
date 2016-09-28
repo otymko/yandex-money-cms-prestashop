@@ -99,7 +99,7 @@ class Yamodule extends PaymentModule
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.3.8';
+        $this->version = '1.3.9';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -1704,7 +1704,7 @@ class Yamodule extends PaymentModule
             " в <a href='https://money.yandex.ru/joinups' target='_blank'>личном кабинете</a>".
             " после подключения Яндекс.Кассы.";
         $vars_p2p['YA_P2P_TEXT_INSIDE'] = "ID и секретное слово вы получите после".
-            " <a href='https://sp-money.yandex.ru/myservices/online.xml'".
+            " <a href='https://sp-money.yandex.ru/myservices/new.xml'".
             " target='_blank'>регистрации приложения</a>".
             " на сайте Яндекс.Денег";
         $this->context->smarty->assign(array(

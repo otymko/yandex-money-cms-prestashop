@@ -27,7 +27,7 @@
 	</ul>
 	<div id="money">
 		<div class="errors">{$p2p_status|escape:'quotes':'UTF-8'}</div>
-		<p>Для работы с модулем нужно <a href='https://money.yandex.ru/new' target='_blank'>открыть кошелек</a> на Яндексе и <a href='https://sp-money.yandex.ru/myservices/online.xml' target='_blank'>зарегистрировать приложение</a> на сайте Яндекс.Денег</p>
+		<p>Для работы с модулем нужно <a href='https://money.yandex.ru/new' target='_blank'>открыть кошелек</a> на Яндексе и <a href='https://sp-money.yandex.ru/myservices/new.xml' target='_blank'>зарегистрировать приложение</a> на сайте Яндекс.Денег</p>
 		{$money_p2p}
 	</div>
 	<div id="moneyorg">

@@ -902,7 +902,7 @@ class Hforms
                         'col' => 6,
                         'class' => 't',
                         'desc' => "Скопируйте эту ссылку в поле Redirect URL на ".
-                            "<a href='https://sp-money.yandex.ru/myservices/online.xml' target='_blank'>"
+                            "<a href='https://sp-money.yandex.ru/myservices/new.xml' target='_blank'>"
                             .$this->l("странице регистрации приложения")."</a>",
                         'type' => 'text',
                         'name' => 'YA_P2P_REDIRECT',
