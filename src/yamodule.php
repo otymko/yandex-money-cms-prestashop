@@ -315,7 +315,7 @@ class Yamodule extends PaymentModule
     public function hookdisplayAdminOrder($params)
     {
         $ya_order_db = $this->getYandexOrderById((int)$params['id_order']);
-        $html = '';
+        $ht = '';
         if ($ya_order_db['id_market_order']) {
             $partner = new Partner();
             $ya_order = $partner->getOrder($ya_order_db['id_market_order']);
@@ -381,7 +381,7 @@ class Yamodule extends PaymentModule
         }
 
         $array = Tools::jsonEncode($array);
-        $html .= '<script type="text/javascript">
+        $ht .= '<script type="text/javascript">
             $(document).ready(function(){
                 var array = JSON.parse("'.$array.'");
                 for(var k in array){
@@ -394,10 +394,10 @@ class Yamodule extends PaymentModule
 
         // if(Configuration::get('YA_POKUPKI_SET_CHANGEC') && $ya_order->order->paymentType != 'PREPAID')
         if (Configuration::get('YA_POKUPKI_SET_CHANGEC')) {
-            $html .= $this->displayTabContent($params['id_order']);
+            $ht .= $this->displayTabContent($params['id_order']);
         }
 
-        return $html;
+        return $ht;
     }
 
     public function displayReturnsContent($params)
@@ -586,7 +586,7 @@ class Yamodule extends PaymentModule
     {
         $partner = new Partner();
         $order_ya_db = $this->getYandexOrderById($id);
-        $html = '';
+        $ht = '';
         if ($order_ya_db['id_market_order']) {
             $ya_order = $partner->getOrder($order_ya_db['id_market_order']);
             $types = unserialize(Configuration::get('YA_POKUPKI_CARRIER_SERIALIZE'));
@@ -602,7 +602,7 @@ class Yamodule extends PaymentModule
             $order = new Order($id);
             $cart = new Cart($order->id_cart);
             $carriers = $cart->simulateCarriersOutput();
-            $html = '';
+            $ht = '';
             $i = 1;
             $tmp = array();
             $tmp[0]['id_carrier'] = 0;
@@ -685,28 +685,18 @@ class Yamodule extends PaymentModule
             $helper->tpl_vars['fields_value']['price_incl'] = '';
             $helper->tpl_vars['fields_value']['new_carrier'] = 0;
             $path_module_http = __PS_BASE_URI__.'modules/yamodule/';
-            $html .= '<div class="change_carr">
-                    <script type="text/javascript">
-                        var notselc = "'.$this->l('Please select carrier').'";
-                        var ajaxurl = "'.$path_module_http.'";
-                        var idm = "'.(int)$this->context->employee->id.'";
-                        var tkn = "'.Tools::getAdminTokenLite('AdminOrders').'";
-                        var id_order = "'.(int)$order->id.'";
-                    </script>
-                    <div id="circularG">
-                        <div id="circularG_1" class="circularG"></div>
-                        <div id="circularG_2" class="circularG"></div>
-                        <div id="circularG_3" class="circularG"></div>
-                        <div id="circularG_4" class="circularG"></div>
-                        <div id="circularG_5" class="circularG"></div>
-                        <div id="circularG_6" class="circularG"></div>
-                        <div id="circularG_7" class="circularG"></div>
-                        <div id="circularG_8" class="circularG"></div>
-                    </div>';
-            $html .= $helper->generateForm(array($fields_form)).'</div>';
+
+            $this->context->smarty->assign('employee_id', $this->context->employee->id);
+            $this->context->smarty->assign('path_module_http', $path_module_http);
+            $this->context->smarty->assign('token_lite', Tools::getAdminTokenLite('AdminOrders'));
+            $this->context->smarty->assign('orderid', $order->id);
+
+            $ht .= $this->context->smarty->fetch(dirname(__FILE__).'\controllers\front\carrier.tpl');
+
+            $ht .= $helper->generateForm(array($fields_form)).'</div>';
         }
 
-        return $html;
+        return $ht;
     }
 
     public function processLoadPrice()
@@ -1432,11 +1422,7 @@ class Yamodule extends PaymentModule
             Configuration::UpdateValue('YA_POKUPKI_TOKEN', Tools::getValue('YA_POKUPKI_TOKEN'));
         }
 
-        if (Tools::getValue('YA_POKUPKI_APIURL') == '') {
-            $errors .= $this->displayError($this->l('The API URL is not filled in!'));
-        } else {
-            Configuration::UpdateValue('YA_POKUPKI_APIURL', Tools::getValue('YA_POKUPKI_APIURL'));
-        }
+        Configuration::UpdateValue('YA_POKUPKI_APIURL', "https://api.partner.market.yandex.ru/v2/");
 
         if (Tools::getValue('YA_POKUPKI_LOGIN') == '') {
             $errors .= $this->displayError($this->l('Fill your username in Yandex!'));
@@ -1487,7 +1473,7 @@ class Yamodule extends PaymentModule
         Configuration::UpdateValue('YA_MARKET_SET_GZIP', Tools::getValue('YA_MARKET_SET_GZIP'));
         Configuration::UpdateValue('YA_MARKET_SET_AVAILABLE', Tools::getValue('YA_MARKET_SET_AVAILABLE'));
         Configuration::UpdateValue('YA_MARKET_SET_NACTIVECAT', Tools::getValue('YA_MARKET_SET_NACTIVECAT'));
-        Configuration::UpdateValue('YA_MARKET_SET_HOMECARRIER', Tools::getValue('YA_MARKET_SET_HOMECARRIER'));
+        //Configuration::UpdateValue('YA_MARKET_SET_HOMECARRIER', Tools::getValue('YA_MARKET_SET_HOMECARRIER'));
         Configuration::UpdateValue('YA_MARKET_SET_COMBINATIONS', Tools::getValue('YA_MARKET_SET_COMBINATIONS'));
         Configuration::UpdateValue('YA_MARKET_SET_DIMENSIONS', Tools::getValue('YA_MARKET_SET_DIMENSIONS'));
         Configuration::UpdateValue('YA_MARKET_SET_SAMOVIVOZ', Tools::getValue('YA_MARKET_SET_SAMOVIVOZ'));
@@ -1671,7 +1657,7 @@ class Yamodule extends PaymentModule
             'YA_MARKET_NAME',
             'YA_MARKET_SET_AVAILABLE',
             'YA_MARKET_SET_NACTIVECAT',
-            'YA_MARKET_SET_HOMECARRIER',
+            //'YA_MARKET_SET_HOMECARRIER',
             'YA_MARKET_SET_COMBINATIONS',
             'YA_MARKET_CATALL',
             'YA_MARKET_SET_DIMENSIONS',

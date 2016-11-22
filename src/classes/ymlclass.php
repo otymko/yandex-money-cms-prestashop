@@ -194,7 +194,7 @@ class Yml
             $s .= $this->convertArrayToAttr($category, 'category', $category_name);
         }
         $s .= '</categories>' . "\r\n";
-        if (Configuration::get('YA_MARKET_SET_HOMECARRIER')) {
+        if (Configuration::get('YA_MARKET_DELIVERY', 0) == 0) {
             $s .= '<local_delivery_cost>'.Configuration::get('YA_MARKET_DELIVERY').'</local_delivery_cost>' . "\r\n";
         }
 

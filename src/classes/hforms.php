@@ -135,14 +135,15 @@ class Hforms
                             'name' => 'name'
                         ),
                     ),
-                    array(
+                    /*array(
                         'col' => 4,
-                        'class' => 't',
+                        'class' => 't disabled',
                         'type' => 'text',
-                        'desc' => $this->l('Ссылка на https://api.partner.market.yandex.ru/v2/'),
+                        //'desc' => $this->l('Ссылка на https://api.partner.market.yandex.ru/v2/'),
                         'name' => 'YA_POKUPKI_APIURL',
                         'label' => $this->l('URL affiliate API Yandex.Market'),
-                    ),
+                        'value' => 'https://api.partner.market.yandex.ru/v2/',
+                    ),*/
                     array(
                         'col' => 4,
                         'class' => 't',
@@ -163,7 +164,7 @@ class Hforms
                         'col' => 4,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l('Application ID'),
+                        //'desc' => $this->l('Application ID'),
                         'name' => 'YA_POKUPKI_ID',
                         'label' => $this->l('Application ID'),
                     ),
@@ -171,7 +172,7 @@ class Hforms
                         'col' => 4,
                         'class' => 't',
                         'type' => 'text',
-                        'desc' => $this->l('Password prilozheniye'),
+                        //'desc' => $this->l('Password prilozheniye'),
                         'name' => 'YA_POKUPKI_PW',
                         'label' => $this->l('An application-specific password'),
                     ),array(
@@ -375,11 +376,11 @@ class Hforms
                                     'name' => $this->l('To exclude inactive categories'),
                                     'val' => 1
                                 ),
-                                array(
+                                /*array(
                                     'id' => 'HOMECARRIER',
                                     'name' => $this->l('To use the delivery at your home location'),
                                     'val' => 1
-                                ),
+                                ),*/
                                 array(
                                     'id' => 'COMBINATIONS',
                                     'name' => $this->l('Export of product combinations'),

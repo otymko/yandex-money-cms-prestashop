@@ -20,8 +20,8 @@
 	<input type="hidden" name="shopSuccessURL" value="{$link->getModuleLink('yamodule', 'success', [], true)|escape:'quotes':'UTF-8'}"/>
 	<input type="hidden" name="shopFailURL" value="{$link->getPageLink('order.php', true, null, 'step=3')|escape:'quotes':'UTF-8'}"/>
 	<input type="submit" style="display: none;" value="{l s='Click here to proceed with the payment' mod='yamodule'}"/>
-	<input name="cps_phone" value="{$address->phone_mobile|escape:'html':'UTF-8'}" type="hidden"/> 
-	<input name="cps_email" value="{$customer->email|escape:'html':'UTF-8'}" type="hidden"/> 
+	<input name="cps_phone" value="{$address->phone_mobile|escape:'html':'UTF-8'}" type="hidden"/>
+	<input name="cps_email" value="{$customer->email|escape:'html':'UTF-8'}" type="hidden"/>
 </form>
 {literal}
 	<script>
