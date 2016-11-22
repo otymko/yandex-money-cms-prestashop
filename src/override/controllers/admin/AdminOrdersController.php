@@ -11,10 +11,12 @@
 
 class AdminOrdersController extends AdminOrdersControllerCore
 {
-    public function displayReturnsLink($token, $id)
+    public function printPDFIcons($id, $tr)
     {
-        return '<a href="'.$this->context->link->getAdminLink('AdminOrders').'&token='.$token
-            .'&id_order='.$id.'&viewReturns"><i class="icon-gift"></i> Возвраты</a>';
+        $order = new Order($id);
+        $return_btn = ($order->module == 'yamodule')?'<a class="btn btn-default _blank" href="'.$this->context->link->getAdminLink('AdminOrders')
+            .'&id_order='.$id.'&viewReturns"><i class="icon-gift"></i> Возвраты</a> ':'';
+        return  $return_btn. parent::printPDFIcons($id, $tr);
     }
 
     public function renderList()
