@@ -10,10 +10,10 @@
 <div class="change_carr">
 	<script type="text/javascript">
 		var notselc = "Please select carrier";
-		var ajaxurl = "{$path_module_http}";
-		var idm = "{$employee_id}";
-		var tkn = "{$token_lite}";
-		var id_order = "{$orderid}";
+		var ajaxurl = "{$path_module_http:'htmlall':'UTF-8'}";
+		var idm = "{$employee_id:'htmlall':'UTF-8'}";
+		var tkn = "{$token_lite:'htmlall':'UTF-8'}";
+		var id_order = "{$orderid:'htmlall':'UTF-8'}";
 	</script>
 	<div id="circularG">
 		<div id="circularG_1" class="circularG"></div>

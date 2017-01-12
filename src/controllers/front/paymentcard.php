@@ -38,13 +38,66 @@ class YamodulePaymentCardModuleFrontController extends ModuleFrontController
 
         $this->module->payment_status = false;
         $requestId = $this->module->cryptor->decrypt(urldecode($this->context->cookie->ya_encrypt_CRequestId));
+        $instance_id = $this->module->cryptor->decrypt(urldecode($this->context->cookie->ya_encrypt_CInstanceId));
+        if ($this->log_on) $this->module->logSave('payment_card: cookie_requestId'.print_r($requestId, true));
         $res = new stdClass();
         $res->status = Tools::getValue('status');
         $res->error = Tools::getValue('reason');
+        if ($this->log_on) $this->module->logSave("Success returnUrl: ".print_r($res, true));
         if (!empty($requestId)) {
             if ($res->status == 'success') {
-                $this->updateStatus($res);
-                $this->error = false;
+                //TODO Отправить повторный
+                ///*
+                    $external_payment = new ExternalPayment($instance_id);
+                    do {
+                        $process_options = array(
+                            "request_id" => $requestId,
+                            'ext_auth_success_uri' => $this->context->link->getModuleLink(
+                                'yamodule',
+                                'paymentcard',
+                                array(),
+                                true
+                            ),
+                            'ext_auth_fail_uri' => $this->context->link->getModuleLink(
+                                'yamodule',
+                                'paymentcard',
+                                array(),
+                                true
+                            )
+                        );
+
+                        $result = $external_payment->process($process_options);
+                        if ($result->status == "in_progress") {
+                            sleep(1);
+                        }
+                        if ($this->log_on) $this->module->logSave('final card_redirect: process '.print_r($result,true));
+                    } while ($result->status == "in_progress");
+                    if ($result->status == 'success') {
+                        if ($this->log_on) {
+                            $this->module->logSave('final card_redirect:success');
+                        }
+                        $this->updateStatus($result);
+                        $this->error = false;
+                    } elseif ($result->status == 'ext_auth_required') {
+                        $url = sprintf("%s?%s", $result->acs_uri, http_build_query($result->acs_params));
+                        if ($this->log_on) {
+                            $this->module->logSave('final card_redirect: request ' . print_r($process_options, true));
+                            $this->module->logSave('final card_redirect: response ' . print_r($result, true));
+                            $this->module->logSave('final card_redirect:  ' . $this->module->l('Redirect to') . ' ' . $url);
+                        }
+                        Tools::redirect($url, '');
+                        exit;
+                    } elseif ($result->status == 'refused') {
+                        $this->errors[] = $this->module->descriptionError($result->error)
+                            ? $this->module->descriptionError($result->error) : $result->error;
+                        if ($this->log_on) {
+                            $this->module->logSave(
+                                'final card_redirect:refused ' . $this->module->descriptionError($result->error)
+                                    ? $this->module->descriptionError($result->error) : $result->error
+                            );
+                        }
+                        $this->module->payment_status = 102;
+                    }
             } else {
                 $this->error = true;
                 $this->errors[] = $this->module->descriptionError($res->error);

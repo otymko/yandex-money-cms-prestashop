@@ -121,7 +121,7 @@ class Yml
         return true;
     }
 
-    public function addOffer($id, $data, $available = true)
+    public function addOffer($id, $data, $available = true, $group_id = 0)
     {
         $allowed = array(
             'url',
@@ -136,7 +136,6 @@ class Yml
             'vendor',
             'vendorCode',
             'model',
-            'group_id',
             'description',
             'sales_notes',
             'downloadable',
@@ -165,6 +164,7 @@ class Yml
         } # Порядок важен для Я.Маркета!!!
 
         $out = array('id' => $id, 'data' => $data, 'available' => ($available) ? 'true' : 'false');
+        if ($group_id>0) $out['group_id'] = $group_id;
         if (!Configuration::get('YA_MARKET_SHORT')) {
             $out['type'] = 'vendor.model';
         }

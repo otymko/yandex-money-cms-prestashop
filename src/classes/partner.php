@@ -72,8 +72,8 @@ class Partner
 
     public function sendDelivery($order)
     {
-        $order_ya_db = $this->module->getYandexOrderById($order->id);
-        $ya_order = $this->getOrder($order_ya_db['id_market_order']);
+        $order_ya_db = $this->module->getYandexOrderById((int) $order->id);
+        $ya_order = $this->getOrder((int) $order_ya_db['id_market_order']);
         $address = new Address($order->id_address_delivery);
         $carrier = new Carrier($order->id_carrier, $this->context->language->id);
         $country = new Country($address->id_country, $this->context->language->id);
@@ -413,12 +413,13 @@ class Partner
                     $values_to_insert = array(
                         'id_order' => (int)$order->currentOrder,
                         'id_market_order' => (int)$data->order->id,
-                        'ptype' => $data->order->paymentType,
-                        'pmethod' => $data->order->paymentMethod,
-                        'home' => isset($data->order->delivery->address->house)
-                            ? $data->order->delivery->address->house : 0,
-                        'outlet' => isset($data->order->delivery->outlet->id) ? $data->order->delivery->outlet->id : '',
-                        'currency' => $data->order->currency
+                        'ptype' => ($data->order->paymentType == "POSTPAID")?"POSTPAID":"PREPAID",
+                        'pmethod' => pSQL($data->order->paymentMethod),
+                        'home' => (isset($data->order->delivery->address->house))?
+                            (int) $data->order->delivery->address->house : 0,
+                        'outlet' => isset($data->order->delivery->outlet->id) ?
+                            (int) $data->order->delivery->outlet->id : 0,
+                        'currency' => pSQL($data->order->currency)
                     );
 
                     Db::getInstance()->autoExecute(_DB_PREFIX_.'pokupki_orders', $values_to_insert, 'INSERT');

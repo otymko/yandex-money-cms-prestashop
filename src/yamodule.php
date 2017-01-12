@@ -99,7 +99,7 @@ class Yamodule extends PaymentModule
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.3.9';
+        $this->version = '1.3.10';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -281,9 +281,9 @@ class Yamodule extends PaymentModule
         }
 
         $customer = new Customer();
-        $customer->firstname = 'YA POKUPKI Not Delete';
-        $customer->lastname = 'YA POKUPKI Not Delete';
-        $customer->email = 'support@supp.com';
+        $customer->firstname = 'Service user for YCMS';
+        $customer->lastname = 'Service user for YCMS';
+        $customer->email = 'service@example.com';
         $customer->passwd = Tools::encrypt('OPC123456dmo');
         $customer->newsletter = 1;
         $customer->optin = 1;
@@ -297,7 +297,7 @@ class Yamodule extends PaymentModule
 
     public function uninstall()
     {
-        $id = Configuration::get('YA_POKUPKI_CUSTOMER');
+        $id = (int) Configuration::get('YA_POKUPKI_CUSTOMER');
         $customer = new Customer($id);
         $customer->id = $id;
         $customer->delete();
@@ -394,7 +394,7 @@ class Yamodule extends PaymentModule
 
         // if(Configuration::get('YA_POKUPKI_SET_CHANGEC') && $ya_order->order->paymentType != 'PREPAID')
         if (Configuration::get('YA_POKUPKI_SET_CHANGEC')) {
-            $ht .= $this->displayTabContent($params['id_order']);
+            $ht .= $this->displayTabContent((int) $params['id_order']);
         }
 
         return $ht;
@@ -457,12 +457,12 @@ class Yamodule extends PaymentModule
                 if (isset($mws_return['status'])) {
                     $mws->addReturn(array(
                         'amount' => $amount,
-                        'cause' => $cause,
-                        'request' => $mws->txt_request || 'NULL',
-                        'response' => $mws->txt_respond || 'NULL',
-                        'status' => $mws_return['status'],
-                        'error' => $mws_return['error'],
-                        'invoice_id' => $mws_payment['invoiceId'],
+                        'cause' => pSQL($cause),
+                        'request' => pSQL($mws->txt_request) || 'NULL',
+                        'response' => pSQL($mws->txt_respond) || 'NULL',
+                        'status' => pSQL($mws_return['status']),
+                        'error' => pSQL($mws_return['error']),
+                        'invoice_id' => pSQL($mws_payment['invoiceId']),
                         'date' => date('Y-m-d H:i:s')
                     ));
 
@@ -513,7 +513,7 @@ class Yamodule extends PaymentModule
 
     public function sendCarrierToYandex($order)
     {
-        $order_ya = $this->getYandexOrderById($order->id);
+        $order_ya = $this->getYandexOrderById((int) $order->id);
         if ($order_ya['id_order']
             && $order_ya['home'] != ''
             && $order_ya['id_market_order']
@@ -585,7 +585,7 @@ class Yamodule extends PaymentModule
     public function displayTabContent($id)
     {
         $partner = new Partner();
-        $order_ya_db = $this->getYandexOrderById($id);
+        $order_ya_db = $this->getYandexOrderById((int) $id);
         $ht = '';
         if ($order_ya_db['id_market_order']) {
             $ya_order = $partner->getOrder($order_ya_db['id_market_order']);
@@ -691,7 +691,7 @@ class Yamodule extends PaymentModule
             $this->context->smarty->assign('token_lite', Tools::getAdminTokenLite('AdminOrders'));
             $this->context->smarty->assign('orderid', $order->id);
 
-            $ht .= $this->context->smarty->fetch(dirname(__FILE__).'\controllers\front\carrier.tpl');
+            $ht .= $this->context->smarty->fetch(dirname(__FILE__).'\views\templates\front\carrier.tpl');
 
             $ht .= $helper->generateForm(array($fields_form)).'</div>';
         }
@@ -1098,7 +1098,7 @@ class Yamodule extends PaymentModule
                             $available = $data['available'];
                             unset($data['available']);
                             if (!empty($data) && $data['price'] != 0) {
-                                $yml->addOffer($data['id'], $data, $available);
+                                $yml->addOffer($data['id'], $data, $available, $data['group_id']);
                             }
                         }
                     } else {

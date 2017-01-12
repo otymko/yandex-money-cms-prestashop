@@ -55,7 +55,7 @@ class YamoduleRedirectCardModuleFrontController extends ModuleFrontController
             $response = ExternalPayment::getInstanceId(Configuration::get('YA_P2P_IDENTIFICATOR'));
             if ($response->status == "success") {
                 if ($this->log_on) {
-                    $this->module->logSave('card_redirect:  '.$this->module->l('Get instance success'));
+                    $this->module->logSave('card_redirect:  '.$this->module->l('Get instance success').print_r($response, true));
                 }
                 $instance_id = $response->instance_id;
                 $external_payment = new ExternalPayment($instance_id);
@@ -78,6 +78,8 @@ class YamoduleRedirectCardModuleFrontController extends ModuleFrontController
                     $request_id = $response->request_id;
                     $this->context->cookie->ya_encrypt_CRequestId
                         = urlencode($this->module->cryptor->encrypt($request_id));
+                    $this->context->cookie->ya_encrypt_CInstanceId
+                        = urlencode($this->module->cryptor->encrypt($instance_id));
                     $this->context->cookie->write();
                     
                     do {
@@ -109,6 +111,8 @@ class YamoduleRedirectCardModuleFrontController extends ModuleFrontController
                     } elseif ($result->status == 'ext_auth_required') {
                         $url = sprintf("%s?%s", $result->acs_uri, http_build_query($result->acs_params));
                         if ($this->log_on) {
+                            $this->module->logSave('card_redirect: request '.print_r($process_options, true));
+                            $this->module->logSave('card_redirect: response '.print_r($result, true));
                             $this->module->logSave('card_redirect:  '.$this->module->l('Redirect to').' '.$url);
                         }
                         Tools::redirect($url, '');
