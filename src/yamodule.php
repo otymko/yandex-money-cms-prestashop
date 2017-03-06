@@ -99,7 +99,7 @@ class Yamodule extends PaymentModule
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.3.10';
+        $this->version = '1.3.11';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -1079,7 +1079,7 @@ class Yamodule extends PaymentModule
                             }
                             $comb_array[$combination['id_product_attribute']]['comb_url'] .= '/'.
                                 Tools::str2url(
-                                    $combination['group_name']
+                                    $combination['id_attribute']."-".$combination['group_name']
                                 ).'-'.str_replace(
                                     Configuration::get('PS_ATTRIBUTE_ANCHOR_SEPARATOR'),
                                     '_',
