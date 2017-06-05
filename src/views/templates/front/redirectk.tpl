@@ -22,6 +22,9 @@
 	<input type="submit" style="display: none;" value="{l s='Click here to proceed with the payment' mod='yamodule'}"/>
 	<input name="cps_phone" value="{$address->phone_mobile|escape:'html':'UTF-8'}" type="hidden"/>
 	<input name="cps_email" value="{$customer->email|escape:'html':'UTF-8'}" type="hidden"/>
+	{if $DATA_ORG['YA_SEND_CHECK'] && $receipt}
+	    <input name="ym_merchant_receipt" value='{$receipt|json_encode}' type="hidden"/>
+	{/if}
 </form>
 {literal}
 	<script>

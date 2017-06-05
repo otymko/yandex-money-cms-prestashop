@@ -53,11 +53,51 @@ class YamoduleRedirectkModuleFrontController extends ModuleFrontController
                     'YA_ORG_SCID',
                     'YA_ORG_ACTIVE',
                     'YA_ORG_TYPE',
+                    'YA_SEND_CHECK'
                 ));
+
+                $receipt = array(
+                    'customerContact' => $this->context->customer->email,
+                    'items' => array(),
+                );
+
+                $products = $this->context->cart->getProducts(true);
+                $taxValue = $this->module->getTaxesArray(true);
+                $carrier = new CarrierCore($this->context->cart->id_carrier, $this->context->language->id);
+                $summary = $this->context->cart->getSummaryDetails(null, true);
+
+                $disc = 1.0 - round($summary['total_discounts']/$summary['total_products_wt'], 2);
+
+                foreach ($products as $product) {
+                    $id_tax = Product::getIdTaxRulesGroupByIdProduct($product['id_product']);
+                    $receipt['items'][] = array(
+                        'quantity' => $product['cart_quantity'],
+                        'text' => substr($product['name'], 0, 128),
+                        'tax' => ($taxValue['YA_NALOG_STAVKA_'.$id_tax] ? $taxValue['YA_NALOG_STAVKA_'.$id_tax] : 1),
+                        'price' => array(
+                            'amount' => number_format($product['price_wt'] * $disc, 2, '.', ''),
+                            'currency' => 'RUB'
+                        ),
+                    );
+                }
+
+                if ($carrier->id && $this->context->cart->getPackageShippingCost()) {
+                    $id_tax = $carrier->id_tax_rules_group;
+                    $receipt['items'][] = array(
+                        'quantity' => 1,
+                        'text' => substr($carrier->name, 0, 128),
+                        'tax' => ($taxValue['YA_NALOG_STAVKA_'.$id_tax] ? $taxValue['YA_NALOG_STAVKA_'.$id_tax] : 1),
+                        'price' => array(
+                            'amount' => number_format($this->context->cart->getPackageShippingCost(), 2, '.', ''),
+                            'currency' => 'RUB'
+                        ),
+                    );
+                }
 
                 $this->context->smarty->assign(array(
                     'DATA_ORG' => $vars_org,
                     'id_cart' => $cart->id,
+                    'receipt' => $receipt,
                     'customer' => new Customer($cart->id_customer),
                     'address' => new Address($this->context->cart->id_address_delivery),
                     'total_to_pay' => number_format($total_to_pay, 2, '.', ''),

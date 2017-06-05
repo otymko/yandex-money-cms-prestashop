@@ -99,7 +99,7 @@ class Yamodule extends PaymentModule
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.3.11';
+        $this->version = '1.4.0';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -276,6 +276,14 @@ class Yamodule extends PaymentModule
                 PRIMARY KEY  (`id_return`,`invoice_id`)
             ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci';
 
+        $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'mws_return_product`
+            (
+                `id_order` int(10) NOT NULL,
+                `id_order_detail` int(10) NOT NULL,
+                `quantity` int(10) NOT NULL,
+                PRIMARY KEY  (`id_order`,`id_order_detail`)
+            ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci';
+
         foreach ($sql as $qr) {
             Db::getInstance()->execute($qr);
         }
@@ -426,6 +434,7 @@ class Yamodule extends PaymentModule
             false,
             false
         );
+
         if (!isset($mws_payment['invoiceId']) || !$mws_payment['invoiceId']) {
             $errors[] = $this->l(
                 'The problem with the certificate, no payment under this order or specified wrong ID of the store'
@@ -467,6 +476,22 @@ class Yamodule extends PaymentModule
                     ));
 
                     if ($mws_return['status'] == 0) {
+                        if (Configuration::get('YA_SEND_CHECK')) {
+                            if (isset($_POST['items']) && is_array($_POST['items'])) {
+                                foreach ($_POST['items'] as $item) {
+                                    if ($item['quantity'] < 1) {
+                                        continue;
+                                    }
+
+                                    Db::getInstance()->insert('mws_return_product', array(
+                                        'id_order_detail' => $item['id_order_detail'],
+                                        'id_order' => (int)$params['order']->id,
+                                        'quantity' => $item['quantity']
+                                    ), false, false, Db::INSERT_IGNORE);
+                                }
+                            }
+                        }
+
                         $success = true;
                     } else {
                         $errors[] = $this->getErr($mws_return['error']);
@@ -478,6 +503,7 @@ class Yamodule extends PaymentModule
         $kassa_returns = array();
         $docs = $params['order']->getDocuments();
         $payment = $params['order']->getOrderPaymentCollection();
+        $delivery = $docs[0]->total_shipping_tax_incl;
 
         $inv = (isset($mws_payment['invoiceId'])) ? $mws_payment['invoiceId'] : 0;
         $inv_sum = (isset($mws_payment['orderSumAmount'])) ? $mws_payment['orderSumAmount'] : 0;
@@ -485,7 +511,45 @@ class Yamodule extends PaymentModule
         $ri = $mws->getSuccessReturns($inv);
         $sum_returned = $mws->sum;
 
+        $customer = new Customer($params['order']->id_customer);
+
+        if (Configuration::get('YA_SEND_CHECK')) {
+            $products = $params['order']->getCartProducts();
+
+            $mws_products = Db::getInstance()->executeS('SELECT * FROM `'._DB_PREFIX_.'mws_return_product` WHERE id_order = '.(int)$params['order']->id);
+
+            $mws_array = array();
+            foreach ($mws_products as $mws_product) {
+                $mws_array[$mws_product['id_order_detail']] = $mws_product['quantity'];
+
+                if ($mws_product['id_order_detail']) {
+                    $delivery = 0;
+                }
+            }
+
+            $disc = 1.0 - round(($params['order']->total_discounts_tax_incl/$params['order']->total_products_wt), 2);
+
+            foreach ($products as $pk => &$product) {
+                $product['unit_price_tax_incl'] = round($product['unit_price_tax_incl'] * $disc, 2);
+
+                if (array_key_exists($product['id_order_detail'], $mws_array)) {
+                    $product['product_quantity'] -= (float)$mws_array[$product['id_order_detail']];
+                }
+
+                if ($product['product_quantity'] < 1) {
+                    unset($products[$pk]);
+                }
+            }
+
+            if (empty($products)) {
+                $errors[] = $this->l('Нет товаров для отправки в Яндекс.Касса');
+            }
+        } else {
+            $products = array();
+        }
+
         $this->context->smarty->assign(array(
+            'email' => $customer->email,
             'id_order' => $params['order']->id,
             'kassa_returns' => $kassa_returns,
             'return_total' => Tools::displayPrice($sum_returned),
@@ -497,6 +561,11 @@ class Yamodule extends PaymentModule
             'text_success' => $this->l('The payment is successfully returned'),
             'return_errors' => $errors,
             'doc' => $docs[0],
+            'products' => $products,
+            'taxesValue' => $this->getTaxesArray(true),
+            'YA_SEND_CHECK' => Configuration::get('YA_SEND_CHECK'),
+            'delivery' => $delivery,
+            'dname' => (new Carrier($params['order']->id_carrier))->name
         ));
 
         $html = $this->display(__FILE__, 'kassa_returns_content.tpl');
@@ -1505,6 +1574,8 @@ class Yamodule extends PaymentModule
     public function validateKassa()
     {
         $errors = '';
+        Configuration::UpdateValue('YA_NALOG_DEFAULT', Tools::getValue('YA_NALOG_DEFAULT'));
+        Configuration::UpdateValue('YA_SEND_CHECK', Tools::getValue('YA_SEND_CHECK'));
         Configuration::UpdateValue('YA_ORG_MIN', Tools::getValue('YA_ORG_MIN'));
         Configuration::UpdateValue('YA_ORG_PAYMENT_YANDEX', Tools::getValue('YA_ORG_PAYMENT_YANDEX'));
         Configuration::UpdateValue('YA_ORG_PAYMENT_CARD', Tools::getValue('YA_ORG_PAYMENT_CARD'));
@@ -1522,6 +1593,10 @@ class Yamodule extends PaymentModule
         Configuration::UpdateValue('YA_ORG_PAYLOGO_ON', Tools::getValue('YA_ORG_PAYLOGO_ON'));
         Configuration::UpdateValue('YA_ORG_ACTIVE', Tools::getValue('YA_ORG_ACTIVE'));
         Configuration::UpdateValue('YA_ORG_INSIDE', Tools::getValue('YA_ORG_INSIDE'));
+
+        foreach ($this->getTaxesArray() as $taxRow) {
+            Configuration::UpdateValue($taxRow, Tools::getValue($taxRow));
+        }
 
         if (Tools::getValue('YA_ORG_ACTIVE') && Configuration::get('yamodule_mws_csr_sign')) {
             Mws::generateCsr();
@@ -1584,6 +1659,21 @@ class Yamodule extends PaymentModule
         return $errors;
     }
 
+    public function getTaxesArray($config = false) {
+        $taxes = TaxCore::getTaxes(Context::getContext()->language->id, true);
+
+        $tax_array = array();
+        foreach ($taxes as $tax) {
+            $tax_array[] = 'YA_NALOG_STAVKA_' . $tax['id_tax'];
+        }
+
+        if ($config) {
+            return Configuration::getMultiple($tax_array);
+        }
+
+        return $tax_array;
+    }
+
     public function getContent()
     {
         $this->context->controller->addJS($this->_path.'/views/js/main.js');
@@ -1591,6 +1681,9 @@ class Yamodule extends PaymentModule
         $this->context->controller->addCSS($this->_path.'/views/css/admin.css');
         $this->selfPostProcess();
         $this->context->controller->addJqueryUI('ui.tabs');
+        $tax_array = $this->getTaxesArray();
+
+
         $vars_p2p = Configuration::getMultiple(array(
             'YA_P2P_IDENTIFICATOR',
             'YA_P2P_NUMBER',
@@ -1600,7 +1693,7 @@ class Yamodule extends PaymentModule
             'YA_P2P_LOGGING_ON',
             'YA_P2P_SECRET'
         ));
-        $vars_org = Configuration::getMultiple(array(
+        $vars_org = Configuration::getMultiple(array_merge(array(
             'YA_ORG_SHOPID',
             'YA_ORG_SCID',
             'YA_ORG_ACTIVE',
@@ -1620,8 +1713,10 @@ class Yamodule extends PaymentModule
             'YA_ORG_PAYMENT_MA',
             'YA_ORG_PAYMENT_QW',
             'YA_ORG_PAYMENT_QP',
-            'YA_ORG_PAYMENT_ALFA'
-        ));
+            'YA_ORG_PAYMENT_ALFA',
+            'YA_SEND_CHECK',
+            'YA_NALOG_DEFAULT',
+        ), $tax_array));
         $vars_metrika = Configuration::getMultiple(array(
             'YA_METRIKA_PASSWORD_APPLICATION',
             'YA_METRIKA_ID_APPLICATION',

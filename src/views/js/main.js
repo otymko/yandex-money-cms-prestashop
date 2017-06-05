@@ -9,10 +9,15 @@
 */
 
 $(document).ready(function(){
+    hideTaxes();
+	$('input[name="YA_SEND_CHECK"]').change(function(){
+        hideTaxes();
+	});
+
 	hideMethods();
 	$('input[name="YA_ORG_INSIDE"]').change(function(){
 		hideMethods();
-	})
+	});
 	$('#tabs').tabs();
 	var view = $.totalStorage('tab_ya');
 	if(view == null)
@@ -25,6 +30,29 @@ $(document).ready(function(){
 		$.totalStorage('tab_ya', view);
 	});
 });
+
+function hideTaxes() {
+    var inside = $('input[name="YA_SEND_CHECK"]:checked').val();
+
+    if (inside == 1)
+    {
+    	$('select').each(function(){
+    		if (strpos($(this).attr('id'), 'YA_NALOG_STAVKA') !== false) {
+    			$(this).parents('.form-group').first().slideDown('slow');
+			}
+		});
+
+        $('input[name="YA_SEND_CHECK"]').parents('.form-group').first().next().slideDown('slow');
+    } else {
+        $('select').each(function(){
+            if (strpos($(this).attr('id'), 'YA_NALOG_STAVKA') !== false) {
+                $(this).parents('.form-group').first().slideUp('slow');
+            }
+        });
+
+        $('input[name="YA_SEND_CHECK"]').parents('.form-group').first().next().slideUp('slow');
+    }
+}
 
 function strpos( haystack, needle, offset){
     var i = haystack.indexOf( needle, offset );

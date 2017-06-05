@@ -608,7 +608,7 @@ class Hforms
 
     public function getFormYamoneyOrg()
     {
-        return array(
+        $form =  array(
             'form' => array(
                 'input' => array(
                     array(
@@ -863,13 +863,80 @@ class Hforms
                             'id' => 'id',
                             'name' => 'name'
                         ),
-                    )
+                    ),
+                    array(
+                        'type' => 'radio',
+                        'label' => $this->l('Отправлять в Яндекс.Кассу данные для чеков (54-ФЗ)'),
+                        'name' => 'YA_SEND_CHECK',
+                        'desc' => $this->l('Отправлять в Яндекс.Кассу данные для чеков (54-ФЗ) НДС'),
+                        'values' => array(
+                            array(
+                                'id' => 1,
+                                'label' => 'Включить',
+                                'value' => 1
+                            ),
+                            array(
+                                'id' => 0,
+                                'label' => 'Отключить',
+                                'value' => 0
+                            ),
+                        ),
+                    ),
                 ),
                 'submit' => array(
                     'title' => $this->l('Save'),
                 ),
             )
         );
+
+
+		$taxes = TaxCore::getTaxes(Context::getContext()->language->id, true);
+		$form['form']['input'][] = array(
+			'type' => 'html',
+			'label' => $this->l('Ставка в вашем магазине.'),
+			'html_content' => '',
+            'desc' => $this->l('Слева — ставка НДС в вашем магазине, справа — в Яндекс.Кассе. Пожалуйста, сопоставьте их.'),
+		);
+
+		foreach ($taxes as $tax) {
+			$form['form']['input'][] = array(
+				'type' => 'select',
+				'label' => '<span style="text-align:left;float: left;">'.$tax['name'].'</span>'.$this->l(' Передавать в Яндекс.Кассу как'),
+				'name' => 'YA_NALOG_STAVKA_' . $tax['id_tax'],
+				'options' => array(
+					'query' => array(
+						array(
+							'id' => 1,
+							'name' => 'Без НДС'
+						),
+						array(
+							'id' => 2,
+							'name' => '0%'
+						),
+						array(
+							'id' => 3,
+							'name' => '10%'
+						),
+						array(
+							'id' => 4,
+							'name' => '18%'
+						),
+						array(
+							'id' => 5,
+							'name' => 'Расчётная ставка 10/110'
+						),
+						array(
+							'id' => 6,
+							'name' => 'Расчётная ставка 18/118'
+						)
+					),
+					'id' => 'id',
+					'name' => 'name'
+				),
+			);
+		}
+
+        return $form;
     }
 
     public function getFormYamoney()
