@@ -9,7 +9,7 @@
  * @license   https://money.yandex.ru/doc.xml?id=527052
  */
 
-class Yamodule extends PaymentModule
+class Yamodule extends PaymentModuleCore
 {
     private $p2p_status = '';
     private $mws_status = '';
@@ -17,6 +17,7 @@ class Yamodule extends PaymentModule
     private $market_status = '';
     private $metrika_status = '';
     private $pokupki_status = '';
+    private $billing_status = '';
     private $metrika_valid;
     private $update_status;
     private $update_text;
@@ -548,6 +549,7 @@ class Yamodule extends PaymentModule
             $products = array();
         }
 
+        $carrier = new Carrier($params['order']->id_carrier);
         $this->context->smarty->assign(array(
             'email' => $customer->email,
             'id_order' => $params['order']->id,
@@ -565,7 +567,7 @@ class Yamodule extends PaymentModule
             'taxesValue' => $this->getTaxesArray(true),
             'YA_SEND_CHECK' => Configuration::get('YA_SEND_CHECK'),
             'delivery' => $delivery,
-            'dname' => (new Carrier($params['order']->id_carrier))->name
+            'dname' => $carrier->name
         ));
 
         $html = $this->display(__FILE__, 'kassa_returns_content.tpl');
@@ -1245,16 +1247,19 @@ class Yamodule extends PaymentModule
             $this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitorgModule')) {
             $this->org_status = $this->validateKassa();
-            $this->update_status = $this->sendStatistics();//$this->sendStatistics();
+            $this->update_status = $this->sendStatistics();
+        } elseif (Tools::isSubmit('submitbilling_formModule')) {
+            $this->billing_status = $this->validateBilling();
+            $this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitPokupkiModule')) {
             $this->pokupki_status = $this->validatePokupki();
-            $this->update_status = $this->sendStatistics();//$this->sendStatistics();
+            $this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitp2pModule')) {
             $this->p2p_status = $this->validateP2P();
-            $this->update_status = $this->sendStatistics();//$this->sendStatistics();
+            $this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitmarketModule')) {
             $this->market_status = $this->validateMarket();
-            $this->update_status = $this->sendStatistics();//$this->sendStatistics();
+            $this->update_status = $this->sendStatistics();
         }
     }
 
@@ -1273,7 +1278,8 @@ class Yamodule extends PaymentModule
             'settings' => array(
                 'kassa' => (bool) Configuration::get('YA_ORG_ACTIVE'),
                 'p2p' => (bool) Configuration::get('YA_P2P_ACTIVE'),
-                'metrika' =>(bool) Configuration::get('YA_METRIKA_ACTIVE')
+                'metrika' =>(bool) Configuration::get('YA_METRIKA_ACTIVE'),
+                'billing' => (bool) Configuration::get('YA_BILLING_ACTIVE'),
             )
         );
 
@@ -1624,6 +1630,11 @@ class Yamodule extends PaymentModule
             $errors = $this->displayConfirmation($this->l('Settings saved successfully!'));
         }
 
+        if (Tools::getValue('YA_ORG_ACTIVE') == '1') {
+            Configuration::UpdateValue('YA_BILLING_ACTIVE', '0');
+            Configuration::UpdateValue('YA_P2P_ACTIVE', '0');
+        }
+
         return $errors;
     }
 
@@ -1654,6 +1665,46 @@ class Yamodule extends PaymentModule
 
         if ($errors == '') {
             $errors = $this->displayConfirmation($this->l('Settings saved successfully!'));
+        }
+
+        if (Tools::getValue('YA_P2P_ACTIVE') == '1') {
+            Configuration::UpdateValue('YA_BILLING_ACTIVE', '0');
+            Configuration::UpdateValue('YA_ORG_ACTIVE', '0');
+        }
+
+        return $errors;
+    }
+
+    public function validateBilling()
+    {
+        $errors = '';
+        Configuration::UpdateValue('YA_BILLING_ACTIVE', Tools::getValue('YA_BILLING_ACTIVE'));
+
+        if (Tools::getValue('YA_BILLING_ID') == '') {
+            $errors .= $this->displayError($this->l('Yandex.Billing\'s identifier not filled!'));
+        } else {
+            Configuration::UpdateValue('YA_BILLING_ID', trim(Tools::getValue('YA_BILLING_ID')));
+        }
+
+        if (Tools::getValue('YA_BILLING_PURPOSE') == '') {
+            $errors .= $this->displayError($this->l('Payment purpose is not filled!'));
+        } else {
+            Configuration::UpdateValue('YA_BILLING_PURPOSE', trim(Tools::getValue('YA_BILLING_PURPOSE')));
+        }
+
+        if (Tools::getValue('YA_BILLING_END_STATUS') == '') {
+            $errors .= $this->displayError($this->l('Order status is not filled!'));
+        } else {
+            Configuration::UpdateValue('YA_BILLING_END_STATUS', trim(Tools::getValue('YA_BILLING_END_STATUS')));
+        }
+
+        if ($errors == '') {
+            $errors = $this->displayConfirmation($this->l('Settings saved successfully!'));
+        }
+
+        if (Tools::getValue('YA_BILLING_ACTIVE') == '1') {
+            Configuration::UpdateValue('YA_P2P_ACTIVE', '0');
+            Configuration::UpdateValue('YA_ORG_ACTIVE', '0');
         }
 
         return $errors;
@@ -1732,6 +1783,12 @@ class Yamodule extends PaymentModule
             'YA_METRIKA_CELI_ORDER',
             'YA_METRIKA_CELI_WISHLIST'
         ));
+        $vars_billing = Configuration::getMultiple(array(
+            'YA_BILLING_ACTIVE',
+            'YA_BILLING_ID',
+            'YA_BILLING_PURPOSE',
+            'YA_BILLING_END_STATUS',
+        ));
         $vars_pokupki = Configuration::getMultiple(array(
             'YA_POKUPKI_PUNKT',
             'YA_POKUPKI_TOKEN',
@@ -1805,6 +1862,7 @@ class Yamodule extends PaymentModule
             'metrika_status' => $this->metrika_status,
             'market_status' => $this->market_status,
             'pokupki_status' => $this->pokupki_status,
+            'billing_status' => $this->billing_status,
             'p2p_status' => $this->p2p_status,
             'org_status' => $this->org_status,
             'mws_status' => $this->mws_status,
@@ -1813,6 +1871,7 @@ class Yamodule extends PaymentModule
             'money_metrika' => $this->renderForm('metrika', $vars_metrika, $hforms->getFormYamoneyMetrika()),
             'money_market' => $this->renderForm('market', $vars_market, $hforms->getFormYamoneyMarket()),
             'money_marketp' => $this->renderForm('Pokupki', $vars_pokupki, $hforms->getFormYaPokupki()),
+            'billing_form' => $this->renderForm('billing_form', $vars_billing, $hforms->getFormBilling()),
         ));
         return $this->display(__FILE__, 'admin.tpl');
     }
@@ -1922,6 +1981,23 @@ class Yamodule extends PaymentModule
             ));
 
             $display .= $this->display(__FILE__, 'payment.tpl');
+        }
+
+        if (Configuration::get('YA_BILLING_ACTIVE')) {
+            $vars_billing = Configuration::getMultiple(array(
+                'YA_BILLING_ACTIVE',
+                'YA_BILLING_ID',
+                'YA_BILLING_PURPOSE',
+                'YA_BILLING_END_STATUS',
+            ));
+
+            $this->context->smarty->assign(array(
+                'DATA_BILLING' => $vars_billing,
+                'price' => number_format($total_to_pay, 2, '.', ''),
+                'cart' => $this->context->cart
+            ));
+
+            $display .= $this->display(__FILE__, 'payment_ya_billing.tpl');
         }
 
         if (Configuration::get('YA_ORG_ACTIVE')) {

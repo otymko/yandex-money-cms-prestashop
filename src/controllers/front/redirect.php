@@ -58,6 +58,7 @@ class YamoduleRedirectModuleFrontController extends ModuleFrontController
                 ."\",\"account\").limit(,".$total_to_pay_limit.")",
                 "money-source(\"wallet\",\"card\")"
             );
+            $this->module->logSave('p2p_redirect: type = '.json_encode($type));
             if ($type == 'wallet') {
                 if ($log_on) {
                     $this->module->logSave('p2p_redirect: '.$this->module->l('Type wallet'));
@@ -75,6 +76,19 @@ class YamoduleRedirectModuleFrontController extends ModuleFrontController
                     $this->context->link->getModuleLink(
                         'yamodule',
                         'redirectcard',
+                        array('code' => true, 'cnf' => true),
+                        true
+                    ),
+                    ''
+                );
+            } elseif ($type == 'yabilling') {
+                if ($log_on) {
+                    $this->module->logSave('redirect: '.$this->module->l('Type billing'));
+                }
+                Tools::redirect(
+                    $this->context->link->getModuleLink(
+                        'yamodule',
+                        'redirectbilling',
                         array('code' => true, 'cnf' => true),
                         true
                     ),

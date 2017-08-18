@@ -20,12 +20,12 @@
 {include file="$tpl_dir./order-steps.tpl"}
 
 {if $nbProducts <= 0}
-	<p class="alert alert-warning">
+    <p class="alert alert-warning">
         {l s='Ваша корзина пуста.' mod='yamodule'}
     </p>
 {else}
     <form action="{$payment_link|escape:'quotes':'UTF-8'}" method="post">
-	<input type="hidden" name="cnf" value="1" checked />
+        <input type="hidden" name="cnf" value="1" checked />
         <div class="box cheque-box">
             <h3 class="page-subheading">
                {l s='credit card payment.' mod='yamodule'}
@@ -44,8 +44,8 @@
             </p>
         </div>
         <p class="cart_navigation clearfix" id="cart_navigation">
-        	<a 
-            class="button-exclusive btn btn-default" 
+            <a
+            class="button-exclusive btn btn-default"
             href="{$link->getPageLink('order', true, NULL, "step=3")|escape:'html':'UTF-8'}">
                 <i class="icon-chevron-left"></i>{l s='Другие методы оплаты' mod='yamodule'}
             </a>

@@ -64,7 +64,7 @@ class Hforms
                         'disabled' => 1,
                         'type' => 'text',
                         'name' => 'YA_POKUPKI_FD',
-                        'label' => $this->l('Формат данных'),
+                        'label' => $this->l('Data format'),
                     ),
                     array(
                         'col' => 4,
@@ -625,12 +625,12 @@ class Hforms
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Да')
+                                'label' => $this->l('Yes')
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Нет')
+                                'label' => $this->l('No')
                             )
                         )
                     ),
@@ -890,51 +890,51 @@ class Hforms
         );
 
 
-		$taxes = TaxCore::getTaxes(Context::getContext()->language->id, true);
-		$form['form']['input'][] = array(
-			'type' => 'html',
-			'label' => $this->l('Ставка в вашем магазине.'),
-			'html_content' => '',
+        $taxes = TaxCore::getTaxes(Context::getContext()->language->id, true);
+        $form['form']['input'][] = array(
+            'type' => 'html',
+            'label' => $this->l('Ставка в вашем магазине.'),
+            'html_content' => '',
             'desc' => $this->l('Слева — ставка НДС в вашем магазине, справа — в Яндекс.Кассе. Пожалуйста, сопоставьте их.'),
-		);
+        );
 
-		foreach ($taxes as $tax) {
-			$form['form']['input'][] = array(
-				'type' => 'select',
-				'label' => '<span style="text-align:left;float: left;">'.$tax['name'].'</span>'.$this->l(' Передавать в Яндекс.Кассу как'),
-				'name' => 'YA_NALOG_STAVKA_' . $tax['id_tax'],
-				'options' => array(
-					'query' => array(
-						array(
-							'id' => 1,
-							'name' => 'Без НДС'
-						),
-						array(
-							'id' => 2,
-							'name' => '0%'
-						),
-						array(
-							'id' => 3,
-							'name' => '10%'
-						),
-						array(
-							'id' => 4,
-							'name' => '18%'
-						),
-						array(
-							'id' => 5,
-							'name' => 'Расчётная ставка 10/110'
-						),
-						array(
-							'id' => 6,
-							'name' => 'Расчётная ставка 18/118'
-						)
-					),
-					'id' => 'id',
-					'name' => 'name'
-				),
-			);
-		}
+        foreach ($taxes as $tax) {
+            $form['form']['input'][] = array(
+                'type' => 'select',
+                'label' => '<span style="text-align:left;float: left;">'.$tax['name'].'</span>'.$this->l(' Передавать в Яндекс.Кассу как'),
+                'name' => 'YA_NALOG_STAVKA_' . $tax['id_tax'],
+                'options' => array(
+                    'query' => array(
+                        array(
+                            'id' => 1,
+                            'name' => 'Без НДС'
+                        ),
+                        array(
+                            'id' => 2,
+                            'name' => '0%'
+                        ),
+                        array(
+                            'id' => 3,
+                            'name' => '10%'
+                        ),
+                        array(
+                            'id' => 4,
+                            'name' => '18%'
+                        ),
+                        array(
+                            'id' => 5,
+                            'name' => 'Расчётная ставка 10/110'
+                        ),
+                        array(
+                            'id' => 6,
+                            'name' => 'Расчётная ставка 18/118'
+                        )
+                    ),
+                    'id' => 'id',
+                    'name' => 'name'
+                ),
+            );
+        }
 
         return $form;
     }
@@ -957,12 +957,12 @@ class Hforms
                             array(
                                 'id' => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Да')
+                                'label' => $this->l('Yes')
                             ),
                             array(
                                 'id' => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Нет')
+                                'label' => $this->l('No')
                             )
                         ),
                     ),
@@ -1035,6 +1035,74 @@ class Hforms
                     ),
                 ),
             'submit' => array(
+                    'title' => $this->l('Save'),
+                ),
+            ),
+        );
+    }
+
+    public function getFormBilling()
+    {
+        $state = new OrderState();
+        return array(
+            'form' => array(
+                'legend' => array(
+                    'title' => $this->l('The module settings Yandex.Billing'),
+                    'icon' => 'icon-cogs',
+                ),
+                'input' => array(
+                    array(
+                        'type' => 'radio',
+                        'label' => $this->l('Activate payments via Yandex.Billing'),
+                        'name' => 'YA_BILLING_ACTIVE',
+                        'required' => false,
+                        'class' => 't',
+                        'is_bool' => true,
+                        'values' => array(
+                            array(
+                                'id' => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l('Yes')
+                            ),
+                            array(
+                                'id' => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l('No')
+                            )
+                        ),
+                    ),
+                    array(
+                        'col' => 4,
+                        'class' => 't',
+                        'type' => 'text',
+                        'label' => $this->l('Yandex.Billing\'s identifier'),
+                        'name' => 'YA_BILLING_ID',
+                    ),
+                    array(
+                        'col' => 4,
+                        'class' => 't',
+                        'type' => 'text',
+                        'desc' => $this->l('Payment purpose is added to the payment order: specify whatever will help identify the order paid via Yandex.Billing'),
+                        'name' => 'YA_BILLING_PURPOSE',
+                        'label' => $this->l('Payment purpose'),
+                        'default' => $this->l('Order No. #order_id# Payment via Yandex.Billing'),
+                    ),
+                    array(
+                        'col' => 4,
+                        'class' => 't',
+                        'type' => 'select',
+                        'desc' => $this->l('Order status shows the payment result is unknown: you can only learn whether the client made payment or not from an email notification or in your bank'),
+                        'name' => 'YA_BILLING_END_STATUS',
+                        'label' => $this->l('Order status'),
+                        'options' => array(
+                            'query' => $state->getOrderStates(1),
+                            'id' => 'id_order_state',
+                            'name' => 'name'
+                        ),
+                        'default' => Configuration::get('PS_OS_PAYMENT'),
+                    ),
+                ),
+                'submit' => array(
                     'title' => $this->l('Save'),
                 ),
             ),

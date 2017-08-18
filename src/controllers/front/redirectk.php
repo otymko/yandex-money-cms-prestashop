@@ -1,13 +1,13 @@
 <?php
 /**
-* Module is prohibited to sales! Violation of this condition leads to the deprivation of the license!
-*
-* @category  Front Office Features
-* @package   Yandex Payment Solution
-* @author    Yandex.Money <cms@yamoney.ru>
-* @copyright © 2015 NBCO Yandex.Money LLC
-* @license   https://money.yandex.ru/doc.xml?id=527052
-*/
+ * Module is prohibited to sales! Violation of this condition leads to the deprivation of the license!
+ *
+ * @category  Front Office Features
+ * @package   Yandex Payment Solution
+ * @author    Yandex.Money <cms@yamoney.ru>
+ * @copyright © 2015 NBCO Yandex.Money LLC
+ * @license   https://money.yandex.ru/doc.xml?id=527052
+ */
 
 class YamoduleRedirectkModuleFrontController extends ModuleFrontController
 {
@@ -63,7 +63,7 @@ class YamoduleRedirectkModuleFrontController extends ModuleFrontController
 
                 $products = $this->context->cart->getProducts(true);
                 $taxValue = $this->module->getTaxesArray(true);
-                $carrier = new CarrierCore($this->context->cart->id_carrier, $this->context->language->id);
+                $carrier = new Carrier($this->context->cart->id_carrier, $this->context->language->id);
                 $summary = $this->context->cart->getSummaryDetails(null, true);
 
                 $disc = 1.0 - round($summary['total_discounts']/$summary['total_products_wt'], 2);
