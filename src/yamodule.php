@@ -100,7 +100,7 @@ class Yamodule extends PaymentModuleCore
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.4.0';
+        $this->version = '1.4.2';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -1876,7 +1876,7 @@ class Yamodule extends PaymentModuleCore
         return $this->display(__FILE__, 'admin.tpl');
     }
 
-    public static function validateResponse(
+    public function validateResponse(
         $message = '',
         $code = 0,
         $action = '',
@@ -1885,7 +1885,7 @@ class Yamodule extends PaymentModuleCore
         $toYandex = false
     ) {
         if ($message != '') {
-            self::logSave('yamodule: validate response '.$message);
+            $this->logSave('yamodule: validate response '.$message);
         }
 
         if ($toYandex) {
