@@ -100,7 +100,7 @@ class Yamodule extends PaymentModuleCore
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.4.2';
+        $this->version = '1.4.3';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -292,6 +292,9 @@ class Yamodule extends PaymentModuleCore
         $customer = new Customer();
         $customer->firstname = 'Service user for YCMS';
         $customer->lastname = 'Service user for YCMS';
+        if (property_exists($customer, 'middlename')) {
+            $customer->middlename = 'Service user for YCMS';
+        }
         $customer->email = 'service@example.com';
         $customer->passwd = Tools::encrypt('OPC123456dmo');
         $customer->newsletter = 1;

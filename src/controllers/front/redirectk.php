@@ -122,6 +122,7 @@ class YamoduleRedirectkModuleFrontController extends ModuleFrontController
         if ($carrier->id && $this->context->cart->getPackageShippingCost()) {
             $taxIndex = 'YA_NALOG_STAVKA_' . $carrier->id_tax_rules_group;
             if (isset($taxValue[$taxIndex])) {
+                $taxId = $taxValue[$taxIndex];
                 $receipt->addShipping($carrier->name, $this->context->cart->getPackageShippingCost(), $taxId);
             } else {
                 $receipt->addShipping($carrier->name, $this->context->cart->getPackageShippingCost());
