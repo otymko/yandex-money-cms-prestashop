@@ -129,8 +129,11 @@ class YamoduleRedirectkModuleFrontController extends ModuleFrontController
             }
         }
 
-        $receipt->normalize($orderAmount);
-
-        return $receipt->getJson();
+        if ($receipt->notEmpty()) {
+            $receipt->normalize($orderAmount);
+            return $receipt->getJson();
+        } else {
+            return null;
+        }
     }
 }

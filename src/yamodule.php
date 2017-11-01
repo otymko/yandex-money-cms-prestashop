@@ -100,7 +100,7 @@ class Yamodule extends PaymentModuleCore
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.4.3';
+        $this->version = '1.4.4';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -1249,6 +1249,13 @@ class Yamodule extends PaymentModuleCore
             }
             $this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitorgModule')) {
+            $merchantIp = Configuration::get('yamodule_mws_ip');
+            $detectedIp = $this->getServerIp();
+
+            if($merchantIp !== $detectedIp) {
+                Configuration::UpdateValue('yamodule_mws_ip', $detectedIp);
+            }
+
             $this->org_status = $this->validateKassa();
             $this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitbilling_formModule')) {
@@ -1836,6 +1843,13 @@ class Yamodule extends PaymentModuleCore
             }
         }
 
+        $merchantIp = Configuration::get('yamodule_mws_ip');
+        $detectedIp = $this->getServerIp();
+
+        if(!$merchantIp) {
+            $merchantIp = $detectedIp;
+        }
+
         $hforms = new hforms();
         $hforms->cats = $cats;
 
@@ -1858,6 +1872,8 @@ class Yamodule extends PaymentModuleCore
                 .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='
                 .$this->name.'&token='.Tools::getAdminTokenLite('AdminModules'),
             'mws_cn' => '/business/ps/yacms-'.$vars_org['YA_ORG_SHOPID'],
+            'mws_ip' => $merchantIp,
+            'detected_ip' => $detectedIp,
             'mws_sign' => Configuration::get('yamodule_mws_csr_sign'),
             'mws_cert' => Configuration::get('yamodule_mws_cert') ? true : false,
             'this_path' => $this->_path,
@@ -2392,5 +2408,29 @@ class Yamodule extends PaymentModuleCore
         }
 
         return $error[$id];
+    }
+
+    private function getServerIp()
+    {
+        $url = 'http://ipv4.internet.yandex.net/internet/api/v0/ip';
+        $ch  = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_FAILONERROR, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 9);
+        curl_setopt($ch, CURLOPT_POST, 0);
+        $result = curl_exec($ch);
+        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if ($status == 200) {
+            $data = json_decode($result);
+            if (is_string($data)) {
+                return $data;
+            }
+        }
+
+        return 'Не удалось определить IP адрес';
     }
 }

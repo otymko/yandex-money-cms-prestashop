@@ -1,138 +1,140 @@
 <?php
-/**
-* Module is prohibited to sales! Violation of this condition leads to the deprivation of the license!
-*
-* @category  Front Office Features
-* @package   Yandex Payment Solution
-* @author    Yandex.Money <cms@yamoney.ru>
-* @copyright © 2015 NBCO Yandex.Money LLC
-* @license   https://money.yandex.ru/doc.xml?id=527052
-*/
 
+/**
+ * Module is prohibited to sales! Violation of this condition leads to the deprivation of the license!
+ *
+ * @category  Front Office Features
+ * @package   Yandex Payment Solution
+ * @author    Yandex.Money <cms@yamoney.ru>
+ * @copyright © 2015 NBCO Yandex.Money LLC
+ * @license   https://money.yandex.ru/doc.xml?id=527052
+ */
 class Hforms
 {
     public $cats;
+
     public function l($s)
     {
         $mod = Module::getInstanceByName('yamodule');
+
         return $mod->l($s, 'hforms');
     }
 
     public function getFormYaPokupki()
     {
         $yamodule = new Yamodule();
-        $dir = _PS_ADMIN_DIR_;
-        $dir = explode('/', $dir);
-        $dir = base64_encode(
+        $dir      = _PS_ADMIN_DIR_;
+        $dir      = explode('/', $dir);
+        $dir      = base64_encode(
             $yamodule->cryptor->encrypt(
                 end($dir).'_'.Context::getContext()->cookie->id_employee.'_pokupki'
             )
         );
         $carriers = Carrier::getCarriers(Context::getContext()->language->id, true, false, false, null, 5);
-        $type = array(
+        $type     = array(
             array(
                 'name' => 'POST',
-                'id' => 'POST'
+                'id'   => 'POST',
             ),
             array(
                 'name' => 'PICKUP',
-                'id' => 'PICKUP'
+                'id'   => 'PICKUP',
             ),
             array(
                 'name' => 'DELIVERY',
-                'id' => 'DELIVERY'
-            )
+                'id'   => 'DELIVERY',
+            ),
         );
-        $out = array(
+        $out      = array(
             'form' => array(
                 'legend' => array(
-                'title' => $this->l('Module configuration Orders on the market'),
-                'icon' => 'icon-cogs',
+                    'title' => $this->l('Module configuration Orders on the market'),
+                    'icon'  => 'icon-cogs',
                 ),
-            'input' => array(
+                'input'  => array(
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('A token for access to API Yandex.Market'),
-                        'name' => 'YA_POKUPKI_TOKEN',
+                        'type'  => 'text',
+                        'desc'  => $this->l('A token for access to API Yandex.Market'),
+                        'name'  => 'YA_POKUPKI_TOKEN',
                         'label' => $this->l('An authorization token Yandex.Market'),
                     ),
                     array(
-                        'col' => 4,
-                        'class' => 't',
+                        'col'      => 4,
+                        'class'    => 't',
                         'disabled' => 1,
-                        'type' => 'text',
-                        'name' => 'YA_POKUPKI_FD',
-                        'label' => $this->l('Data format'),
+                        'type'     => 'text',
+                        'name'     => 'YA_POKUPKI_FD',
+                        'label'    => $this->l('Data format'),
                     ),
                     array(
-                        'col' => 4,
-                        'class' => 't',
+                        'col'      => 4,
+                        'class'    => 't',
                         'disabled' => 1,
-                        'type' => 'text',
-                        'name' => 'YA_POKUPKI_TA',
-                        'label' => $this->l('Тип авторизации'),
+                        'type'     => 'text',
+                        'name'     => 'YA_POKUPKI_TA',
+                        'label'    => $this->l('Тип авторизации'),
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => $this->l('Prepayment'),
-                        'name' => 'YA_POKUPKI_PREDOPLATA',
+                        'type'   => 'checkbox',
+                        'label'  => $this->l('Prepayment'),
+                        'name'   => 'YA_POKUPKI_PREDOPLATA',
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'YANDEX',
+                                    'id'   => 'YANDEX',
                                     'name' => $this->l('Payment at registration (only in Russia)'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'SHOP_PREPAID',
+                                    'id'   => 'SHOP_PREPAID',
                                     'name' => $this->l('Directly to the shop (only for Ukraine)'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
 
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => $this->l('Post-paid'),
-                        'name' => 'YA_POKUPKI_POSTOPLATA',
+                        'type'   => 'checkbox',
+                        'label'  => $this->l('Post-paid'),
+                        'name'   => 'YA_POKUPKI_POSTOPLATA',
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'CASH_ON_DELIVERY',
+                                    'id'   => 'CASH_ON_DELIVERY',
                                     'name' => $this->l('Cash upon receipt of goods'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'CARD_ON_DELIVERY',
+                                    'id'   => 'CARD_ON_DELIVERY',
                                     'name' => $this->l('Payment via credit card upon receipt of order'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
 
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => $this->l('Settings'),
-                        'name' => 'YA_POKUPKI_SET',
+                        'type'   => 'checkbox',
+                        'label'  => $this->l('Settings'),
+                        'name'   => 'YA_POKUPKI_SET',
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'CHANGEC',
+                                    'id'   => 'CHANGEC',
                                     'name' => $this->l('To enable the change of delivery'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
 
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                     /*array(
@@ -145,70 +147,71 @@ class Hforms
                         'value' => 'https://api.partner.market.yandex.ru/v2/',
                     ),*/
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('The Campaign Number'),
-                        'name' => 'YA_POKUPKI_NC',
+                        'type'  => 'text',
+                        'desc'  => $this->l('The Campaign Number'),
+                        'name'  => 'YA_POKUPKI_NC',
                         'label' => $this->l('The Campaign Number'),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('The user login in the system Yandex.Market'),
-                        'name' => 'YA_POKUPKI_LOGIN',
+                        'type'  => 'text',
+                        'desc'  => $this->l('The user login in the system Yandex.Market'),
+                        'name'  => 'YA_POKUPKI_LOGIN',
                         'label' => $this->l('The user login in the system Yandex.Market'),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
+                        'type'  => 'text',
                         //'desc' => $this->l('Application ID'),
-                        'name' => 'YA_POKUPKI_ID',
+                        'name'  => 'YA_POKUPKI_ID',
                         'label' => $this->l('Application ID'),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
+                        'type'  => 'text',
                         //'desc' => $this->l('Password prilozheniye'),
-                        'name' => 'YA_POKUPKI_PW',
+                        'name'  => 'YA_POKUPKI_PW',
                         'label' => $this->l('An application-specific password'),
-                    ),array(
-                        'col' => 4,
-                        'class' => 't',
-                        'type' => 'text',
-                        'desc' => '<a href="https://oauth.yandex.ru/authorize?response_type=code&display=popup&state='
-                            .$dir.'&client_id='.Configuration::get('YA_POKUPKI_ID')."&device_id="
-                            .md5(Configuration::get('YA_POKUPKI_ID')).'">'
-                            .$this->l('To obtain a token for access to Yandex.Buy').'</a>',
-                        'name' => 'YA_POKUPKI_YATOKEN',
-                        'label' => $this->l('An authorization token'),
-                        'disabled' => true
                     ),
                     array(
-                        'col' => 6,
+                        'col'      => 4,
+                        'class'    => 't',
+                        'type'     => 'text',
+                        'desc'     => '<a href="https://oauth.yandex.ru/authorize?response_type=code&display=popup&state='
+                                      .$dir.'&client_id='.Configuration::get('YA_POKUPKI_ID')."&device_id="
+                                      .md5(Configuration::get('YA_POKUPKI_ID')).'">'
+                                      .$this->l('To obtain a token for access to Yandex.Buy').'</a>',
+                        'name'     => 'YA_POKUPKI_YATOKEN',
+                        'label'    => $this->l('An authorization token'),
+                        'disabled' => true,
+                    ),
+                    array(
+                        'col'   => 6,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('Item number ex'),
-                        'name' => 'YA_POKUPKI_PUNKT',
+                        'type'  => 'text',
+                        'desc'  => $this->l('Item number ex'),
+                        'name'  => 'YA_POKUPKI_PUNKT',
                         'label' => $this->l('The ID of the item ex'),
                     ),
                     array(
-                        'col' => 6,
+                        'col'   => 6,
                         'class' => 't',
-                        'type' => 'text',
-                        'name' => 'YA_MARKET_REDIRECT',
-                        'desc' => $this->l('Callback Url for OAuth applications'),
+                        'type'  => 'text',
+                        'name'  => 'YA_MARKET_REDIRECT',
+                        'desc'  => $this->l('Callback Url for OAuth applications'),
                         'label' => $this->l('The link for the application'),
                     ),
                     array(
-                        'col' => 6,
+                        'col'   => 6,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('URL API to fill in the store settings on Yandex.Market'),
-                        'name' => 'YA_POKUPKI_APISHOP',
+                        'type'  => 'text',
+                        'desc'  => $this->l('URL API to fill in the store settings on Yandex.Market'),
+                        'name'  => 'YA_POKUPKI_APISHOP',
                         'label' => $this->l('The link to access Your store'),
                     ),
                 ),
@@ -220,17 +223,17 @@ class Hforms
 
         foreach ($carriers as $a) {
             $out['form']['input'][] = array(
-                        'type' => 'select',
-                        'label' => $this->l('The delivery type').' '.$a['name'],
-                        'name' => 'YA_POKUPKI_DELIVERY_'.$a['id_carrier'],
-                        'desc' =>$this->l('POST - Mail DELIVERY - Express delivery, PICKUP Pickup'),
-                        'options' => array(
-                            'query' => $type,
-                            'name' => 'name',
-                            'id' => 'id'
-                        ),
-                        'class' => 't'
-                    );
+                'type'    => 'select',
+                'label'   => $this->l('The delivery type').' '.$a['name'],
+                'name'    => 'YA_POKUPKI_DELIVERY_'.$a['id_carrier'],
+                'desc'    => $this->l('POST - Mail DELIVERY - Express delivery, PICKUP Pickup'),
+                'options' => array(
+                    'query' => $type,
+                    'name'  => 'name',
+                    'id'    => 'id',
+                ),
+                'class'   => 't',
+            );
         }
 
         return $out;
@@ -240,141 +243,141 @@ class Hforms
     {
         return array(
             'form' => array(
-                'legend' => array(
-                'title' => $this->l('The module settings Yandex.Market'),
-                'icon' => 'icon-cogs',
+                'legend'  => array(
+                    'title' => $this->l('The module settings Yandex.Market'),
+                    'icon'  => 'icon-cogs',
                 ),
-            'input' => array(
+                'input'   => array(
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l('Simplified yml:'),
-                        'name' => 'YA_MARKET_SHORT',
+                        'type'     => 'radio',
+                        'label'    => $this->l('Simplified yml:'),
+                        'name'     => 'YA_MARKET_SHORT',
                         'required' => false,
-                        'class' => 't',
-                        'is_bool' => true,
-                        'values' => array(
+                        'class'    => 't',
+                        'is_bool'  => true,
+                        'values'   => array(
                             array(
-                                'id' => 'active_on',
+                                'id'    => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Included')
+                                'label' => $this->l('Included'),
                             ),
                             array(
-                                'id' => 'active_off',
+                                'id'    => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Off')
-                            )
+                                'label' => $this->l('Off'),
+                            ),
                         ),
                     ),
                     array(
-                        'type' => 'categories',
+                        'type'  => 'categories',
                         'label' => $this->l('Categories'),
-                        'desc' => $this->l('Select the categories to export. If you need a subcategory, select them.'),
-                        'name' => 'YA_MARKET_CATEGORIES',
-                        'tree' => array(
-                            'use_search' => false,
-                            'id' => 'categoryBox',
-                            'use_checkbox' => true,
+                        'desc'  => $this->l('Select the categories to export. If you need a subcategory, select them.'),
+                        'name'  => 'YA_MARKET_CATEGORIES',
+                        'tree'  => array(
+                            'use_search'          => false,
+                            'id'                  => 'categoryBox',
+                            'use_checkbox'        => true,
                             'selected_categories' => $this->cats,
                         ),
                     ),
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l('To unload:'),
-                        'name' => 'YA_MARKET_CATALL',
+                        'type'     => 'radio',
+                        'label'    => $this->l('To unload:'),
+                        'name'     => 'YA_MARKET_CATALL',
                         'required' => false,
-                        'class' => 't',
-                        'is_bool' => true,
-                        'values' => array(
+                        'class'    => 't',
+                        'is_bool'  => true,
+                        'values'   => array(
                             array(
-                                'id' => 'active_on',
+                                'id'    => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('All categories')
+                                'label' => $this->l('All categories'),
                             ),
                             array(
-                                'id' => 'active_off',
+                                'id'    => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Only selected')
-                            )
+                                'label' => $this->l('Only selected'),
+                            ),
                         ),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('The name of your company for Yandex.Market'),
-                        'name' => 'YA_MARKET_NAME',
+                        'type'  => 'text',
+                        'desc'  => $this->l('The name of your company for Yandex.Market'),
+                        'name'  => 'YA_MARKET_NAME',
                         'label' => $this->l('The name of the store'),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('The shipping cost to your home location'),
-                        'name' => 'YA_MARKET_DELIVERY',
+                        'type'  => 'text',
+                        'desc'  => $this->l('The shipping cost to your home location'),
+                        'name'  => 'YA_MARKET_DELIVERY',
                         'label' => $this->l('The shipping cost to your home location'),
                     ),
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l('Type paged descriptions'),
-                        'name' => 'YA_MARKET_DESC_TYPE',
-                        'class' => 't',
+                        'type'   => 'radio',
+                        'label'  => $this->l('Type paged descriptions'),
+                        'name'   => 'YA_MARKET_DESC_TYPE',
+                        'class'  => 't',
                         'values' => array(
                             array(
-                                'id' => 'NORMAL',
+                                'id'    => 'NORMAL',
                                 'value' => 0,
-                                'label' => $this->l('Full')
+                                'label' => $this->l('Full'),
                             ),
                             array(
-                                'id' => 'SHORT',
+                                'id'    => 'SHORT',
                                 'value' => 1,
-                                'label' => $this->l('Short')
-                            )
+                                'label' => $this->l('Short'),
+                            ),
                         ),
                     ),
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l('Availability'),
-                        'desc' => $this->l('Availability'),
-                        'name' => 'YA_MARKET_DOSTUPNOST',
+                        'type'    => 'radio',
+                        'label'   => $this->l('Availability'),
+                        'desc'    => $this->l('Availability'),
+                        'name'    => 'YA_MARKET_DOSTUPNOST',
                         'is_bool' => false,
-                        'values' => array(
+                        'values'  => array(
                             array(
-                                'id' => 'd_0',
+                                'id'    => 'd_0',
                                 'value' => 0,
-                                'label' => $this->l('All available')
+                                'label' => $this->l('All available'),
                             ),
                             array(
-                                'id' => 'd_1',
+                                'id'    => 'd_1',
                                 'value' => 1,
-                                'label' => $this->l('If available > 0, the rest to order')
+                                'label' => $this->l('If available > 0, the rest to order'),
                             ),
                             array(
-                                'id' => 'd_2',
+                                'id'    => 'd_2',
                                 'value' => 2,
-                                'label' => $this->l('If = 0, do not unload')
+                                'label' => $this->l('If = 0, do not unload'),
                             ),
                             array(
-                                'id' => 'd_3',
+                                'id'    => 'd_3',
                                 'value' => 3,
-                                'label' => $this->l('All made to order')
-                            )
-                        )
+                                'label' => $this->l('All made to order'),
+                            ),
+                        ),
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => $this->l('Settings'),
-                        'name' => 'YA_MARKET_SET',
+                        'type'   => 'checkbox',
+                        'label'  => $this->l('Settings'),
+                        'name'   => 'YA_MARKET_SET',
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'AVAILABLE',
+                                    'id'   => 'AVAILABLE',
                                     'name' => $this->l('To export only the goods which are in stock'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'NACTIVECAT',
+                                    'id'   => 'NACTIVECAT',
                                     'name' => $this->l('To exclude inactive categories'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 /*array(
                                     'id' => 'HOMECARRIER',
@@ -382,75 +385,75 @@ class Hforms
                                     'val' => 1
                                 ),*/
                                 array(
-                                    'id' => 'COMBINATIONS',
+                                    'id'   => 'COMBINATIONS',
                                     'name' => $this->l('Export of product combinations'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'DIMENSIONS',
-                                    'val' => 1,
-                                    'name' => $this->l('Display dimensions of product (dimensions)')
+                                    'id'   => 'DIMENSIONS',
+                                    'val'  => 1,
+                                    'name' => $this->l('Display dimensions of product (dimensions)'),
                                 ),
                                 array(
-                                    'id' => 'ALLCURRENCY',
-                                    'val' => 1,
+                                    'id'   => 'ALLCURRENCY',
+                                    'val'  => 1,
                                     'name' =>
-                                        $this->l('Unload all currencies? (If not, will be uploaded only by default)')
+                                        $this->l('Unload all currencies? (If not, will be uploaded only by default)'),
                                 ),
                                 array(
-                                    'id' => 'GZIP',
-                                    'val' => 1,
-                                    'name' => $this->l('Gzip compression')
+                                    'id'   => 'GZIP',
+                                    'val'  => 1,
+                                    'name' => $this->l('Gzip compression'),
                                 ),
                                 array(
-                                    'id' => 'ROZNICA',
-                                    'val' => 1,
-                                    'name' => $this->l('the opportunity to buy in a retail store.')
+                                    'id'   => 'ROZNICA',
+                                    'val'  => 1,
+                                    'name' => $this->l('the opportunity to buy in a retail store.'),
                                 ),
                                 array(
-                                    'id' => 'DOST',
-                                    'val' => 1,
-                                    'name' => $this->l(' the possibility of delivery of the product.')
+                                    'id'   => 'DOST',
+                                    'val'  => 1,
+                                    'name' => $this->l(' the possibility of delivery of the product.'),
                                 ),
                                 array(
-                                    'id' => 'SAMOVIVOZ',
-                                    'val' => 1,
-                                    'name' => $this->l('the ability to reserve and pick up yourself.')
+                                    'id'   => 'SAMOVIVOZ',
+                                    'val'  => 1,
+                                    'name' => $this->l('the ability to reserve and pick up yourself.'),
                                 ),
 
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                     array(
-                        'col' => 6,
+                        'col'   => 6,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('Link to the dynamic file price list'),
-                        'name' => 'YA_MARKET_YML',
+                        'type'  => 'text',
+                        'desc'  => $this->l('Link to the dynamic file price list'),
+                        'name'  => 'YA_MARKET_YML',
                         'label' => $this->l('The yml file'),
                     ),
                     array(
-                        'col' => 6,
+                        'col'   => 6,
                         'class' => 't',
-                        'type' => 'text',
-                        'name' => 'YA_MARKET_REDIRECT',
+                        'type'  => 'text',
+                        'name'  => 'YA_MARKET_REDIRECT',
                         'label' => $this->l('The redirect link for the application.'),
                     ),
                 ),
-            'submit' => array(
+                'submit'  => array(
                     'title' => $this->l('Save'),
                 ),
                 'buttons' => array(
-                'generatemanual' => array(
-                    'title' => $this->l('To generate manually'),
-                    'name' => 'generatemanual',
-                    'type' => 'submit',
-                    'class' => 'btn btn-default pull-right',
-                    'icon' => 'process-icon-refresh'
-                )
-            )
+                    'generatemanual' => array(
+                        'title' => $this->l('To generate manually'),
+                        'name'  => 'generatemanual',
+                        'type'  => 'submit',
+                        'class' => 'btn btn-default pull-right',
+                        'icon'  => 'process-icon-refresh',
+                    ),
+                ),
             ),
         );
     }
@@ -458,427 +461,428 @@ class Hforms
     public function getFormYamoneyMetrika()
     {
         $yamodule = new Yamodule();
-        $dir = _PS_ADMIN_DIR_;
-        $dir = explode('/', $dir);
-        $dir = base64_encode(
+        $dir      = _PS_ADMIN_DIR_;
+        $dir      = explode('/', $dir);
+        $dir      = base64_encode(
             $yamodule->cryptor->encrypt(
                 end($dir).'_'.Context::getContext()->cookie->id_employee.'_metrika'
             )
         );
+
         return array(
             'form' => array(
                 'legend' => array(
-                'title' => $this->l('The module settings Yandex.The metric'),
-                'icon' => 'icon-cogs',
+                    'title' => $this->l('The module settings Yandex.The metric'),
+                    'icon'  => 'icon-cogs',
                 ),
-            'input' => array(
+                'input'  => array(
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l('Activity:'),
-                        'name' => 'YA_METRIKA_ACTIVE',
+                        'type'     => 'radio',
+                        'label'    => $this->l('Activity:'),
+                        'name'     => 'YA_METRIKA_ACTIVE',
                         'required' => false,
-                        'class' => 't',
-                        'is_bool' => true,
-                        'values' => array(
+                        'class'    => 't',
+                        'is_bool'  => true,
+                        'values'   => array(
                             array(
-                                'id' => 'active_on',
+                                'id'    => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Enabled')
+                                'label' => $this->l('Enabled'),
                             ),
                             array(
-                                'id' => 'active_off',
+                                'id'    => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('Disabled')
-                            )
+                                'label' => $this->l('Disabled'),
+                            ),
                         ),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('The number of Your counter'),
-                        'name' => 'YA_METRIKA_NUMBER',
+                        'type'  => 'text',
+                        'desc'  => $this->l('The number of Your counter'),
+                        'name'  => 'YA_METRIKA_NUMBER',
                         'label' => $this->l('The number of the counter'),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('ID of the OAuth application'),
-                        'name' => 'YA_METRIKA_ID_APPLICATION',
+                        'type'  => 'text',
+                        'desc'  => $this->l('ID of the OAuth application'),
+                        'name'  => 'YA_METRIKA_ID_APPLICATION',
                         'label' => $this->l('Application ID'),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('The password of the OAuth application'),
-                        'name' => 'YA_METRIKA_PASSWORD_APPLICATION',
+                        'type'  => 'text',
+                        'desc'  => $this->l('The password of the OAuth application'),
+                        'name'  => 'YA_METRIKA_PASSWORD_APPLICATION',
                         'label' => $this->l('An application-specific password'),
                     ),
                     array(
-                        'col' => 4,
-                        'class' => 't',
-                        'type' => 'text',
-                        'desc' => '<a href="https://oauth.yandex.ru/authorize?response_type=code&display=popup&state='.
-                            $dir.'&client_id='.Configuration::get('YA_METRIKA_ID_APPLICATION').'">'
-                            .$this->l('To request a token for accessing the Yandex.The metric').'</a>',
-                        'name' => 'YA_METRIKA_TOKEN',
-                        'label' => $this->l('The OAuth Token'),
-                        'disabled' => true
+                        'col'      => 4,
+                        'class'    => 't',
+                        'type'     => 'text',
+                        'desc'     => '<a href="https://oauth.yandex.ru/authorize?response_type=code&display=popup&state='.
+                                      $dir.'&client_id='.Configuration::get('YA_METRIKA_ID_APPLICATION').'">'
+                                      .$this->l('To request a token for accessing the Yandex.The metric').'</a>',
+                        'name'     => 'YA_METRIKA_TOKEN',
+                        'label'    => $this->l('The OAuth Token'),
+                        'disabled' => true,
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => $this->l('Settings'),
-                        'name' => 'YA_METRIKA_SET',
+                        'type'   => 'checkbox',
+                        'label'  => $this->l('Settings'),
+                        'name'   => 'YA_METRIKA_SET',
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'WEBVIZOR',
+                                    'id'   => 'WEBVIZOR',
                                     'name' => $this->l('Vebvizor'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'CLICKMAP',
+                                    'id'   => 'CLICKMAP',
                                     'name' => $this->l('Map clicks'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'OUTLINK',
+                                    'id'   => 'OUTLINK',
                                     'name' => $this->l('External links, file downloads and report the "Share"button'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'OTKAZI',
+                                    'id'   => 'OTKAZI',
                                     'name' => $this->l('Accurate bounce rate'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'HASH',
+                                    'id'   => 'HASH',
                                     'name' => $this->l('Hash tracking in the browser address bar'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
 
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => $this->l('To collect statistics on the following circuits:'),
-                        'name' => 'YA_METRIKA_CELI',
+                        'type'   => 'checkbox',
+                        'label'  => $this->l('To collect statistics on the following circuits:'),
+                        'name'   => 'YA_METRIKA_CELI',
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'CART',
+                                    'id'   => 'CART',
                                     'name' => $this->l('Basket(Visitor has clicked "add to cart")'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'ORDER',
+                                    'id'   => 'ORDER',
                                     'name' => $this->l('Ordering(Visitor checkout)'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'WISHLIST',
+                                    'id'   => 'WISHLIST',
                                     'name' => $this->l('Wishlist(Visitor added an item to wishlist)'),
-                                    'val' => 1
-                                )
+                                    'val'  => 1,
+                                ),
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                     array(
-                        'col' => 6,
+                        'col'   => 6,
                         'class' => 't',
-                        'type' => 'text',
-                        'name' => 'YA_METRIKA_REDIRECT',
-                        'desc' => $this->l('Callback Url for OAuth applications'),
+                        'type'  => 'text',
+                        'name'  => 'YA_METRIKA_REDIRECT',
+                        'desc'  => $this->l('Callback Url for OAuth applications'),
                         'label' => $this->l('The link for the application'),
                     ),
                 ),
-            'submit' => array(
+                'submit' => array(
                     'title' => $this->l('Save'),
-            ),
+                ),
             ),
         );
     }
 
     public function getFormYamoneyOrg()
     {
-        $form =  array(
+        $form = array(
             'form' => array(
-                'input' => array(
+                'input'  => array(
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l(
+                        'type'     => 'radio',
+                        'label'    => $this->l(
                             'Включить приём'.
                             ' платежей через Яндекс.Кассу'
                         ),
-                        'name' => 'YA_ORG_ACTIVE',
+                        'name'     => 'YA_ORG_ACTIVE',
                         'required' => false,
-                        'class' => 't',
-                        'is_bool' => true,
-                        'values' => array(
+                        'class'    => 't',
+                        'is_bool'  => true,
+                        'values'   => array(
                             array(
-                                'id' => 'active_on',
+                                'id'    => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Yes')
+                                'label' => $this->l('Yes'),
                             ),
                             array(
-                                'id' => 'active_off',
+                                'id'    => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('No')
-                            )
-                        )
-                    ),
-                    array(
-                        'type' => 'radio',
-                        'label' => '',
-                        'name' => 'YA_ORG_TYPE',
-                        'required' => false,
-                        'class' => 't',
-                        'is_bool' => true,
-                        'values' => array(
-                            array(
-                                'id' => 'active_on',
-                                'value' => 1,
-                                'label' => $this->l("Рабочий режим")
+                                'label' => $this->l('No'),
                             ),
-                            array(
-                                'id' => 'active_off',
-                                'value' => 0,
-                                'label' => $this->l("Тестовый режим")
-                            )
                         ),
                     ),
                     array(
-                        'col' => 6,
-                        'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l(
+                        'type'     => 'radio',
+                        'label'    => '',
+                        'name'     => 'YA_ORG_TYPE',
+                        'required' => false,
+                        'class'    => 't',
+                        'is_bool'  => true,
+                        'values'   => array(
+                            array(
+                                'id'    => 'active_on',
+                                'value' => 1,
+                                'label' => $this->l("Рабочий режим"),
+                            ),
+                            array(
+                                'id'    => 'active_off',
+                                'value' => 0,
+                                'label' => $this->l("Тестовый режим"),
+                            ),
+                        ),
+                    ),
+                    array(
+                        'col'      => 6,
+                        'class'    => 't',
+                        'type'     => 'text',
+                        'desc'     => $this->l(
                             "Скопируйте эту ссылку".
                             " в поля Check URL и".
                             " Aviso URL в настройках личного кабинета Яндекс.Кассы"
                         ),
-                        'name' => 'YA_ORG_CHECKORDER',
-                        'label' => "checkUrl/avisoUrl",
-                        'disabled' => true
+                        'name'     => 'YA_ORG_CHECKORDER',
+                        'label'    => "checkUrl/avisoUrl",
+                        'disabled' => true,
                     ),
                     array(
-                        'col' => 6,
-                        'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l(
+                        'col'      => 6,
+                        'class'    => 't',
+                        'type'     => 'text',
+                        'desc'     => $this->l(
                             "Включите «Использовать ".
                             "страницы успеха и ошибки с динамическими".
                             " адресами» в настройках ".
                             "личного кабинета Яндекс.Кассы"
                         ),
-                        'name' => 'YA_ORG_SUCCESS',
-                        'values' => array(
-                            'value'=> $this->l(
+                        'name'     => 'YA_ORG_SUCCESS',
+                        'values'   => array(
+                            'value' => $this->l(
                                 'Страницы с динамическими адресами'
-                            )
+                            ),
                         ),
-                        'label' => "successUrl/failUrl",
-                        'disabled' => true
+                        'label'    => "successUrl/failUrl",
+                        'disabled' => true,
                     ),
                     //
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('Идентификатор магазина'),
-                        'name' => 'YA_ORG_SHOPID',
+                        'type'  => 'text',
+                        'desc'  => $this->l('Идентификатор магазина'),
+                        'name'  => 'YA_ORG_SHOPID',
                         'label' => $this->l('shop ID'),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('Номер витрины магазина'),
-                        'name' => 'YA_ORG_SCID',
+                        'type'  => 'text',
+                        'desc'  => $this->l('Номер витрины магазина'),
+                        'name'  => 'YA_ORG_SCID',
                         'label' => $this->l('Scid'),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('Секретное слово'),
-                        'name' => 'YA_ORG_MD5_PASSWORD',
+                        'type'  => 'text',
+                        'desc'  => $this->l('Секретное слово'),
+                        'name'  => 'YA_ORG_MD5_PASSWORD',
                         'label' => $this->l('shopPassword'),
                     ),
                     array(
-                        'col' => 9,
+                        'col'   => 9,
                         'class' => 't',
-                        'type' => 'free',
-                        'name' => 'YA_ORG_TEXT_INSIDE',
+                        'type'  => 'free',
+                        'name'  => 'YA_ORG_TEXT_INSIDE',
                     ),
                     //
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l('Сценарий оплаты'),
-                        'desc' => "<a href='https://tech.yandex.ru/money/doc/payment-solution".
-                            "/payment-form/payment-form-docpage/' target='_blank'>".
-                            $this->l('Подробнее о сценариях оплаты')."</a>",
-                        'name' => 'YA_ORG_INSIDE',
+                        'type'     => 'radio',
+                        'label'    => $this->l('Сценарий оплаты'),
+                        'desc'     => "<a href='https://tech.yandex.ru/money/doc/payment-solution".
+                                      "/payment-form/payment-form-docpage/' target='_blank'>".
+                                      $this->l('Подробнее о сценариях оплаты')."</a>",
+                        'name'     => 'YA_ORG_INSIDE',
                         'required' => false,
-                        'class' => 't',
-                        'is_bool' => true,
-                        'values' => array(
+                        'class'    => 't',
+                        'is_bool'  => true,
+                        'values'   => array(
                             array(
-                                'id' => 'active_off',
+                                'id'    => 'active_off',
                                 'value' => 0,
                                 'label' => $this->l(
                                     'Выбор способов оплаты'.
                                     ' на стороне сервиса Яндекс.Касса'
-                                )
+                                ),
                             ),
                             array(
-                                'id' => 'active_on',
+                                'id'    => 'active_on',
                                 'value' => 1,
                                 'label' => $this->l(
                                     'Выбор способов оплаты на стороне магазина'
-                                )
-                            )
+                                ),
+                            ),
                         ),
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => $this->l(
+                        'type'   => 'checkbox',
+                        'label'  => $this->l(
                             'Назвать кнопку оплаты «Заплатить через Яндекс»'
                         ),
-                        'name' => 'YA_ORG_PAYLOGO',
-                        'class' => 'text-inside',
-                        'desc' => $this->l(''),
+                        'name'   => 'YA_ORG_PAYLOGO',
+                        'class'  => 'text-inside',
+                        'desc'   => $this->l(''),
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'ON',
-                                    'name' => ''
+                                    'id'   => 'ON',
+                                    'name' => '',
                                 ),
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => '',
-                        'desc' => $this->l(
+                        'type'   => 'checkbox',
+                        'label'  => '',
+                        'desc'   => $this->l(
                             'Отметьте способы оплаты,'.
                             ' которые указаны в вашем '.
                             'договоре с Яндекс.Деньгами'
                         ),
-                        'name' => 'YA_ORG_PAYMENT',
+                        'name'   => 'YA_ORG_PAYMENT',
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'YANDEX',
+                                    'id'   => 'YANDEX',
                                     'name' => $this->l('Payment from the purse in Yandex.Money.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'CARD',
+                                    'id'   => 'CARD',
                                     'name' => $this->l('Arbitrary payment with Bank card.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'TERMINAL',
+                                    'id'   => 'TERMINAL',
                                     'name' => $this->l('Payment in cash through cash desks and terminals.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'MOBILE',
+                                    'id'   => 'MOBILE',
                                     'name' => $this->l('Payment with mobile phone account.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'WEBMONEY',
+                                    'id'   => 'WEBMONEY',
                                     'name' => $this->l('Payment of the purse in system WebMoney.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'SBER',
+                                    'id'   => 'SBER',
                                     'name' => $this->l('Payment via Sberbank: payment by SMS or Sberbank Online.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'ALFA',
+                                    'id'   => 'ALFA',
                                     'name' => $this->l('Payment via Alfa-Click.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'PB',
+                                    'id'   => 'PB',
                                     'name' => $this->l('Payments via Promsvyazbank.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'MA',
+                                    'id'   => 'MA',
                                     'name' => $this->l('Payment via MasterPass.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'QW',
+                                    'id'   => 'QW',
                                     'name' => $this->l('Payment via QIWI Wallet.'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                                 array(
-                                    'id' => 'QP',
+                                    'id'   => 'QP',
                                     'name' => $this->l('Payment through a trusted payment (Kuppi.ru).'),
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
 
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l(''),
-                        'name' => 'YA_ORG_MIN',
+                        'type'  => 'text',
+                        'desc'  => $this->l(''),
+                        'name'  => 'YA_ORG_MIN',
                         'label' => $this->l('Минимальная сумма заказа'),
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => $this->l('Запись отладочной информации'),
-                        'name' => 'YA_ORG_LOGGING',
-                        'desc' => $this->l(
+                        'type'   => 'checkbox',
+                        'label'  => $this->l('Запись отладочной информации'),
+                        'name'   => 'YA_ORG_LOGGING',
+                        'desc'   => $this->l(
                             'Настройку нужно будет поменять,'.
                             ' только если попросят специалисты Яндекс.Денег'
                         ),
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'ON',
-                                    'name' => ''
+                                    'id'   => 'ON',
+                                    'name' => '',
                                 ),
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l('Отправлять в Яндекс.Кассу данные для чеков (54-ФЗ)'),
-                        'name' => 'YA_SEND_CHECK',
-                        'desc' => $this->l('Отправлять в Яндекс.Кассу данные для чеков (54-ФЗ) НДС'),
+                        'type'   => 'radio',
+                        'label'  => $this->l('Отправлять в Яндекс.Кассу данные для чеков (54-ФЗ)'),
+                        'name'   => 'YA_SEND_CHECK',
+                        'desc'   => $this->l('Отправлять в Яндекс.Кассу данные для чеков (54-ФЗ) НДС'),
                         'values' => array(
                             array(
-                                'id' => 1,
+                                'id'    => 1,
                                 'label' => 'Включить',
-                                'value' => 1
+                                'value' => 1,
                             ),
                             array(
-                                'id' => 0,
+                                'id'    => 0,
                                 'label' => 'Отключить',
-                                'value' => 0
+                                'value' => 0,
                             ),
                         ),
                     ),
@@ -886,52 +890,52 @@ class Hforms
                 'submit' => array(
                     'title' => $this->l('Save'),
                 ),
-            )
+            ),
         );
 
 
-        $taxes = TaxCore::getTaxes(Context::getContext()->language->id, true);
+        $taxes                   = TaxCore::getTaxes(Context::getContext()->language->id, true);
         $form['form']['input'][] = array(
-            'type' => 'html',
-            'label' => $this->l('Ставка в вашем магазине.'),
+            'type'         => 'html',
+            'label'        => $this->l('Ставка в вашем магазине.'),
             'html_content' => '',
-            'desc' => $this->l('Слева — ставка НДС в вашем магазине, справа — в Яндекс.Кассе. Пожалуйста, сопоставьте их.'),
+            'desc'         => $this->l('Слева — ставка НДС в вашем магазине, справа — в Яндекс.Кассе. Пожалуйста, сопоставьте их.'),
         );
 
         foreach ($taxes as $tax) {
             $form['form']['input'][] = array(
-                'type' => 'select',
-                'label' => '<span style="text-align:left;float: left;">'.$tax['name'].'</span>'.$this->l(' Передавать в Яндекс.Кассу как'),
-                'name' => 'YA_NALOG_STAVKA_' . $tax['id_tax'],
+                'type'    => 'select',
+                'label'   => '<span style="text-align:left;float: left;">'.$tax['name'].'</span>'.$this->l(' Передавать в Яндекс.Кассу как'),
+                'name'    => 'YA_NALOG_STAVKA_'.$tax['id_tax'],
                 'options' => array(
                     'query' => array(
                         array(
-                            'id' => 1,
-                            'name' => 'Без НДС'
+                            'id'   => 1,
+                            'name' => 'Без НДС',
                         ),
                         array(
-                            'id' => 2,
-                            'name' => '0%'
+                            'id'   => 2,
+                            'name' => '0%',
                         ),
                         array(
-                            'id' => 3,
-                            'name' => '10%'
+                            'id'   => 3,
+                            'name' => '10%',
                         ),
                         array(
-                            'id' => 4,
-                            'name' => '18%'
+                            'id'   => 4,
+                            'name' => '18%',
                         ),
                         array(
-                            'id' => 5,
-                            'name' => 'Расчётная ставка 10/110'
+                            'id'   => 5,
+                            'name' => 'Расчётная ставка 10/110',
                         ),
                         array(
-                            'id' => 6,
-                            'name' => 'Расчётная ставка 18/118'
-                        )
+                            'id'   => 6,
+                            'name' => 'Расчётная ставка 18/118',
+                        ),
                     ),
-                    'id' => 'id',
-                    'name' => 'name'
+                    'id'    => 'id',
+                    'name'  => 'name',
                 ),
             );
         }
@@ -943,98 +947,98 @@ class Hforms
     {
         return array(
             'form' => array(
-                'input' => array(
+                'input'  => array(
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l(
+                        'type'     => 'radio',
+                        'label'    => $this->l(
                             'Включить прием платежей в кошелек на Яндексе'
                         ),
-                        'name' => 'YA_P2P_ACTIVE',
+                        'name'     => 'YA_P2P_ACTIVE',
                         'required' => false,
-                        'class' => 't',
-                        'is_bool' => true,
-                        'values' => array(
+                        'class'    => 't',
+                        'is_bool'  => true,
+                        'values'   => array(
                             array(
-                                'id' => 'active_on',
+                                'id'    => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Yes')
+                                'label' => $this->l('Yes'),
                             ),
                             array(
-                                'id' => 'active_off',
+                                'id'    => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('No')
-                            )
+                                'label' => $this->l('No'),
+                            ),
                         ),
                     ),
                     array(
-                        'col' => 6,
+                        'col'   => 6,
                         'class' => 't',
-                        'desc' => "Скопируйте эту ссылку в поле Redirect URL на ".
-                            "<a href='https://sp-money.yandex.ru/myservices/new.xml' target='_blank'>"
-                            .$this->l("странице регистрации приложения")."</a>",
-                        'type' => 'text',
-                        'name' => 'YA_P2P_REDIRECT',
+                        'desc'  => "Скопируйте эту ссылку в поле Redirect URL на ".
+                                   "<a href='https://sp-money.yandex.ru/myservices/new.xml' target='_blank'>"
+                                   .$this->l("странице регистрации приложения")."</a>",
+                        'type'  => 'text',
+                        'name'  => 'YA_P2P_REDIRECT',
                         'label' => $this->l('RedirectURL'),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l(''),
-                        'name' => 'YA_P2P_NUMBER',
+                        'type'  => 'text',
+                        'desc'  => $this->l(''),
+                        'name'  => 'YA_P2P_NUMBER',
                         'label' => $this->l('Номер кошелька'),
                     ),
                     array(
-                        'col' => 6,
+                        'col'   => 6,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l(''),
-                        'name' => 'YA_P2P_IDENTIFICATOR',
+                        'type'  => 'text',
+                        'desc'  => $this->l(''),
+                        'name'  => 'YA_P2P_IDENTIFICATOR',
                         'label' => $this->l('Id приложения'),
                     ),
                     array(
-                        'type' => 'textarea',
+                        'type'  => 'textarea',
                         'label' => $this->l('Секретное слово'),
-                        'name' => 'YA_P2P_KEY',
-                        'rows' => 5,
-                        'cols' => 30,
-                        'desc' => $this->l(''),
-                        'class' => 't'
+                        'name'  => 'YA_P2P_KEY',
+                        'rows'  => 5,
+                        'cols'  => 30,
+                        'desc'  => $this->l(''),
+                        'class' => 't',
                     ),
                     array(
-                        'col' => 9,
+                        'col'   => 9,
                         'class' => 't',
-                        'type' => 'free',
-                        'name' => 'YA_P2P_TEXT_INSIDE',
+                        'type'  => 'free',
+                        'name'  => 'YA_P2P_TEXT_INSIDE',
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l(''),
-                        'name' => 'YA_P2P_MIN',
+                        'type'  => 'text',
+                        'desc'  => $this->l(''),
+                        'name'  => 'YA_P2P_MIN',
                         'label' => $this->l('Minimum order amount'),
                     ),
                     array(
-                        'type' => 'checkbox',
-                        'label' => $this->l('Запись отладочной информации'),
-                        'desc' => $this->l('Настройку нужно будет поменять, ".
+                        'type'   => 'checkbox',
+                        'label'  => $this->l('Запись отладочной информации'),
+                        'desc'   => $this->l('Настройку нужно будет поменять, ".
                             "только если попросят специалисты Яндекс.Денег'),
-                        'name' => 'YA_P2P_LOGGING',
+                        'name'   => 'YA_P2P_LOGGING',
                         'values' => array(
                             'query' => array(
                                 array(
-                                    'id' => 'ON',
+                                    'id'   => 'ON',
                                     'name' => '',
-                                    'val' => 1
+                                    'val'  => 1,
                                 ),
                             ),
-                            'id' => 'id',
-                            'name' => 'name'
+                            'id'    => 'id',
+                            'name'  => 'name',
                         ),
                     ),
                 ),
-            'submit' => array(
+                'submit' => array(
                     'title' => $this->l('Save'),
                 ),
             ),
@@ -1044,60 +1048,61 @@ class Hforms
     public function getFormBilling()
     {
         $state = new OrderState();
+
         return array(
             'form' => array(
                 'legend' => array(
                     'title' => $this->l('The module settings Yandex.Billing'),
-                    'icon' => 'icon-cogs',
+                    'icon'  => 'icon-cogs',
                 ),
-                'input' => array(
+                'input'  => array(
                     array(
-                        'type' => 'radio',
-                        'label' => $this->l('Activate payments via Yandex.Billing'),
-                        'name' => 'YA_BILLING_ACTIVE',
+                        'type'     => 'radio',
+                        'label'    => $this->l('Activate payments via Yandex.Billing'),
+                        'name'     => 'YA_BILLING_ACTIVE',
                         'required' => false,
-                        'class' => 't',
-                        'is_bool' => true,
-                        'values' => array(
+                        'class'    => 't',
+                        'is_bool'  => true,
+                        'values'   => array(
                             array(
-                                'id' => 'active_on',
+                                'id'    => 'active_on',
                                 'value' => 1,
-                                'label' => $this->l('Yes')
+                                'label' => $this->l('Yes'),
                             ),
                             array(
-                                'id' => 'active_off',
+                                'id'    => 'active_off',
                                 'value' => 0,
-                                'label' => $this->l('No')
-                            )
+                                'label' => $this->l('No'),
+                            ),
                         ),
                     ),
                     array(
-                        'col' => 4,
+                        'col'   => 4,
                         'class' => 't',
-                        'type' => 'text',
+                        'type'  => 'text',
                         'label' => $this->l('Yandex.Billing\'s identifier'),
-                        'name' => 'YA_BILLING_ID',
+                        'name'  => 'YA_BILLING_ID',
                     ),
                     array(
-                        'col' => 4,
-                        'class' => 't',
-                        'type' => 'text',
-                        'desc' => $this->l('Payment purpose is added to the payment order: specify whatever will help identify the order paid via Yandex.Billing'),
-                        'name' => 'YA_BILLING_PURPOSE',
-                        'label' => $this->l('Payment purpose'),
+                        'col'     => 4,
+                        'class'   => 't',
+                        'type'    => 'text',
+                        'desc'    => $this->l('Payment purpose is added to the payment order: specify whatever will help identify the order paid via Yandex.Billing'),
+                        'name'    => 'YA_BILLING_PURPOSE',
+                        'label'   => $this->l('Payment purpose'),
                         'default' => $this->l('Order No. #order_id# Payment via Yandex.Billing'),
                     ),
                     array(
-                        'col' => 4,
-                        'class' => 't',
-                        'type' => 'select',
-                        'desc' => $this->l('Order status shows the payment result is unknown: you can only learn whether the client made payment or not from an email notification or in your bank'),
-                        'name' => 'YA_BILLING_END_STATUS',
-                        'label' => $this->l('Order status'),
+                        'col'     => 4,
+                        'class'   => 't',
+                        'type'    => 'select',
+                        'desc'    => $this->l('Order status shows the payment result is unknown: you can only learn whether the client made payment or not from an email notification or in your bank'),
+                        'name'    => 'YA_BILLING_END_STATUS',
+                        'label'   => $this->l('Order status'),
                         'options' => array(
                             'query' => $state->getOrderStates(1),
-                            'id' => 'id_order_state',
-                            'name' => 'name'
+                            'id'    => 'id_order_state',
+                            'name'  => 'name',
                         ),
                         'default' => Configuration::get('PS_OS_PAYMENT'),
                     ),

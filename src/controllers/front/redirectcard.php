@@ -9,6 +9,11 @@
 * @license   https://money.yandex.ru/doc.xml?id=527052
 */
 
+/**
+ * Class YamoduleRedirectCardModuleFrontController
+ *
+ * @property PaymentModuleCore $module
+ */
 class YamoduleRedirectCardModuleFrontController extends ModuleFrontController
 {
     public $display_header = true;
@@ -141,7 +146,7 @@ class YamoduleRedirectCardModuleFrontController extends ModuleFrontController
             if ($cart->orderExists()) {
                 $ord = new Order((int)Order::getOrderByCartId($cart->id));
             } else {
-                $ord = $this->module->validateOrder(
+                if ($this->module->validateOrder(
                     $cart->id,
                     _PS_OS_PREPARATION_,
                     $cart->getOrderTotal(true, Cart::BOTH),
@@ -151,20 +156,28 @@ class YamoduleRedirectCardModuleFrontController extends ModuleFrontController
                     null,
                     false,
                     $cart->secure_key
-                );
+                )) {
+                    $ord = new Order($this->module->currentOrder);
+                } else {
+                    if ($this->log_on) {
+                        $this->module->logSave(
+                            'payment_card: #'.$this->module->currentOrder.' '.$this->module->l('Order failure')
+                        );
+                    }
+                    return;
+                }
             }
 
-            if ($ord) {
-                $history = new OrderHistory();
-                $history->id_order = $ord->id;
-                $history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $ord->id);
-                $history->addWithemail(true);
-            }
+            $history = new OrderHistory();
+            $history->id_order = $ord->id;
+            $history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $ord->id);
+            $history->addWithemail(true);
             if ($this->log_on) {
                 $this->module->logSave(
                     'payment_card: #'.$this->module->currentOrder.' '.$this->module->l('Order success')
                 );
             }
+
             Tools::redirect(
                 $this->context->link->getPageLink('order-confirmation').'&id_cart='
                 .$this->context->cart->id.'&id_module='.$this->module->id

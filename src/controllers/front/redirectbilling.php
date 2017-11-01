@@ -93,7 +93,7 @@ class YamoduleRedirectBillingModuleFrontController extends ModuleFrontController
         if ($cart->orderExists()) {
             $ord = new Order((int)Order::getOrderByCartId($cart->id));
         } else {
-            $ord = $this->module->validateOrder(
+            if ($this->module->validateOrder(
                 $cart->id,
                 _PS_OS_PREPARATION_,
                 $cart->getOrderTotal(true, Cart::BOTH),
@@ -103,20 +103,25 @@ class YamoduleRedirectBillingModuleFrontController extends ModuleFrontController
                 null,
                 false,
                 $cart->secure_key
-            );
-            $id = $this->module->currentOrder;
-            $ord = new Order((int)Order::getOrderByCartId($id));
-        }
-        if ($ord) {
-            $history = new OrderHistory();
-            $history->id_order = $ord->id;
-            $state = Configuration::get('YA_BILLING_END_STATUS');
-            if (empty($state)) {
-                $state = Configuration::get('PS_OS_PAYMENT');
+            )) {
+                $ord = new Order($this->module->currentOrder);
+            } else {
+                if ($this->log_on) {
+                    $this->module->logSave(
+                        'payment_billing: #' . $this->module->currentOrder . ' ' . $this->module->l('Order failure')
+                    );
+                }
+                return;
             }
-            $history->changeIdOrderState($state, $ord->id);
-            $history->addWithemail(true);
         }
+        $history = new OrderHistory();
+        $history->id_order = $ord->id;
+        $state = Configuration::get('YA_BILLING_END_STATUS');
+        if (empty($state)) {
+            $state = Configuration::get('PS_OS_PAYMENT');
+        }
+        $history->changeIdOrderState($state, $ord->id);
+        $history->addWithemail(true);
         if ($this->log_on) {
             $this->module->logSave(
                 'payment_billing: #'.$this->module->currentOrder.' '.$this->module->l('Order success')

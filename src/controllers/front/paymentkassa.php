@@ -68,7 +68,7 @@ class YamodulePaymentKassaModuleFrontController extends ModuleFrontController
             if ($cart->orderExists()) {
                 $ord = new Order((int)Order::getOrderByCartId($cart->id));
             } else {
-                $ord = $this->module->validateOrder(
+                if ($this->module->validateOrder(
                     $cart->id,
                     _PS_OS_PREPARATION_,
                     $cart->getOrderTotal(true, Cart::BOTH),
@@ -81,18 +81,19 @@ class YamodulePaymentKassaModuleFrontController extends ModuleFrontController
                     null,
                     false,
                     $cart->secure_key
-                );
-            }
-
-            if (!$ord) {
-                $this->module->validateResponse(
-                    $this->module->l('Invalid order number'),
-                    1,
-                    $action,
-                    $shopId,
-                    $invoiceId,
-                    true
-                );
+                )) {
+                    $ord = new Order($this->module->currentOrder);
+                } else {
+                    $this->module->validateResponse(
+                        $this->module->l('Invalid order number'),
+                        1,
+                        $action,
+                        $shopId,
+                        $invoiceId,
+                        true
+                    );
+                    return;
+                }
             }
 
             if (Tools::strtoupper($signature) != Tools::strtoupper(Tools::getValue('md5'))) {

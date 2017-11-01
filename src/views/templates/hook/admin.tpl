@@ -42,6 +42,9 @@
         {$money_org}
     </div>
     <div id="mws">
+        {if $mws_ip !== $detected_ip}
+            <div class="alert alert-danger">{l s='Ваш ip был изменен.' mod='yamodule'}</div>
+        {/if}
         <div class="errors">{$mws_status|escape:'quotes':'UTF-8'}</div>
         <p>{l s='Любое использование вами модуля Y.CMS означает полное и безоговорочное принятие вами условий' mod='yamodule'} <a target="_blank" href="https://money.yandex.ru/doc.xml?id=527052">{l s='лицензионного договора' mod='yamodule'} </a> {l s='Если вы не принимаете условия указанного договора в полном объеме, то не имеете права использовать программу в каких-либо целях.' mod='yamodule'}<p>
         <h4>Настройка взаимодействия по протоколу MWS (<a target="_blank" href="https://tech.yandex.ru/money/doc/payment-solution/payment-management/payment-management-about-docpage/">Merchant Web Services</a>)</h4>
@@ -54,6 +57,7 @@
                     <div class="alert alert-danger">{l s='Отсутствует идентификатор магазина (shopId)' mod='yamodule'}</div>
                 {/if}
             {else}
+
                 <p>{l s='Для работы с MWS необходимо получить в Яндекс.Деньгах специальный сертификат и загрузить его в приложении.' mod='yamodule'}<p>
                 <p>
                 <form id="mws_form" class="market_form form-horizontal" method="post" action="">
@@ -96,6 +100,18 @@
                             </table>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-lg-3">
+                            {l s='IP-адрес сервера.' mod='yamodule'}
+                        </label>
+                        <div class="col-lg-9">
+                            <span>{$mws_ip}</span>
+                            <input type="hidden" name="" value="{$detected_ip}">
+                            <p class="help-block">
+                                {l s='IP-адрес для тестового и рабочего режимов совпадают.' mod='yamodule'}
+                            </p>
+                        </div>
+                    </div>
                 </form>
             {/if}
         {else}
@@ -103,7 +119,8 @@
             <p>{l s='Просмотреть информацию о платеже или сделать возврат можно в ' mod='yamodule'}<a href="{$orders_link|escape:'quotes':'UTF-8'}">{l s='Списке заказов' mod='yamodule'}</a></p>
             <p><a class="reset_csr">{l s='Сбросить настройки' mod='yamodule'}</a></p>
         {/if}
-    </p>
+        </p>
+
     </div>
     <div id="metrika">
         <div class="errors">{$metrika_status|escape:'quotes':'UTF-8'}</div>
