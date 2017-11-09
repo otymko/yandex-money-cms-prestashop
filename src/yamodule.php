@@ -100,7 +100,7 @@ class Yamodule extends PaymentModuleCore
 
         $this->name = 'yamodule';
         $this->tab = 'payments_gateways';
-        $this->version = '1.4.4';
+        $this->version = '1.4.5';
         $this->author = 'Яндекс.Деньги';
         $this->need_instance = 1;
         $this->bootstrap = 1;
@@ -982,7 +982,7 @@ class Yamodule extends PaymentModuleCore
         }
 
         $data['available'] = $available;
-        $data['url'] = str_replace('https://', 'http://', $url);
+        $data['url'] = $url;
         $data['id'] = $id_offer;
         $data['currencyId'] = $this->currency_iso;
         $data['price'] = $price;
