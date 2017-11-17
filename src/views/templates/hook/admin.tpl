@@ -43,7 +43,7 @@
     </div>
     <div id="mws">
         {if $mws_ip !== $detected_ip}
-            <div class="alert alert-danger">{l s='Ваш ip был изменен.' mod='yamodule'}</div>
+            <div class="alert alert-danger">{l s='IP-адрес Вашего сервера изменился с %s на %s.'|sprintf:$mws_ip:$detected_ip mod='yamodule'}</div>
         {/if}
         <div class="errors">{$mws_status|escape:'quotes':'UTF-8'}</div>
         <p>{l s='Любое использование вами модуля Y.CMS означает полное и безоговорочное принятие вами условий' mod='yamodule'} <a target="_blank" href="https://money.yandex.ru/doc.xml?id=527052">{l s='лицензионного договора' mod='yamodule'} </a> {l s='Если вы не принимаете условия указанного договора в полном объеме, то не имеете права использовать программу в каких-либо целях.' mod='yamodule'}<p>
@@ -107,9 +107,6 @@
                         <div class="col-lg-9">
                             <span>{$mws_ip}</span>
                             <input type="hidden" name="" value="{$detected_ip}">
-                            <p class="help-block">
-                                {l s='IP-адрес для тестового и рабочего режимов совпадают.' mod='yamodule'}
-                            </p>
                         </div>
                     </div>
                 </form>
