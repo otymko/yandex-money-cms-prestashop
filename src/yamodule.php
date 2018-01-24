@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Module is prohibited to sales! Violation of this condition leads to the deprivation of the license!
  *
@@ -8,7 +9,6 @@
  * @copyright © 2015 NBCO Yandex.Money LLC
  * @license   https://money.yandex.ru/doc.xml?id=527052
  */
-
 class Yamodule extends PaymentModuleCore
 {
     private $p2p_status = '';
@@ -25,56 +25,56 @@ class Yamodule extends PaymentModuleCore
     public $cryptor;
 
     public $status = array(
-        'DELIVERY' => 900,
-        'CANCELLED' => 901,
-        'PICKUP' => 902,
-        'PROCESSING' => 903,
-        'DELIVERED' => 904,
-        'UNPAID' => 905,
+        'DELIVERY'            => 900,
+        'CANCELLED'           => 901,
+        'PICKUP'              => 902,
+        'PROCESSING'          => 903,
+        'DELIVERED'           => 904,
+        'UNPAID'              => 905,
         'RESERVATION_EXPIRED' => 906,
-        'RESERVATION' => 907
+        'RESERVATION'         => 907,
     );
 
     public static $ModuleRoutes = array(
-        'pokupki_cart' => array(
+        'pokupki_cart'   => array(
             'controller' => 'pokupki',
-            'rule' =>  'yamodule/{controller}/{type}',
-            'keywords' => array(
-                'type'   => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'type'),
-                'module'  => array('regexp' => '[\w]+', 'param' => 'module'),
-                'controller' => array('regexp' => '[\w]+',  'param' => 'controller')
+            'rule'       => 'yamodule/{controller}/{type}',
+            'keywords'   => array(
+                'type'       => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'type'),
+                'module'     => array('regexp' => '[\w]+', 'param' => 'module'),
+                'controller' => array('regexp' => '[\w]+', 'param' => 'controller'),
             ),
-            'params' => array(
-                'fc' => 'module',
-                'module' => 'yamodule',
-                'controller' => 'pokupki'
-            )
+            'params'     => array(
+                'fc'         => 'module',
+                'module'     => 'yamodule',
+                'controller' => 'pokupki',
+            ),
         ),
-        'pokupki_order' => array(
+        'pokupki_order'  => array(
             'controller' => 'pokupki',
-            'rule' =>  'yamodule/{controller}/{type}/{func}',
-            'keywords' => array(
-                'type'   => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'type'),
-                'func'   => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'func'),
-                'module'  => array('regexp' => '[\w]+', 'param' => 'module'),
-                'controller' => array('regexp' => '[\w]+',  'param' => 'controller')
+            'rule'       => 'yamodule/{controller}/{type}/{func}',
+            'keywords'   => array(
+                'type'       => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'type'),
+                'func'       => array('regexp' => '[_a-zA-Z0-9-\pL]*', 'param' => 'func'),
+                'module'     => array('regexp' => '[\w]+', 'param' => 'module'),
+                'controller' => array('regexp' => '[\w]+', 'param' => 'controller'),
             ),
-            'params' => array(
-                'fc' => 'module',
-                'module' => 'yamodule',
-                'controller' => 'pokupki'
-            )
+            'params'     => array(
+                'fc'         => 'module',
+                'module'     => 'yamodule',
+                'controller' => 'pokupki',
+            ),
         ),
         'generate_price' => array(
             'controller' => null,
-            'rule' =>  'yamodule/{controller}',
-            'keywords' => array(
-                'controller' => array('regexp' => '[\w]+',  'param' => 'controller')
+            'rule'       => 'yamodule/{controller}',
+            'keywords'   => array(
+                'controller' => array('regexp' => '[\w]+', 'param' => 'controller'),
             ),
-            'params' => array(
-                'fc' => 'module',
+            'params'     => array(
+                'fc'     => 'module',
                 'module' => 'yamodule',
-            )
+            ),
         ),
     );
 
@@ -98,21 +98,21 @@ class Yamodule extends PaymentModuleCore
         include_once(dirname(__FILE__).'/lib/api.php');
         include_once(dirname(__FILE__).'/lib/external_payment.php');
 
-        $this->name = 'yamodule';
-        $this->tab = 'payments_gateways';
-        $this->version = '1.4.5';
-        $this->author = 'Яндекс.Деньги';
-        $this->need_instance = 1;
-        $this->bootstrap = 1;
-        $this->module_key = "f51f5c45095c7d4eec9d2266901d793e";
-        $this->currencies = true;
+        $this->name            = 'yamodule';
+        $this->tab             = 'payments_gateways';
+        $this->version         = '1.4.6';
+        $this->author          = 'Яндекс.Деньги';
+        $this->need_instance   = 1;
+        $this->bootstrap       = 1;
+        $this->module_key      = "f51f5c45095c7d4eec9d2266901d793e";
+        $this->currencies      = true;
         $this->currencies_mode = 'checkbox';
 
         parent::__construct();
 
-        $this->cryptor = $this->getCryptor();
-        $this->displayName = $this->l('Y.CMS Prestashop');
-        $this->description = $this->l(
+        $this->cryptor          = $this->getCryptor();
+        $this->displayName      = $this->l('Y.CMS Prestashop');
+        $this->description      = $this->l(
             'Yandex.Money, Yandex.Service, Yandex.Metrika, Yandex.Market Orders in the Market'
         );
         $this->confirmUninstall = $this->l('Really uninstall the module?');
@@ -138,7 +138,7 @@ class Yamodule extends PaymentModuleCore
     public function multiLangField($str)
     {
         $languages = Language::getLanguages(false);
-        $data = array();
+        $data      = array();
         foreach ($languages as $lang) {
             $data[$lang['id_lang']] = $str;
         }
@@ -162,95 +162,95 @@ class Yamodule extends PaymentModuleCore
         }
 
         $status = array(
-            'DELIVERY' => array(
-                'name' => 'YA Ждёт отправки',
-                'color' => '#8A2BE2',
-                'id' => 900,
-                'paid' => true,
-                'shipped' => false,
-                'logable' => true,
-                'delivery' => true
+            'DELIVERY'            => array(
+                'name'     => 'YA Ждёт отправки',
+                'color'    => '#8A2BE2',
+                'id'       => 900,
+                'paid'     => true,
+                'shipped'  => false,
+                'logable'  => true,
+                'delivery' => true,
             ),
-            'CANCELLED' => array(
-                'name' => 'YA Отменен',
-                'color' => '#b70038',
-                'id' => 901,
-                'paid' => false,
-                'shipped' => false,
-                'logable' => true,
-                'delivery' => false
+            'CANCELLED'           => array(
+                'name'     => 'YA Отменен',
+                'color'    => '#b70038',
+                'id'       => 901,
+                'paid'     => false,
+                'shipped'  => false,
+                'logable'  => true,
+                'delivery' => false,
             ),
-            'PICKUP' => array(
-                'name' => 'YA В пункте самовывоза',
-                'color' => '#cd98ff',
-                'id' => 902,
-                'paid' => true,
-                'shipped' => true,
-                'logable' => true,
-                'delivery' => true
+            'PICKUP'              => array(
+                'name'     => 'YA В пункте самовывоза',
+                'color'    => '#cd98ff',
+                'id'       => 902,
+                'paid'     => true,
+                'shipped'  => true,
+                'logable'  => true,
+                'delivery' => true,
             ),
-            'PROCESSING' => array(
-                'name' => 'YA В процессе подготовки',
-                'color' => '#FF8C00',
-                'id' => 903,
-                'paid' => true,
-                'shipped' => false,
-                'logable' => false,
-                'delivery' => true
+            'PROCESSING'          => array(
+                'name'     => 'YA В процессе подготовки',
+                'color'    => '#FF8C00',
+                'id'       => 903,
+                'paid'     => true,
+                'shipped'  => false,
+                'logable'  => false,
+                'delivery' => true,
             ),
-            'DELIVERED' => array(
-                'name' => 'YA Доставлен',
-                'color' => '#108510',
-                'id' => 904,
-                'paid' => true,
-                'shipped' => true,
-                'logable' => true,
-                'delivery' => true
+            'DELIVERED'           => array(
+                'name'     => 'YA Доставлен',
+                'color'    => '#108510',
+                'id'       => 904,
+                'paid'     => true,
+                'shipped'  => true,
+                'logable'  => true,
+                'delivery' => true,
             ),
-            'UNPAID' => array(
-                'name' => 'YA Не оплачен',
-                'color' => '#ff1c30',
-                'id' => 905,
-                'paid' => false,
-                'shipped' => false,
-                'logable' => false,
-                'delivery' => false
+            'UNPAID'              => array(
+                'name'     => 'YA Не оплачен',
+                'color'    => '#ff1c30',
+                'id'       => 905,
+                'paid'     => false,
+                'shipped'  => false,
+                'logable'  => false,
+                'delivery' => false,
             ),
             'RESERVATION_EXPIRED' => array(
-                'name' => 'YA Резерв отменён',
-                'color' => '#ff2110',
-                'id' => 906,
-                'paid' => false,
-                'shipped' => false,
-                'logable' => false,
-                'delivery' => false
+                'name'     => 'YA Резерв отменён',
+                'color'    => '#ff2110',
+                'id'       => 906,
+                'paid'     => false,
+                'shipped'  => false,
+                'logable'  => false,
+                'delivery' => false,
             ),
-            'RESERVATION' => array(
-                'name' => 'YA Резерв',
-                'color' => '#0f00d3',
-                'id' => 907,
-                'paid' => false,
-                'shipped' => false,
-                'logable' => false,
-                'delivery' => false
+            'RESERVATION'         => array(
+                'name'     => 'YA Резерв',
+                'color'    => '#0f00d3',
+                'id'       => 907,
+                'paid'     => false,
+                'shipped'  => false,
+                'logable'  => false,
+                'delivery' => false,
             ),
         );
 
         foreach ($status as $s) {
-            $os = new OrderState((int)$s['id']);
-            $os->id = $s['id'];
-            $os->force_id = true;
-            $os->name = $this->multiLangField($s['name']);
-            $os->color = $s['color'];
+            $os              = new OrderState((int)$s['id']);
+            $os->id          = $s['id'];
+            $os->force_id    = true;
+            $os->name        = $this->multiLangField($s['name']);
+            $os->color       = $s['color'];
             $os->module_name = $this->name;
-            $os->paid = $s['paid'];
-            $os->logable = $s['logable'];
-            $os->shipped = $s['shipped'];
-            $os->delivery = $s['delivery'];
+            $os->paid        = $s['paid'];
+            $os->logable     = $s['logable'];
+            $os->shipped     = $s['shipped'];
+            $os->delivery    = $s['delivery'];
             $os->add();
         }
 
-        $sql = array();
+        $sql   = array();
         $sql[] = 'CREATE TABLE IF NOT EXISTS `'._DB_PREFIX_.'pokupki_orders`
             (
                 `id_order` int(10) NOT NULL,
@@ -289,17 +289,17 @@ class Yamodule extends PaymentModuleCore
             Db::getInstance()->execute($qr);
         }
 
-        $customer = new Customer();
+        $customer            = new Customer();
         $customer->firstname = 'Service user for YCMS';
-        $customer->lastname = 'Service user for YCMS';
+        $customer->lastname  = 'Service user for YCMS';
         if (property_exists($customer, 'middlename')) {
             $customer->middlename = 'Service user for YCMS';
         }
-        $customer->email = 'service@example.com';
-        $customer->passwd = Tools::encrypt('OPC123456dmo');
+        $customer->email      = 'service@example.com';
+        $customer->passwd     = Tools::encrypt('OPC123456dmo');
         $customer->newsletter = 1;
-        $customer->optin = 1;
-        $customer->active = 0;
+        $customer->optin      = 1;
+        $customer->active     = 0;
         $customer->add();
         Configuration::updateValue('YA_POKUPKI_CUSTOMER', $customer->id);
         Configuration::updateValue('YA_ORG_INSIDE', 0);
@@ -309,14 +309,14 @@ class Yamodule extends PaymentModuleCore
 
     public function uninstall()
     {
-        $id = (int) Configuration::get('YA_POKUPKI_CUSTOMER');
-        $customer = new Customer($id);
+        $id           = (int)Configuration::get('YA_POKUPKI_CUSTOMER');
+        $customer     = new Customer($id);
         $customer->id = $id;
         $customer->delete();
         Db::getInstance()->execute('DROP TABLE IF EXISTS '._DB_PREFIX_.'pokupki_orders');
 
         foreach ($this->status as $s) {
-            $os = new OrderState((int)$s);
+            $os     = new OrderState((int)$s);
             $os->id = $s;
             $os->delete();
         }
@@ -327,9 +327,9 @@ class Yamodule extends PaymentModuleCore
     public function hookdisplayAdminOrder($params)
     {
         $ya_order_db = $this->getYandexOrderById((int)$params['id_order']);
-        $ht = '';
+        $ht          = '';
         if ($ya_order_db['id_market_order']) {
-            $partner = new Partner();
+            $partner  = new Partner();
             $ya_order = $partner->getOrder($ya_order_db['id_market_order']);
             if ($ya_order) {
                 $array = array();
@@ -341,7 +341,7 @@ class Yamodule extends PaymentModuleCore
                         $this->status['PROCESSING'],
                         $this->status['DELIVERED'],
                         $this->status['PICKUP'],
-                        $this->status['UNPAID']
+                        $this->status['UNPAID'],
                     );
                 } elseif ($state == 'DELIVERY') {
                     $array = array(
@@ -349,7 +349,7 @@ class Yamodule extends PaymentModuleCore
                         $this->status['RESERVATION'],
                         $this->status['PROCESSING'],
                         $this->status['DELIVERY'],
-                        $this->status['UNPAID']
+                        $this->status['UNPAID'],
                     );
                     if (!isset($ya_order->order->delivery->outletId)
                         || $ya_order->order->delivery->outletId < 1
@@ -364,7 +364,7 @@ class Yamodule extends PaymentModuleCore
                         $this->status['PROCESSING'],
                         $this->status['PICKUP'],
                         $this->status['DELIVERY'],
-                        $this->status['UNPAID']
+                        $this->status['UNPAID'],
                     );
                 } else {
                     $array = array(
@@ -375,7 +375,7 @@ class Yamodule extends PaymentModuleCore
                         $this->status['PICKUP'],
                         $this->status['CANCELLED'],
                         $this->status['DELIVERY'],
-                        $this->status['UNPAID']
+                        $this->status['UNPAID'],
                     );
                 }
             }
@@ -388,12 +388,12 @@ class Yamodule extends PaymentModuleCore
                 $this->status['PICKUP'],
                 $this->status['CANCELLED'],
                 $this->status['DELIVERY'],
-                $this->status['UNPAID']
+                $this->status['UNPAID'],
             );
         }
 
         $array = Tools::jsonEncode($array);
-        $ht .= '<script type="text/javascript">
+        $ht    .= '<script type="text/javascript">
             $(document).ready(function(){
                 var array = JSON.parse("'.$array.'");
                 for(var k in array){
@@ -406,7 +406,7 @@ class Yamodule extends PaymentModuleCore
 
         // if(Configuration::get('YA_POKUPKI_SET_CHANGEC') && $ya_order->order->paymentType != 'PREPAID')
         if (Configuration::get('YA_POKUPKI_SET_CHANGEC')) {
-            $ht .= $this->displayTabContent((int) $params['id_order']);
+            $ht .= $this->displayTabContent((int)$params['id_order']);
         }
 
         return $ht;
@@ -423,17 +423,17 @@ class Yamodule extends PaymentModuleCore
             $errors[] = $this->l('Module Yandex.Cash is disabled');
         }
 
-        $mws = new Mws();
-        $mws->demo = !Configuration::get('YA_ORG_TYPE');
-        $mws->shopId = Configuration::get('YA_ORG_SHOPID');
+        $mws          = new Mws();
+        $mws->demo    = !Configuration::get('YA_ORG_TYPE');
+        $mws->shopId  = Configuration::get('YA_ORG_SHOPID');
         $mws->PkeyPem = Configuration::get('yamodule_mws_pkey');
         $mws->CertPem = Configuration::get('yamodule_mws_cert');
 
-        $success = false;
+        $success     = false;
         $mws_payment = $mws->request(
             'listOrders',
             array(
-                'orderNumber' => 'KASSA_'.$params['order']->id_cart
+                'orderNumber' => 'KASSA_'.$params['order']->id_cart,
             ),
             false,
             false
@@ -446,7 +446,7 @@ class Yamodule extends PaymentModuleCore
         }
 
         if (empty($errors) && Tools::isSubmit('return_sum')) {
-            $cause = Tools::getValue('return_cause');
+            $cause  = Tools::getValue('return_cause');
             $amount = Tools::getValue('return_sum');
             $amount = number_format((float)$amount, 2, '.', '');
 
@@ -462,21 +462,21 @@ class Yamodule extends PaymentModuleCore
                     'returnPayment',
                     array(
                         'invoiceId' => $mws_payment['invoiceId'],
-                        'amount' => $amount,
-                        'cause' => $cause
+                        'amount'    => $amount,
+                        'cause'     => $cause,
                     )
                 );
 
                 if (isset($mws_return['status'])) {
                     $mws->addReturn(array(
-                        'amount' => $amount,
-                        'cause' => pSQL($cause),
-                        'request' => pSQL($mws->txt_request) || 'NULL',
-                        'response' => pSQL($mws->txt_respond) || 'NULL',
-                        'status' => pSQL($mws_return['status']),
-                        'error' => pSQL($mws_return['error']),
+                        'amount'     => $amount,
+                        'cause'      => pSQL($cause),
+                        'request'    => pSQL($mws->txt_request) || 'NULL',
+                        'response'   => pSQL($mws->txt_respond) || 'NULL',
+                        'status'     => pSQL($mws_return['status']),
+                        'error'      => pSQL($mws_return['error']),
                         'invoice_id' => pSQL($mws_payment['invoiceId']),
-                        'date' => date('Y-m-d H:i:s')
+                        'date'       => date('Y-m-d H:i:s'),
                     ));
 
                     if ($mws_return['status'] == 0) {
@@ -489,8 +489,8 @@ class Yamodule extends PaymentModuleCore
 
                                     Db::getInstance()->insert('mws_return_product', array(
                                         'id_order_detail' => $item['id_order_detail'],
-                                        'id_order' => (int)$params['order']->id,
-                                        'quantity' => $item['quantity']
+                                        'id_order'        => (int)$params['order']->id,
+                                        'quantity'        => $item['quantity'],
                                     ), false, false, Db::INSERT_IGNORE);
                                 }
                             }
@@ -505,14 +505,14 @@ class Yamodule extends PaymentModuleCore
         }
 
         $kassa_returns = array();
-        $docs = $params['order']->getDocuments();
-        $payment = $params['order']->getOrderPaymentCollection();
-        $delivery = $docs[0]->total_shipping_tax_incl;
+        $docs          = $params['order']->getDocuments();
+        $payment       = $params['order']->getOrderPaymentCollection();
+        $delivery      = $docs[0]->total_shipping_tax_incl;
 
-        $inv = (isset($mws_payment['invoiceId'])) ? $mws_payment['invoiceId'] : 0;
-        $inv_sum = (isset($mws_payment['orderSumAmount'])) ? $mws_payment['orderSumAmount'] : 0;
-        $inv_type = (isset($mws_payment['paymentType'])) ? $mws_payment['paymentType'] : "none";
-        $ri = $mws->getSuccessReturns($inv);
+        $inv          = (isset($mws_payment['invoiceId'])) ? $mws_payment['invoiceId'] : 0;
+        $inv_sum      = (isset($mws_payment['orderSumAmount'])) ? $mws_payment['orderSumAmount'] : 0;
+        $inv_type     = (isset($mws_payment['paymentType'])) ? $mws_payment['paymentType'] : "none";
+        $ri           = $mws->getSuccessReturns($inv);
         $sum_returned = $mws->sum;
 
         $customer = new Customer($params['order']->id_customer);
@@ -531,7 +531,7 @@ class Yamodule extends PaymentModuleCore
                 }
             }
 
-            $disc = 1.0 - round(($params['order']->total_discounts_tax_incl/$params['order']->total_products_wt), 2);
+            $disc = 1.0 - round(($params['order']->total_discounts_tax_incl / $params['order']->total_products_wt), 2);
 
             foreach ($products as $pk => &$product) {
                 $product['unit_price_tax_incl'] = round($product['unit_price_tax_incl'] * $disc, 2);
@@ -554,23 +554,23 @@ class Yamodule extends PaymentModuleCore
 
         $carrier = new Carrier($params['order']->id_carrier);
         $this->context->smarty->assign(array(
-            'email' => $customer->email,
-            'id_order' => $params['order']->id,
-            'kassa_returns' => $kassa_returns,
-            'return_total' => Tools::displayPrice($sum_returned),
-            'return_sum' => Tools::displayPrice($inv_sum - $sum_returned),
-            'invoiceId' => $inv,
-            'return_items' => $ri,
+            'email'          => $customer->email,
+            'id_order'       => $params['order']->id,
+            'kassa_returns'  => $kassa_returns,
+            'return_total'   => Tools::displayPrice($sum_returned),
+            'return_sum'     => Tools::displayPrice($inv_sum - $sum_returned),
+            'invoiceId'      => $inv,
+            'return_items'   => $ri,
             'payment_method' => $payment[0]->payment_method." (".$inv_type.")",
             'return_success' => $success,
-            'text_success' => $this->l('The payment is successfully returned'),
-            'return_errors' => $errors,
-            'doc' => $docs[0],
-            'products' => $products,
-            'taxesValue' => $this->getTaxesArray(true),
-            'YA_SEND_CHECK' => Configuration::get('YA_SEND_CHECK'),
-            'delivery' => $delivery,
-            'dname' => $carrier->name
+            'text_success'   => $this->l('The payment is successfully returned'),
+            'return_errors'  => $errors,
+            'doc'            => $docs[0],
+            'products'       => $products,
+            'taxesValue'     => $this->getTaxesArray(true),
+            'YA_SEND_CHECK'  => Configuration::get('YA_SEND_CHECK'),
+            'delivery'       => $delivery,
+            'dname'          => $carrier->name,
         ));
 
         $html = $this->display(__FILE__, 'kassa_returns_content.tpl');
@@ -587,7 +587,7 @@ class Yamodule extends PaymentModuleCore
 
     public function sendCarrierToYandex($order)
     {
-        $order_ya = $this->getYandexOrderById((int) $order->id);
+        $order_ya = $this->getYandexOrderById((int)$order->id);
         if ($order_ya['id_order']
             && $order_ya['home'] != ''
             && $order_ya['id_market_order']
@@ -600,28 +600,28 @@ class Yamodule extends PaymentModuleCore
 
     public function hookactionOrderStatusUpdate($params)
     {
-        $new_os = $params['newOrderStatus'];
+        $new_os      = $params['newOrderStatus'];
         $status_flip = array_flip($this->status);
         if (in_array($new_os->id, $this->status)) {
             $ya_order_db = $this->getYandexOrderById((int)$params['id_order']);
             $id_ya_order = $ya_order_db['id_market_order'];
             if ($id_ya_order) {
-                $partner = new Partner();
+                $partner  = new Partner();
                 $ya_order = $partner->getOrder($id_ya_order);
-                $state = $ya_order->order->status;
+                $state    = $ya_order->order->status;
                 if ($state == 'PROCESSING'
                     && ($new_os->id == $this->status['DELIVERY']
                         || $new_os->id == $this->status['CANCELLED'])
                 ) {
                     $partner->sendOrder($status_flip[$new_os->id], $id_ya_order);
                 } elseif ($state == 'DELIVERY'
-                    && ($new_os->id == $this->status['DELIVERED']
-                        || $new_os->id == $this->status['PICKUP']
-                        || $new_os->id == $this->status['CANCELLED'])
+                          && ($new_os->id == $this->status['DELIVERED']
+                              || $new_os->id == $this->status['PICKUP']
+                              || $new_os->id == $this->status['CANCELLED'])
                 ) {
                     $partner->sendOrder($status_flip[$new_os->id], $id_ya_order);
                 } elseif ($state == 'PICKUP'
-                    && ($new_os->id == $this->status['DELIVERED'] || $new_os->id == $this->status['CANCELLED'])
+                          && ($new_os->id == $this->status['DELIVERED'] || $new_os->id == $this->status['CANCELLED'])
                 ) {
                     $partner->sendOrder($status_flip[$new_os->id], $id_ya_order);
                 } elseif ($state == 'RESERVATION_EXPIRED' || $state == 'RESERVATION') {
@@ -650,7 +650,7 @@ class Yamodule extends PaymentModuleCore
         $query->select('id_order');
         $query->from('pokupki_orders');
         $query->where('id_market_order = '.(int)$id);
-        $svp = Db::getInstance()->GetRow($query);
+        $svp   = Db::getInstance()->GetRow($query);
         $order = new Order((int)$svp['id_order']);
 
         return $order;
@@ -658,14 +658,14 @@ class Yamodule extends PaymentModuleCore
 
     public function displayTabContent($id)
     {
-        $partner = new Partner();
-        $order_ya_db = $this->getYandexOrderById((int) $id);
-        $ht = '';
+        $partner     = new Partner();
+        $order_ya_db = $this->getYandexOrderById((int)$id);
+        $ht          = '';
         if ($order_ya_db['id_market_order']) {
             $ya_order = $partner->getOrder($order_ya_db['id_market_order']);
-            $types = unserialize(Configuration::get('YA_POKUPKI_CARRIER_SERIALIZE'));
-            $state = $ya_order->order->status;
-            $st = array('PROCESSING', 'DELIVERY', 'PICKUP');
+            $types    = unserialize(Configuration::get('YA_POKUPKI_CARRIER_SERIALIZE'));
+            $state    = $ya_order->order->status;
+            $st       = array('PROCESSING', 'DELIVERY', 'PICKUP');
             // Tools::d($ya_order);
             if (!in_array($state, $st)) {
                 return false;
@@ -673,23 +673,23 @@ class Yamodule extends PaymentModuleCore
 
             $this->context->controller->AddJS($this->_path.'/views/js/back.js');
             $this->context->controller->AddCss($this->_path.'/views/css/back.css');
-            $order = new Order($id);
-            $cart = new Cart($order->id_cart);
-            $carriers = $cart->simulateCarriersOutput();
-            $ht = '';
-            $i = 1;
-            $tmp = array();
+            $order                = new Order($id);
+            $cart                 = new Cart($order->id_cart);
+            $carriers             = $cart->simulateCarriersOutput();
+            $ht                   = '';
+            $i                    = 1;
+            $tmp                  = array();
             $tmp[0]['id_carrier'] = 0;
-            $tmp[0]['name'] = $this->l('-- Please select carrier --');
+            $tmp[0]['name']       = $this->l('-- Please select carrier --');
             foreach ($carriers as $c) {
-                $id = str_replace(',', '', Cart::desintifier($c['id_carrier']));
+                $id   = str_replace(',', '', Cart::desintifier($c['id_carrier']));
                 $type = isset($types[$id]) ? $types[$id] : 'POST';
                 if (!Configuration::get('YA_MARKET_SET_ROZNICA') && $type == 'PICKUP') {
                     continue;
                 }
 
                 $tmp[$i]['id_carrier'] = $id;
-                $tmp[$i]['name'] = $c['name'];
+                $tmp[$i]['name']       = $c['name'];
                 $i++;
             }
 
@@ -699,66 +699,66 @@ class Yamodule extends PaymentModuleCore
 
             $fields_form = array(
                 'form' => array(
-                    'legend' => array(
+                    'legend'  => array(
                         'title' => $this->l('Carrier Available'),
-                        'icon' => 'icon-cogs'
+                        'icon'  => 'icon-cogs',
                     ),
-                    'input' => array(
+                    'input'   => array(
                         'sel_delivery' => array(
-                            'type' => 'select',
-                            'label' => $this->l('Carrier'),
-                            'name' => 'new_carrier',
-                            'required' => true,
+                            'type'          => 'select',
+                            'label'         => $this->l('Carrier'),
+                            'name'          => 'new_carrier',
+                            'required'      => true,
                             'default_value' => 0,
-                            'class' => 't sel_delivery',
-                            'options' => array(
+                            'class'         => 't sel_delivery',
+                            'options'       => array(
                                 'query' => $tmp,
-                                'id' => 'id_carrier',
-                                'name' => 'name'
-                            )
+                                'id'    => 'id_carrier',
+                                'name'  => 'name',
+                            ),
                         ),
                         array(
-                            'col' => 3,
+                            'col'   => 3,
                             'class' => 't pr_in',
-                            'type' => 'text',
-                            'desc' => $this->l('Carrier price tax incl.'),
-                            'name' => 'price_incl',
+                            'type'  => 'text',
+                            'desc'  => $this->l('Carrier price tax incl.'),
+                            'name'  => 'price_incl',
                             'label' => $this->l('Price tax incl.'),
                         ),
                         array(
-                            'col' => 3,
+                            'col'   => 3,
                             'class' => 't pr_ex',
-                            'type' => 'text',
-                            'desc' => $this->l('Carrier price tax excl.'),
-                            'name' => 'price_excl',
+                            'type'  => 'text',
+                            'desc'  => $this->l('Carrier price tax excl.'),
+                            'name'  => 'price_excl',
                             'label' => $this->l('Price tax excl.'),
                         ),
                     ),
                     'buttons' => array(
                         'updcarrier' => array(
                             'title' => $this->l('Update carrier'),
-                            'name' => 'updcarrier',
-                            'type' => 'button',
+                            'name'  => 'updcarrier',
+                            'type'  => 'button',
                             'class' => 'btn btn-default pull-right changec_submit',
-                            'icon' => 'process-icon-refresh'
-                        )
-                    )
+                            'icon'  => 'process-icon-refresh',
+                        ),
+                    ),
                 ),
             );
 
-            $helper = new HelperForm();
-            $helper->show_toolbar = false;
-            $helper->table = $this->table;
-            $helper->module = $this;
-            $helper->identifier = $this->identifier;
-            $helper->submit_action = 'submitChangeCarrier';
-            $helper->currentIndex = AdminController::$currentIndex.'?id_order='.$order->id
-                .'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders');
-            $helper->token = Tools::getAdminTokenLite('AdminOrders');
-            $helper->tpl_vars['fields_value']['price_excl'] = '';
-            $helper->tpl_vars['fields_value']['price_incl'] = '';
+            $helper                                          = new HelperForm();
+            $helper->show_toolbar                            = false;
+            $helper->table                                   = $this->table;
+            $helper->module                                  = $this;
+            $helper->identifier                              = $this->identifier;
+            $helper->submit_action                           = 'submitChangeCarrier';
+            $helper->currentIndex                            = AdminController::$currentIndex.'?id_order='.$order->id
+                                                               .'&vieworder&token='.Tools::getAdminTokenLite('AdminOrders');
+            $helper->token                                   = Tools::getAdminTokenLite('AdminOrders');
+            $helper->tpl_vars['fields_value']['price_excl']  = '';
+            $helper->tpl_vars['fields_value']['price_incl']  = '';
             $helper->tpl_vars['fields_value']['new_carrier'] = 0;
-            $path_module_http = __PS_BASE_URI__.'modules/yamodule/';
+            $path_module_http                                = __PS_BASE_URI__.'modules/yamodule/';
 
             $this->context->smarty->assign('employee_id', $this->context->employee->id);
             $this->context->smarty->assign('path_module_http', $path_module_http);
@@ -775,19 +775,19 @@ class Yamodule extends PaymentModuleCore
 
     public function processLoadPrice()
     {
-        $id_order = (int)Tools::getValue('id_o');
+        $id_order       = (int)Tools::getValue('id_o');
         $id_new_carrier = (int)Tools::getValue('new_carrier');
-        $order = new Order($id_order);
-        $cart = new Cart($order->id_cart);
-        $carrier_list = $cart->getDeliveryOptionList();
-        $result = array();
+        $order          = new Order($id_order);
+        $cart           = new Cart($order->id_cart);
+        $carrier_list   = $cart->getDeliveryOptionList();
+        $result         = array();
         if (isset($carrier_list[$order->id_address_delivery][$id_new_carrier.',']['carrier_list'][$id_new_carrier])) {
             $carrier = $carrier_list[$order->id_address_delivery][$id_new_carrier.',']['carrier_list'][$id_new_carrier];
             $pr_incl = $carrier['price_with_tax'];
             $pr_excl = $carrier['price_without_tax'];
-            $result = array(
+            $result  = array(
                 'price_without_tax' => $pr_excl,
-                'price_with_tax' => $pr_incl
+                'price_with_tax'    => $pr_incl,
             );
         } else {
             $result = array('error' => $this->l('Wrong carrier'));
@@ -798,12 +798,12 @@ class Yamodule extends PaymentModuleCore
 
     public function processChangeCarrier()
     {
-        $id_order = (int)Tools::getValue('id_o');
-        $id_new_carrier = (int)Tools::getValue('new_carrier');
-        $price_incl = (float)Tools::getValue('pr_incl');
-        $price_excl = (float)Tools::getValue('pr_excl');
-        $order = new Order($id_order);
-        $result = array();
+        $id_order        = (int)Tools::getValue('id_o');
+        $id_new_carrier  = (int)Tools::getValue('new_carrier');
+        $price_incl      = (float)Tools::getValue('pr_incl');
+        $price_excl      = (float)Tools::getValue('pr_excl');
+        $order           = new Order($id_order);
+        $result          = array();
         $result['error'] = '';
         if ($id_new_carrier == 0) {
             $result['error'] = $this->l('Error: cannot select carrier');
@@ -812,29 +812,29 @@ class Yamodule extends PaymentModuleCore
                 $result['error'] = $this->l('Error: cannot find order');
             } else {
                 $total_carrierwt = (float)$order->total_products_wt + (float)$price_incl;
-                $total_carrier = (float)$order->total_products + (float)$price_excl;
+                $total_carrier   = (float)$order->total_products + (float)$price_excl;
 
-                $order->total_paid = (float)$total_carrierwt;
-                $order->total_paid_tax_incl = (float)$total_carrierwt;
-                $order->total_paid_tax_excl =(float)$total_carrier;
-                $order->total_paid_real = (float)$total_carrierwt;
-                $order->total_shipping = (float)$price_incl;
+                $order->total_paid              = (float)$total_carrierwt;
+                $order->total_paid_tax_incl     = (float)$total_carrierwt;
+                $order->total_paid_tax_excl     = (float)$total_carrier;
+                $order->total_paid_real         = (float)$total_carrierwt;
+                $order->total_shipping          = (float)$price_incl;
                 $order->total_shipping_tax_excl = (float)$price_excl;
                 $order->total_shipping_tax_incl = (float)$price_incl;
-                $order->carrier_tax_rate = (float)$order->carrier_tax_rate;
-                $order->id_carrier = (int)$id_new_carrier;
+                $order->carrier_tax_rate        = (float)$order->carrier_tax_rate;
+                $order->id_carrier              = (int)$id_new_carrier;
                 if (!$order->update()) {
-                    $result['error'] = $this->l('Error: cannot update order');
+                    $result['error']  = $this->l('Error: cannot update order');
                     $result['status'] = false;
                 } else {
                     if ($order->invoice_number > 0) {
-                        $order_invoice = new OrderInvoice($order->invoice_number);
-                        $order_invoice->total_paid_tax_incl =(float)$total_carrierwt;
-                        $order_invoice->total_paid_tax_excl =(float)$total_carrier;
-                        $order_invoice->total_shipping_tax_excl =(float)$price_excl;
-                        $order_invoice->total_shipping_tax_incl =(float)$price_incl;
+                        $order_invoice                          = new OrderInvoice($order->invoice_number);
+                        $order_invoice->total_paid_tax_incl     = (float)$total_carrierwt;
+                        $order_invoice->total_paid_tax_excl     = (float)$total_carrier;
+                        $order_invoice->total_shipping_tax_excl = (float)$price_excl;
+                        $order_invoice->total_shipping_tax_incl = (float)$price_incl;
                         if (!$order_invoice->update()) {
-                            $result['error'] = $this->l('Error: cannot update order invoice');
+                            $result['error']  = $this->l('Error: cannot update order invoice');
                             $result['status'] = false;
                         }
                     }
@@ -842,15 +842,15 @@ class Yamodule extends PaymentModuleCore
                     $id_order_carrier = Db::getInstance()->getValue('
                             SELECT `id_order_carrier`
                             FROM `'._DB_PREFIX_.'order_carrier`
-                            WHERE `id_order` = '.(int) $order->id);
+                            WHERE `id_order` = '.(int)$order->id);
 
                     if ($id_order_carrier) {
-                        $order_carrier = new OrderCarrier($id_order_carrier);
-                        $order_carrier->id_carrier = $order->id_carrier;
+                        $order_carrier                         = new OrderCarrier($id_order_carrier);
+                        $order_carrier->id_carrier             = $order->id_carrier;
                         $order_carrier->shipping_cost_tax_excl = (float)$price_excl;
                         $order_carrier->shipping_cost_tax_incl = (float)$price_incl;
                         if (!$order_carrier->update()) {
-                            $result['error'] = $this->l('Error: cannot update order carrier');
+                            $result['error']  = $this->l('Error: cannot update order carrier');
                             $result['status'] = false;
                         }
                     }
@@ -874,6 +874,7 @@ class Yamodule extends PaymentModuleCore
             $data .= 'var celi_order = false;';
             $data .= 'var celi_cart = false;';
             $data .= 'var celi_wishlist = false;';
+
             return '<p style="display:none;"><script type="text/javascript">'.$data.'</script></p>';
         }
 
@@ -897,24 +898,24 @@ class Yamodule extends PaymentModuleCore
 
         if (Configuration::get('YA_METRIKA_CODE') != '') {
             return '<p style="display:none;"><script type="text/javascript">'.$data
-            .'</script>'.Configuration::get('YA_METRIKA_CODE').'</p>';
+                   .'</script>'.Configuration::get('YA_METRIKA_CODE').'</p>';
         }
     }
 
     public function makeData($product, $combination = false)
     {
-        $params = array();
-        $data = array();
-        $images = array();
+        $params  = array();
+        $data    = array();
+        $images  = array();
         $id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
         if ($combination) {
-            $quantity = (int)$combination['quantity'];
-            $url = $product['link'].'#'.$combination['comb_url'];
-            $price =  Tools::ps_round($combination['price'], 2);
+            $quantity  = (int)$combination['quantity'];
+            $url       = $product['link'].'#'.$combination['comb_url'];
+            $price     = Tools::ps_round($combination['price'], 2);
             $reference = $combination['reference'];
-            $id_offer = $product['id_product'].'c'.$combination['id_product_attribute'];
-            $barcode = $combination['ean13'];
-            $images = Image::getImages($id_lang, $product['id_product'], $combination['id_product_attribute']);
+            $id_offer  = $product['id_product'].'c'.$combination['id_product_attribute'];
+            $barcode   = $combination['ean13'];
+            $images    = Image::getImages($id_lang, $product['id_product'], $combination['id_product_attribute']);
             if (empty($images)) {
                 $images = Image::getImages($id_lang, $product['id_product']);
             }
@@ -929,17 +930,17 @@ class Yamodule extends PaymentModuleCore
 
             if ($combination['minimal_quantity'] > 1) {
                 $data['sales_notes'] = $this->l('Minimum order').' '.$combination['minimal_quantity'].' '.
-                    $this->l('of the product (s)');
+                                       $this->l('of the product (s)');
             }
             $data['group_id'] = $product['id_product'];
         } else {
-            $quantity = (int)$product['quantity'];
-            $url = $product['link'];
-            $price =  Tools::ps_round($product['price'], 2);
+            $quantity  = (int)$product['quantity'];
+            $url       = $product['link'];
+            $price     = Tools::ps_round($product['price'], 2);
             $reference = $product['reference'];
-            $id_offer = $product['id_product'];
-            $barcode = $product['ean13'];
-            $images = Image::getImages($id_lang, $product['id_product']);
+            $id_offer  = $product['id_product'];
+            $barcode   = $product['ean13'];
+            $images    = Image::getImages($id_lang, $product['id_product']);
             if ((int)$product['weight'] > 0) {
                 $data['weight'] = $product['weight'];
                 $data['weight'] = number_format($data['weight'], 2);
@@ -947,7 +948,7 @@ class Yamodule extends PaymentModuleCore
 
             if ($product['minimal_quantity'] > 1) {
                 $data['sales_notes'] = $this->l('Minimum order').' '.$product['minimal_quantity'].' '.
-                    $this->l('of the product (s)');
+                                       $this->l('of the product (s)');
             }
         }
 
@@ -981,11 +982,11 @@ class Yamodule extends PaymentModuleCore
             $params = array_merge($params, $combination['attributes']);
         }
 
-        $data['available'] = $available;
-        $data['url'] = $url;
-        $data['id'] = $id_offer;
+        $data['available']  = $available;
+        $data['url']        = $url;
+        $data['id']         = $id_offer;
         $data['currencyId'] = $this->currency_iso;
-        $data['price'] = $price;
+        $data['price']      = $price;
         $data['categoryId'] = $product['id_category_default'];
 
         /*-------------------------------------------------------------------*/
@@ -1016,8 +1017,8 @@ class Yamodule extends PaymentModuleCore
                 && $product['width']
             ) {
                 $data['dimensions'] = number_format($product['depth'], 3, '.', '').
-                    '/'.number_format($product['width'], 3, '.', '')
-                    .'/'.number_format($product['height'], 3, '.', '');
+                                      '/'.number_format($product['width'], 3, '.', '')
+                                      .'/'.number_format($product['height'], 3, '.', '');
             }
             if ($product['is_virtual']) {
                 $data['downloadable'] = 'true';
@@ -1034,11 +1035,11 @@ class Yamodule extends PaymentModuleCore
             $data['name'] = $product['name'];
         }
 
-        $data['vendor'] = $product['manufacturer_name'];
-        $data['barcode'] = $barcode;
-        $data['delivery'] = 'false';
-        $data['pickup'] = 'false';
-        $data['store'] = 'false';
+        $data['vendor']     = $product['manufacturer_name'];
+        $data['barcode']    = $barcode;
+        $data['delivery']   = 'false';
+        $data['pickup']     = 'false';
+        $data['store']      = 'false';
         $data['vendorCode'] = $reference;
         if (Configuration::get('YA_MARKET_SET_DOST')) {
             $data['delivery'] = 'true';
@@ -1055,17 +1056,17 @@ class Yamodule extends PaymentModuleCore
 
     public function generateXML($cron)
     {
-        $shop_url = 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__;
-        $id_lang = (int)Configuration::get('PS_LANG_DEFAULT');
-        $currency_default = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
-        $this->currency_iso = $currency_default->iso_code;
-        $country = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
-        $this->country_name = $country->name;
-        $currencies = Currency::getCurrencies();
-        $categories = Category::getCategories($id_lang, false, false);
-        $yamarket_set_combinations = Configuration::get('YA_MARKET_SET_COMBINATIONS');
+        $shop_url                    = 'http://'.Tools::getHttpHost(false, true).__PS_BASE_URI__;
+        $id_lang                     = (int)Configuration::get('PS_LANG_DEFAULT');
+        $currency_default            = new Currency(Configuration::get('PS_CURRENCY_DEFAULT'));
+        $this->currency_iso          = $currency_default->iso_code;
+        $country                     = new Country(Configuration::get('PS_COUNTRY_DEFAULT'));
+        $this->country_name          = $country->name;
+        $currencies                  = Currency::getCurrencies();
+        $categories                  = Category::getCategories($id_lang, false, false);
+        $yamarket_set_combinations   = Configuration::get('YA_MARKET_SET_COMBINATIONS');
         $this->yamarket_availability = Configuration::get('YA_MARKET_DOSTUPNOST');
-        $this->gzip = Configuration::get('YA_MARKET_SET_GZIP');
+        $this->gzip                  = Configuration::get('YA_MARKET_SET_GZIP');
 
         /*-----------------------------------------------------------------------------*/
 
@@ -1084,7 +1085,7 @@ class Yamodule extends PaymentModuleCore
             foreach ($currencies as $currency) {
                 $yml->addCurrency(
                     $currency['iso_code'],
-                    ((float)$currency_default->conversion_rate/(float)$currency['conversion_rate'])
+                    ((float)$currency_default->conversion_rate / (float)$currency['conversion_rate'])
                 );
             }
             unset($currencies);
@@ -1114,7 +1115,7 @@ class Yamodule extends PaymentModuleCore
 
         foreach ($yml->categories as $cat) {
             $category_object = new Category($cat['id']);
-            $products = $category_object->getProducts($id_lang, 1, 10000);
+            $products        = $category_object->getProducts($id_lang, 1, 10000);
             if ($products) {
                 foreach ($products as $product) {
                     if ($product['id_category_default'] != $cat['id']) {
@@ -1124,7 +1125,7 @@ class Yamodule extends PaymentModuleCore
                     $data = array();
                     if ($yamarket_set_combinations && !Configuration::get('YA_MARKET_SHORT')) {
                         $product_object = new Product($product['id_product'], false, $id_lang);
-                        $combinations = $product_object->getAttributeCombinations($id_lang);
+                        $combinations   = $product_object->getAttributeCombinations($id_lang);
                     } else {
                         $combinations = false;
                     }
@@ -1133,7 +1134,7 @@ class Yamodule extends PaymentModuleCore
                         $comb_array = array();
                         foreach ($combinations as $combination) {
                             $comb_array[$combination['id_product_attribute']]['id_product_attribute']
-                                = $combination['id_product_attribute'];
+                                                                                       = $combination['id_product_attribute'];
                             $comb_array[$combination['id_product_attribute']]['price'] = Product::getPriceStatic(
                                 $product['id_product'],
                                 true,
@@ -1141,34 +1142,37 @@ class Yamodule extends PaymentModuleCore
                             );
 
                             $comb_array[$combination['id_product_attribute']]['reference'] = $combination['reference'];
-                            $comb_array[$combination['id_product_attribute']]['ean13'] = $combination['ean13'];
-                            $comb_array[$combination['id_product_attribute']]['quantity'] = $combination['quantity'];
+                            $comb_array[$combination['id_product_attribute']]['ean13']     = $combination['ean13'];
+                            $comb_array[$combination['id_product_attribute']]['quantity']  = $combination['quantity'];
                             $comb_array[$combination['id_product_attribute']]['minimal_quantity']
-                                = $combination['minimal_quantity'];
-                            $comb_array[$combination['id_product_attribute']]['weight'] = $combination['weight'];
+                                                                                           = $combination['minimal_quantity'];
+                            $comb_array[$combination['id_product_attribute']]['weight']    = $combination['weight'];
                             $comb_array[$combination['id_product_attribute']]['attributes'][$combination['group_name']]
-                                = $combination['attribute_name'];
+                                                                                           = $combination['attribute_name'];
                             if (!isset($comb_array[$combination['id_product_attribute']]['comb_url'])) {
                                 $comb_array[$combination['id_product_attribute']]['comb_url'] = '';
                             }
                             $comb_array[$combination['id_product_attribute']]['comb_url'] .= '/'.
-                                Tools::str2url(
-                                    $combination['id_attribute']."-".$combination['group_name']
-                                ).'-'.str_replace(
-                                    Configuration::get('PS_ATTRIBUTE_ANCHOR_SEPARATOR'),
-                                    '_',
-                                    Tools::str2url(
-                                        str_replace(
-                                            array(',', '.'),
-                                            '-',
-                                            $combination['attribute_name']
-                                        )
-                                    )
-                                );
+                                                                                             Tools::str2url(
+                                                                                                 $combination['id_attribute']."-".$combination['group_name']
+                                                                                             ).'-'.str_replace(
+                                                                                                 Configuration::get('PS_ATTRIBUTE_ANCHOR_SEPARATOR'),
+                                                                                                 '_',
+                                                                                                 Tools::str2url(
+                                                                                                     str_replace(
+                                                                                                         array(
+                                                                                                             ',',
+                                                                                                             '.',
+                                                                                                         ),
+                                                                                                         '-',
+                                                                                                         $combination['attribute_name']
+                                                                                                     )
+                                                                                                 )
+                                                                                             );
                         }
 
                         foreach ($comb_array as $combination) {
-                            $data = $this->makeData($product, $combination);
+                            $data      = $this->makeData($product, $combination);
                             $available = $data['available'];
                             unset($data['available']);
                             if (!empty($data) && $data['price'] != 0) {
@@ -1176,7 +1180,7 @@ class Yamodule extends PaymentModuleCore
                             }
                         }
                     } else {
-                        $data = $this->makeData($product);
+                        $data      = $this->makeData($product);
                         $available = $data['available'];
                         unset($data['available']);
                         if (!empty($data) && (int)$data['price'] != 0) {
@@ -1252,20 +1256,20 @@ class Yamodule extends PaymentModuleCore
             $merchantIp = Configuration::get('yamodule_mws_ip');
             $detectedIp = $this->getServerIp();
 
-            if($merchantIp !== $detectedIp) {
+            if ($merchantIp !== $detectedIp) {
                 Configuration::UpdateValue('yamodule_mws_ip', $detectedIp);
             }
 
-            $this->org_status = $this->validateKassa();
+            $this->org_status    = $this->validateKassa();
             $this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitbilling_formModule')) {
             $this->billing_status = $this->validateBilling();
-            $this->update_status = $this->sendStatistics();
+            $this->update_status  = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitPokupkiModule')) {
             $this->pokupki_status = $this->validatePokupki();
-            $this->update_status = $this->sendStatistics();
+            $this->update_status  = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitp2pModule')) {
-            $this->p2p_status = $this->validateP2P();
+            $this->p2p_status    = $this->validateP2P();
             $this->update_status = $this->sendStatistics();
         } elseif (Tools::isSubmit('submitmarketModule')) {
             $this->market_status = $this->validateMarket();
@@ -1275,103 +1279,105 @@ class Yamodule extends PaymentModuleCore
 
     public function sendStatistics()
     {
-        $headers = array();
+        $headers   = array();
         $headers[] = 'Content-Type: application/x-www-form-urlencoded';
 
         $array = array(
-            'url' => Tools::getShopDomainSsl(true),
-            'cms' => 'prestashop',
-            'version' => _PS_VERSION_,
-            'ver_mod' => $this->version,
-            'email' => $this->context->employee->email,
-            'shopid' => Configuration::get('YA_ORG_SHOPID'),
+            'url'      => Tools::getShopDomainSsl(true),
+            'cms'      => 'prestashop',
+            'version'  => _PS_VERSION_,
+            'ver_mod'  => $this->version,
+            'email'    => $this->context->employee->email,
+            'shopid'   => Configuration::get('YA_ORG_SHOPID'),
             'settings' => array(
-                'kassa' => (bool) Configuration::get('YA_ORG_ACTIVE'),
-                'p2p' => (bool) Configuration::get('YA_P2P_ACTIVE'),
-                'metrika' =>(bool) Configuration::get('YA_METRIKA_ACTIVE'),
-                'billing' => (bool) Configuration::get('YA_BILLING_ACTIVE'),
-            )
+                'kassa'   => (bool)Configuration::get('YA_ORG_ACTIVE'),
+                'p2p'     => (bool)Configuration::get('YA_P2P_ACTIVE'),
+                'metrika' => (bool)Configuration::get('YA_METRIKA_ACTIVE'),
+                'billing' => (bool)Configuration::get('YA_BILLING_ACTIVE'),
+            ),
         );
 
         $array_crypt = base64_encode(serialize($array));
 
-        $url = 'https://statcms.yamoney.ru/v2/';
+        $url     = 'https://statcms.yamoney.ru/v2/';
         $curlOpt = array(
-            CURLOPT_HEADER => false,
+            CURLOPT_HEADER         => false,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false,
-            CURLINFO_HEADER_OUT => true,
-            CURLOPT_POST => true,
+            CURLINFO_HEADER_OUT    => true,
+            CURLOPT_POST           => true,
         );
 
         $curlOpt[CURLOPT_HTTPHEADER] = $headers;
-        $curlOpt[CURLOPT_POSTFIELDS] = http_build_query(array('data' => $array_crypt, 'lbl'=>0));
+        $curlOpt[CURLOPT_POSTFIELDS] = http_build_query(array('data' => $array_crypt, 'lbl' => 0));
 
         $curl = curl_init($url);
         curl_setopt_array($curl, $curlOpt);
         curl_exec($curl);
         //$rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
+
         /*
           $json=json_decode($rbody);
             if ($rcode==200 && isset($json->new_version)){
                 return $json->new_version;
             }else{*/
+
         return false;
         //	}
     }
 
     public function sendMetrikaData()
     {
-        $m = new Metrika();
+        $m        = new Metrika();
         $response = $m->run();
-        $data = array(
-            'YA_METRIKA_CART' =>  array(
-                'name' => 'YA_METRIKA_CART',
-                'flag' => 'basket',
-                'type' => 'action',
-                'class' => 1,
-                'depth' => 0,
+        $data     = array(
+            'YA_METRIKA_CART'     => array(
+                'name'       => 'YA_METRIKA_CART',
+                'flag'       => 'basket',
+                'type'       => 'action',
+                'class'      => 1,
+                'depth'      => 0,
                 'conditions' => array(
                     array(
-                        'url' => 'metrikaCart',
-                        'type' => 'exact'
-                    )
-                )
+                        'url'  => 'metrikaCart',
+                        'type' => 'exact',
+                    ),
+                ),
 
             ),
-            'YA_METRIKA_ORDER' => array(
-                'name' => 'YA_METRIKA_ORDER',
-                'flag' => 'order',
-                'type' => 'action',
-                'class' => 1,
-                'depth' => 0,
+            'YA_METRIKA_ORDER'    => array(
+                'name'       => 'YA_METRIKA_ORDER',
+                'flag'       => 'order',
+                'type'       => 'action',
+                'class'      => 1,
+                'depth'      => 0,
                 'conditions' => array(
                     array(
-                        'url' => 'metrikaOrder',
-                        'type' => 'exact'
-                    )
-                )
+                        'url'  => 'metrikaOrder',
+                        'type' => 'exact',
+                    ),
+                ),
 
             ),
             'YA_METRIKA_WISHLIST' => array(
-                'name' => 'YA_METRIKA_WISHLIST',
-                'flag' => '',
-                'type' => 'action',
-                'class' => 1,
-                'depth' => 0,
+                'name'       => 'YA_METRIKA_WISHLIST',
+                'flag'       => '',
+                'type'       => 'action',
+                'class'      => 1,
+                'depth'      => 0,
                 'conditions' => array(
                     array(
-                        'url' => 'metrikaWishlist',
-                        'type' => 'exact'
-                    )
-                )
+                        'url'  => 'metrikaWishlist',
+                        'type' => 'exact',
+                    ),
+                ),
 
             ),
         );
 
-        $ret = array();
+        $ret   = array();
         $error = '';
         if (Configuration::get('YA_METRIKA_TOKEN') != '') {
             if ($response) {
@@ -1388,7 +1394,7 @@ class Yamodule extends PaymentModuleCore
                     );
                 } else {
                     $tmp_goals = $m->getCounterGoals();
-                    $goals = array();
+                    $goals     = array();
                     foreach ($tmp_goals->goals as $goal) {
                         $goals[$goal->name] = $goal;
                     }
@@ -1400,7 +1406,7 @@ class Yamodule extends PaymentModuleCore
                         if (Configuration::get($conf) == 0 && isset($goals[$type])) {
                             $ret['delete_'.$type] = $m->deleteCounterGoal($goals[$type]->id);
                         } elseif (Configuration::get($conf) == 1 && !isset($goals[$type])) {
-                            $params = $data[$type];
+                            $params            = $data[$type];
                             $ret['add_'.$type] = $m->addCounterGoal(array('goal' => $params));
                         }
                     }
@@ -1430,7 +1436,7 @@ class Yamodule extends PaymentModuleCore
     public function validateMetrika()
     {
         $this->metrika_valid = false;
-        $errors = '';
+        $errors              = '';
         Configuration::UpdateValue('YA_METRIKA_SET_WEBVIZOR', Tools::getValue('YA_METRIKA_SET_WEBVIZOR'));
         Configuration::UpdateValue('YA_METRIKA_SET_CLICKMAP', Tools::getValue('YA_METRIKA_SET_CLICKMAP'));
         Configuration::UpdateValue('YA_METRIKA_SET_OUTLINK', Tools::getValue('YA_METRIKA_SET_OUTLINK'));
@@ -1463,7 +1469,7 @@ class Yamodule extends PaymentModuleCore
         }
 
         if ($errors == '') {
-            $errors = $this->displayConfirmation($this->l('Settings saved successfully!'));
+            $errors              = $this->displayConfirmation($this->l('Settings saved successfully!'));
             $this->metrika_valid = true;
         }
 
@@ -1473,10 +1479,10 @@ class Yamodule extends PaymentModuleCore
     public function validatePokupki()
     {
         $array_c = array();
-        $errors = '';
+        $errors  = '';
         foreach ($_POST as $k => $post) {
             if (strpos($k, 'YA_POKUPKI_DELIVERY_') !== false) {
-                $id = str_replace('YA_POKUPKI_DELIVERY_', '', $k);
+                $id           = str_replace('YA_POKUPKI_DELIVERY_', '', $k);
                 $array_c[$id] = $post;
             }
         }
@@ -1603,7 +1609,7 @@ class Yamodule extends PaymentModuleCore
         Configuration::UpdateValue('YA_ORG_PAYMENT_PB', Tools::getValue('YA_ORG_PAYMENT_PB'));
         Configuration::UpdateValue('YA_ORG_PAYMENT_MA', Tools::getValue('YA_ORG_PAYMENT_MA'));
         Configuration::UpdateValue('YA_ORG_PAYMENT_QW', Tools::getValue('YA_ORG_PAYMENT_QW'));
-        Configuration::UpdateValue('YA_ORG_PAYMENT_QP', Tools::getValue('YA_ORG_PAYMENT_QP'));
+        Configuration::UpdateValue('YA_ORG_PAYMENT_CR', Tools::getValue('YA_ORG_PAYMENT_CR'));
         Configuration::UpdateValue('YA_ORG_TYPE', Tools::getValue('YA_ORG_TYPE'));
         Configuration::UpdateValue('YA_ORG_LOGGING_ON', Tools::getValue('YA_ORG_LOGGING_ON'));
         Configuration::UpdateValue('YA_ORG_PAYLOGO_ON', Tools::getValue('YA_ORG_PAYLOGO_ON'));
@@ -1720,12 +1726,13 @@ class Yamodule extends PaymentModuleCore
         return $errors;
     }
 
-    public function getTaxesArray($config = false) {
+    public function getTaxesArray($config = false)
+    {
         $taxes = TaxCore::getTaxes(Context::getContext()->language->id, true);
 
         $tax_array = array();
         foreach ($taxes as $tax) {
-            $tax_array[] = 'YA_NALOG_STAVKA_' . $tax['id_tax'];
+            $tax_array[] = 'YA_NALOG_STAVKA_'.$tax['id_tax'];
         }
 
         if ($config) {
@@ -1745,16 +1752,16 @@ class Yamodule extends PaymentModuleCore
         $tax_array = $this->getTaxesArray();
 
 
-        $vars_p2p = Configuration::getMultiple(array(
+        $vars_p2p     = Configuration::getMultiple(array(
             'YA_P2P_IDENTIFICATOR',
             'YA_P2P_NUMBER',
             'YA_P2P_MIN',
             'YA_P2P_ACTIVE',
             'YA_P2P_KEY',
             'YA_P2P_LOGGING_ON',
-            'YA_P2P_SECRET'
+            'YA_P2P_SECRET',
         ));
-        $vars_org = Configuration::getMultiple(array_merge(array(
+        $vars_org     = Configuration::getMultiple(array_merge(array(
             'YA_ORG_SHOPID',
             'YA_ORG_SCID',
             'YA_ORG_ACTIVE',
@@ -1773,7 +1780,7 @@ class Yamodule extends PaymentModuleCore
             'YA_ORG_PAYMENT_PB',
             'YA_ORG_PAYMENT_MA',
             'YA_ORG_PAYMENT_QW',
-            'YA_ORG_PAYMENT_QP',
+            'YA_ORG_PAYMENT_CR',
             'YA_ORG_PAYMENT_ALFA',
             'YA_SEND_CHECK',
             'YA_NALOG_DEFAULT',
@@ -1791,7 +1798,7 @@ class Yamodule extends PaymentModuleCore
             'YA_METRIKA_NUMBER',
             'YA_METRIKA_CELI_CART',
             'YA_METRIKA_CELI_ORDER',
-            'YA_METRIKA_CELI_WISHLIST'
+            'YA_METRIKA_CELI_WISHLIST',
         ));
         $vars_billing = Configuration::getMultiple(array(
             'YA_BILLING_ACTIVE',
@@ -1814,7 +1821,7 @@ class Yamodule extends PaymentModuleCore
             'YA_POKUPKI_PW',
             'YA_POKUPKI_YATOKEN',
         ));
-        $vars_market = Configuration::getMultiple(array(
+        $vars_market  = Configuration::getMultiple(array(
             'YA_MARKET_SET_ALLCURRENCY',
             'YA_MARKET_NAME',
             'YA_MARKET_SET_AVAILABLE',
@@ -1846,52 +1853,53 @@ class Yamodule extends PaymentModuleCore
         $merchantIp = Configuration::get('yamodule_mws_ip');
         $detectedIp = $this->getServerIp();
 
-        if(!$merchantIp) {
+        if (!$merchantIp) {
             $merchantIp = $detectedIp;
         }
 
-        $hforms = new hforms();
+        $hforms       = new hforms();
         $hforms->cats = $cats;
 
-        $vars_pokupki['YA_POKUPKI_FD'] = 'JSON';
-        $vars_pokupki['YA_POKUPKI_TA'] = 'URL';
+        $vars_pokupki['YA_POKUPKI_FD']  = 'JSON';
+        $vars_pokupki['YA_POKUPKI_TA']  = 'URL';
         $vars_org['YA_ORG_TEXT_INSIDE'] = "Shop ID, scid, ShopPassword можно посмотреть".
-            " в <a href='https://money.yandex.ru/joinups' target='_blank'>личном кабинете</a>".
-            " после подключения Яндекс.Кассы.";
+                                          " в <a href='https://money.yandex.ru/joinups' target='_blank'>личном кабинете</a>".
+                                          " после подключения Яндекс.Кассы.";
         $vars_p2p['YA_P2P_TEXT_INSIDE'] = "ID и секретное слово вы получите после".
-            " <a href='https://sp-money.yandex.ru/myservices/new.xml'".
-            " target='_blank'>регистрации приложения</a>".
-            " на сайте Яндекс.Денег";
+                                          " <a href='https://sp-money.yandex.ru/myservices/new.xml'".
+                                          " target='_blank'>регистрации приложения</a>".
+                                          " на сайте Яндекс.Денег";
         $this->context->smarty->assign(array(
-            'ya_version' => $this->version,
-            'YA_ORG_ACTIVE' => $vars_org['YA_ORG_ACTIVE'],
-            'YA_ORG_SHOPID' => $vars_org['YA_ORG_SHOPID'],
-            'orders_link' => $this->context->link->getAdminLink('AdminOrders', false)
-                .'&token='.Tools::getAdminTokenLite('AdminOrders'),
-            'ajax_limk_ym' => $this->context->link->getAdminLink('AdminModules', false)
-                .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='
-                .$this->name.'&token='.Tools::getAdminTokenLite('AdminModules'),
-            'mws_cn' => '/business/ps/yacms-'.$vars_org['YA_ORG_SHOPID'],
-            'mws_ip' => $merchantIp,
-            'detected_ip' => $detectedIp,
-            'mws_sign' => Configuration::get('yamodule_mws_csr_sign'),
-            'mws_cert' => Configuration::get('yamodule_mws_cert') ? true : false,
-            'this_path' => $this->_path,
-            'update_status' => $this->update_status,
+            'ya_version'     => $this->version,
+            'YA_ORG_ACTIVE'  => $vars_org['YA_ORG_ACTIVE'],
+            'YA_ORG_SHOPID'  => $vars_org['YA_ORG_SHOPID'],
+            'orders_link'    => $this->context->link->getAdminLink('AdminOrders', false)
+                                .'&token='.Tools::getAdminTokenLite('AdminOrders'),
+            'ajax_limk_ym'   => $this->context->link->getAdminLink('AdminModules', false)
+                                .'&configure='.$this->name.'&tab_module='.$this->tab.'&module_name='
+                                .$this->name.'&token='.Tools::getAdminTokenLite('AdminModules'),
+            'mws_cn'         => '/business/ps/yacms-'.$vars_org['YA_ORG_SHOPID'],
+            'mws_ip'         => $merchantIp,
+            'detected_ip'    => $detectedIp,
+            'mws_sign'       => Configuration::get('yamodule_mws_csr_sign'),
+            'mws_cert'       => Configuration::get('yamodule_mws_cert') ? true : false,
+            'this_path'      => $this->_path,
+            'update_status'  => $this->update_status,
             'metrika_status' => $this->metrika_status,
-            'market_status' => $this->market_status,
+            'market_status'  => $this->market_status,
             'pokupki_status' => $this->pokupki_status,
             'billing_status' => $this->billing_status,
-            'p2p_status' => $this->p2p_status,
-            'org_status' => $this->org_status,
-            'mws_status' => $this->mws_status,
-            'money_p2p' => $this->renderForm('p2p', $vars_p2p, $hforms->getFormYamoney()),
-            'money_org' => $this->renderForm('org', $vars_org, $hforms->getFormYamoneyOrg()),
-            'money_metrika' => $this->renderForm('metrika', $vars_metrika, $hforms->getFormYamoneyMetrika()),
-            'money_market' => $this->renderForm('market', $vars_market, $hforms->getFormYamoneyMarket()),
-            'money_marketp' => $this->renderForm('Pokupki', $vars_pokupki, $hforms->getFormYaPokupki()),
-            'billing_form' => $this->renderForm('billing_form', $vars_billing, $hforms->getFormBilling()),
+            'p2p_status'     => $this->p2p_status,
+            'org_status'     => $this->org_status,
+            'mws_status'     => $this->mws_status,
+            'money_p2p'      => $this->renderForm('p2p', $vars_p2p, $hforms->getFormYamoney()),
+            'money_org'      => $this->renderForm('org', $vars_org, $hforms->getFormYamoneyOrg()),
+            'money_metrika'  => $this->renderForm('metrika', $vars_metrika, $hforms->getFormYamoneyMetrika()),
+            'money_market'   => $this->renderForm('market', $vars_market, $hforms->getFormYamoneyMarket()),
+            'money_marketp'  => $this->renderForm('Pokupki', $vars_pokupki, $hforms->getFormYaPokupki()),
+            'billing_form'   => $this->renderForm('billing_form', $vars_billing, $hforms->getFormBilling()),
         ));
+
         return $this->display(__FILE__, 'admin.tpl');
     }
 
@@ -1925,7 +1933,7 @@ class Yamodule extends PaymentModuleCore
 
     public function logSave($logtext)
     {
-        $logdir = 'log_files';
+        $logdir       = 'log_files';
         $real_log_dir = _PS_MODULE_DIR_.'/yamodule/'.$logdir;
         if (!is_dir($real_log_dir)) {
             mkdir($real_log_dir, 0777);
@@ -1934,27 +1942,24 @@ class Yamodule extends PaymentModuleCore
         }
 
         $real_log_file = $real_log_dir.'/'.date('Y-m-d').'.log';
-        $h = fopen($real_log_file, 'ab');
-        fwrite($h, date('Y-m-d H:i:s ') . '[' . addslashes($_SERVER['REMOTE_ADDR']) . '] ' . $logtext . "\n");
+        $h             = fopen($real_log_file, 'ab');
+        fwrite($h, date('Y-m-d H:i:s ').'['.addslashes($_SERVER['REMOTE_ADDR']).'] '.$logtext."\n");
         fclose($h);
     }
 
     public function settingsPaymentOptions($type)
     {
         $tp = array(
-            'PC' => 'Оплата из кошелька в Яндекс.Деньгах',
-            'AC' => 'Оплата с произвольной банковской карты',
-            'GP' => 'Оплата наличными через кассы и терминалы',
-            'MC' => 'Оплата со счета мобильного телефона',
-            'WM' => 'Оплата из кошелька в системе WebMoney',
-            'SB' => 'Оплата через Сбербанк: '.
-                'оплата по SMS или Сбербанк Онлайн',
-            'AB' => 'Оплата через Альфа-Клик',
-            'MC' => 'Платеж со счета мобильного телефона',
-            'MA' => 'Оплата через MasterPass',
-            'PB' => 'Оплата через Промсвязьбанк',
-            'QW' => 'Оплата через QIWI Wallet',
-            'QP' => 'Оплата через доверительный платеж (Куппи.ру)',
+            'PC' => 'Яндекс.Деньги',
+            'AC' => 'Банковские карты',
+            'GP' => 'Наличные через терминалы',
+            'MC' => 'Счёт мобильного',
+            'WM' => 'WebMoney',
+            'SB' => 'Альфа-Клик',
+            'MA' => 'MasterPass',
+            'PB' => 'Промсвязьбанк',
+            'QW' => 'QIWI Wallet',
+            'CR' => 'Заплатить частями',
         );
 
         return isset($tp[$type]) ? $tp[$type] : $type;
@@ -1970,19 +1975,19 @@ class Yamodule extends PaymentModuleCore
             return;
         }
 
-        $cart = $this->context->cart;
-        $total_to_pay = $cart->getOrderTotal(true);
+        $cart            = $this->context->cart;
+        $total_to_pay    = $cart->getOrderTotal(true);
         $rub_currency_id = Currency::getIdByIsoCode('RUB');
         if ($cart->id_currency != $rub_currency_id) {
             $from_currency = new Currency($cart->id_curre1ncy);
-            $to_currency = new Currency($rub_currency_id);
-            $total_to_pay = Tools::convertPriceFull($total_to_pay, $from_currency, $to_currency);
+            $to_currency   = new Currency($rub_currency_id);
+            $total_to_pay  = Tools::convertPriceFull($total_to_pay, $from_currency, $to_currency);
         }
 
         $this->context->smarty->assign(array(
-            'summ' => number_format($total_to_pay, 2, '.', ''),
-            'this_path' => $this->_path,
-            'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/'
+            'summ'          => number_format($total_to_pay, 2, '.', ''),
+            'this_path'     => $this->_path,
+            'this_path_ssl' => Tools::getHttpHost(true, true).__PS_BASE_URI__.'modules/'.$this->name.'/',
         ));
 
         $display = '';
@@ -1995,8 +2000,8 @@ class Yamodule extends PaymentModuleCore
 
             $this->context->smarty->assign(array(
                 'DATA_P2P' => $vars_p2p,
-                'price' => number_format($total_to_pay, 2, '.', ''),
-                'cart' => $this->context->cart
+                'price'    => number_format($total_to_pay, 2, '.', ''),
+                'cart'     => $this->context->cart,
             ));
 
             $display .= $this->display(__FILE__, 'payment.tpl');
@@ -2012,8 +2017,8 @@ class Yamodule extends PaymentModuleCore
 
             $this->context->smarty->assign(array(
                 'DATA_BILLING' => $vars_billing,
-                'price' => number_format($total_to_pay, 2, '.', ''),
-                'cart' => $this->context->cart
+                'price'        => number_format($total_to_pay, 2, '.', ''),
+                'cart'         => $this->context->cart,
             ));
 
             $display .= $this->display(__FILE__, 'payment_ya_billing.tpl');
@@ -2025,19 +2030,19 @@ class Yamodule extends PaymentModuleCore
                 'YA_ORG_SCID',
                 'YA_ORG_ACTIVE',
                 'YA_ORG_TYPE',
-                'YA_ORG_MIN'
+                'YA_ORG_MIN',
             ));
 
             $this->context->smarty->assign(array(
-                'DATA_ORG' => $vars_org,
-                'yandex_logo' => Configuration::get('YA_ORG_PAYLOGO_ON'),
-                'id_cart' => $params['cart']->id,
-                'customer' => new Customer($params['cart']->id_customer),
-                'address' => new Address($this->context->cart->id_address_delivery),
-                'total_to_pay' => number_format($total_to_pay, 2, '.', ''),
+                'DATA_ORG'      => $vars_org,
+                'yandex_logo'   => Configuration::get('YA_ORG_PAYLOGO_ON'),
+                'id_cart'       => $params['cart']->id,
+                'customer'      => new Customer($params['cart']->id_customer),
+                'address'       => new Address($this->context->cart->id_address_delivery),
+                'total_to_pay'  => number_format($total_to_pay, 2, '.', ''),
                 'this_path_ssl' => Tools::getShopDomainSsl(true, true)
-                    . __PS_BASE_URI__ . 'modules/' . $this->name . '/',
-                'shop_name' => Configuration::get('PS_SHOP_NAME')
+                                   .__PS_BASE_URI__.'modules/'.$this->name.'/',
+                'shop_name'     => Configuration::get('PS_SHOP_NAME'),
             ));
 
             $payments = Configuration::getMultiple(array(
@@ -2050,15 +2055,15 @@ class Yamodule extends PaymentModuleCore
                 'YA_ORG_PAYMENT_PB',
                 'YA_ORG_PAYMENT_MA',
                 'YA_ORG_PAYMENT_QW',
-                'YA_ORG_PAYMENT_QP',
-                'YA_ORG_PAYMENT_ALFA'
+                'YA_ORG_PAYMENT_CR',
+                'YA_ORG_PAYMENT_ALFA',
             ));
 
             if (Configuration::get('YA_ORG_INSIDE')) {
                 if ($payments['YA_ORG_PAYMENT_YANDEX']) {
                     $this->smarty->assign(array(
-                        'pt' => 'PC',
-                        'buttontext' => $this->l('Payment from the purse in Yandex.Money.')
+                        'pt'         => 'PC',
+                        'buttontext' => $this->l('Payment from the purse in Yandex.Money.'),
                     ));
 
                     $display .= $this->display(__FILE__, 'kassa.tpl');
@@ -2066,8 +2071,8 @@ class Yamodule extends PaymentModuleCore
 
                 if ($payments['YA_ORG_PAYMENT_CARD']) {
                     $this->smarty->assign(array(
-                        'pt' => 'AC',
-                        'buttontext' => $this->l('Arbitrary payment with Bank card.')
+                        'pt'         => 'AC',
+                        'buttontext' => $this->l('Arbitrary payment with Bank card.'),
                     ));
 
                     $display .= $this->display(__FILE__, 'kassa.tpl');
@@ -2075,8 +2080,8 @@ class Yamodule extends PaymentModuleCore
 
                 if ($payments['YA_ORG_PAYMENT_MOBILE']) {
                     $this->smarty->assign(array(
-                        'pt' => 'MC',
-                        'buttontext' => $this->l('Payment with mobile phone account.')
+                        'pt'         => 'MC',
+                        'buttontext' => $this->l('Payment with mobile phone account.'),
                     ));
 
                     $display .= $this->display(__FILE__, 'kassa.tpl');
@@ -2084,8 +2089,8 @@ class Yamodule extends PaymentModuleCore
 
                 if ($payments['YA_ORG_PAYMENT_WEBMONEY']) {
                     $this->smarty->assign(array(
-                        'pt' => 'WM',
-                        'buttontext' => $this->l('Payment of the purse in system WebMoney.')
+                        'pt'         => 'WM',
+                        'buttontext' => $this->l('Payment of the purse in system WebMoney.'),
                     ));
 
                     $display .= $this->display(__FILE__, 'kassa.tpl');
@@ -2093,8 +2098,8 @@ class Yamodule extends PaymentModuleCore
 
                 if ($payments['YA_ORG_PAYMENT_TERMINAL']) {
                     $this->smarty->assign(array(
-                        'pt' => 'GP',
-                        'buttontext' => $this->l('Payment in cash through cash desks and terminals.')
+                        'pt'         => 'GP',
+                        'buttontext' => $this->l('Payment in cash through cash desks and terminals.'),
                     ));
 
                     $display .= $this->display(__FILE__, 'kassa.tpl');
@@ -2102,47 +2107,47 @@ class Yamodule extends PaymentModuleCore
 
                 if ($payments['YA_ORG_PAYMENT_SBER']) {
                     $this->smarty->assign(array(
-                        'pt' => 'SB',
-                        'buttontext' => $this->l('Payment via Sberbank: payment by SMS or Sberbank Online.')
+                        'pt'         => 'SB',
+                        'buttontext' => $this->l('Payment via Sberbank: payment by SMS or Sberbank Online.'),
                     ));
 
                     $display .= $this->display(__FILE__, 'kassa.tpl');
                 }
                 if ($payments['YA_ORG_PAYMENT_ALFA']) {
                     $this->smarty->assign(array(
-                        'pt' => 'AB',
-                        'buttontext' => $this->l('Payment via Alfa-Click.')
+                        'pt'         => 'AB',
+                        'buttontext' => $this->l('Payment via Alfa-Click.'),
                     ));
 
                     $display .= $this->display(__FILE__, 'kassa.tpl');
                 }
                 if ($payments['YA_ORG_PAYMENT_PB']) {
                     $this->smarty->assign(array(
-                        'pt' => 'PB',
-                        'buttontext' => $this->l('Payments via Promsvyazbank.')
+                        'pt'         => 'PB',
+                        'buttontext' => $this->l('Payments via Promsvyazbank.'),
                     ));
 
                     $display .= $this->display(__FILE__, 'kassa.tpl');
                 }
                 if ($payments['YA_ORG_PAYMENT_MA']) {
                     $this->smarty->assign(array(
-                        'pt' => 'MA',
-                        'buttontext' => $this->l('Payment via MasterPass.')
+                        'pt'         => 'MA',
+                        'buttontext' => $this->l('Payment via MasterPass.'),
                     ));
                     $display .= $this->display(__FILE__, 'kassa.tpl');
                 }
 
                 if ($payments['YA_ORG_PAYMENT_QW']) {
                     $this->smarty->assign(array(
-                        'pt' => 'QW',
-                        'buttontext' => $this->l('Payment via QIWI Wallet.')
+                        'pt'         => 'QW',
+                        'buttontext' => $this->l('Payment via QIWI Wallet.'),
                     ));
                     $display .= $this->display(__FILE__, 'kassa.tpl');
                 }
-                if ($payments['YA_ORG_PAYMENT_QP']) {
+                if ($payments['YA_ORG_PAYMENT_CR']) {
                     $this->smarty->assign(array(
-                        'pt' => 'QP',
-                        'buttontext' => $this->l('Payment through a trusted payment (Kuppi.ru).')
+                        'pt'         => 'CR',
+                        'buttontext' => $this->l('Pay in Parts'),
                     ));
                     $display .= $this->display(__FILE__, 'kassa.tpl');
                 }
@@ -2157,22 +2162,23 @@ class Yamodule extends PaymentModuleCore
     public function hookdisplayPaymentReturn($params)
     {
         if (!$this->active) {
-            return ;
-        }
-
-        if (!$order=$params['objOrder']) {
             return;
         }
 
-        if ($this->context->cookie->id_customer!=$order->id_customer) {
+        if (!$order = $params['objOrder']) {
+            return;
+        }
+
+        if ($this->context->cookie->id_customer != $order->id_customer) {
             return;
         }
         if (!$order->hasBeenPaid()) {
             return;
         }
         $this->smarty->assign(array(
-            'products' => $order->getProducts()
+            'products' => $order->getProducts(),
         ));
+
         return $this->display(__FILE__, 'paymentReturn.tpl');
     }
 
@@ -2182,21 +2188,21 @@ class Yamodule extends PaymentModuleCore
             return false;
         }
 
-        $ret = array();
+        $ret                = array();
         $ret['order_price'] = $params['total_to_pay'].' '.$params['currency'];
-        $ret['order_id'] = $params['objOrder']->id;
-        $ret['currency'] = $params['currencyObj']->iso_code;
-        $ret['payment'] = $params['objOrder']->payment;
-        $products = array();
+        $ret['order_id']    = $params['objOrder']->id;
+        $ret['currency']    = $params['currencyObj']->iso_code;
+        $ret['payment']     = $params['objOrder']->payment;
+        $products           = array();
         foreach ($params['objOrder']->getCartProducts() as $k => $product) {
-            $products[$k]['id'] = $product['product_id'];
-            $products[$k]['name'] = $product['product_name'];
+            $products[$k]['id']       = $product['product_id'];
+            $products[$k]['name']     = $product['product_name'];
             $products[$k]['quantity'] = $product['product_quantity'];
-            $products[$k]['price'] = $product['product_price'];
+            $products[$k]['price']    = $product['product_price'];
         }
 
         $ret['goods'] = $products;
-        $data = '<script>
+        $data         = '<script>
                 $(window).load(function() {
                     if(celi_order)
                         metrikaReach(\'metrikaOrder\', '.Tools::jsonEncode($ret).');
@@ -2231,8 +2237,9 @@ class Yamodule extends PaymentModuleCore
         //$kassa_aviso = $this->context->link->getModuleLink($this->name, 'paymentkassa');
         //$kassa_success = '';//$this->context->link->getModuleLink($this->name, 'success');
         //$kassa_fail = $this->context->link->getModuleLink($this->name, 'fail');
-        $api_pokupki = _PS_BASE_URL_.__PS_BASE_URI__.'yamodule/pokupki';
-        $redir = _PS_BASE_URL_.__PS_BASE_URI__.'modules/yamodule/callback.php';
+        $base = str_replace('http://', 'https://', _PS_BASE_URL_.__PS_BASE_URI__);
+        $api_pokupki = $base.'yamodule/pokupki';
+        $redir = $base.'modules/yamodule/callback.php';
         $market_list = $this->context->link->getModuleLink($this->name, 'generate');
         $helper->fields_value['YA_MARKET_YML'] = $market_list;
         $helper->fields_value['YA_ORG_CHECKORDER'] = $kassa_check;
@@ -2256,7 +2263,7 @@ class Yamodule extends PaymentModuleCore
 
     public function checkCurrency($cart)
     {
-        $currency_order = new Currency((int)$cart->id_currency);
+        $currency_order    = new Currency((int)$cart->id_currency);
         $currencies_module = $this->getCurrency();
 
         if (is_array($currencies_module)) {
@@ -2271,46 +2278,46 @@ class Yamodule extends PaymentModuleCore
     public function descriptionError($error)
     {
         $error_array = array(
-            'invalid_request' => $this->l(
+            'invalid_request'            => $this->l(
                 'Your request is missing required parameters or settings are incorrect or invalid values'
             ),
-            'invalid_scope' => $this->l(
+            'invalid_scope'              => $this->l(
                 'The scope parameter is missing or has an invalid value or a logical contradiction'
             ),
-            'unauthorized_client' => $this->l(
+            'unauthorized_client'        => $this->l(
                 'Invalid parameter client_id, or the application does not have the'.
                 ' right to request authorization (such as its client_id blocked Yandex.Money)'
             ),
-            'access_denied' => $this->l('Has declined a request authorization application'),
-            'invalid_grant' => $this->l(
+            'access_denied'              => $this->l('Has declined a request authorization application'),
+            'invalid_grant'              => $this->l(
                 'The issue access_token denied. Issued a temporary token is not '.
                 'Google search or expired, or on the temporary token is issued access_token (second '.
                 'request authorization token with the same time token)'
             ),
-            'illegal_params' => $this->l('Required payment options are not available or have invalid values.'),
-            'illegal_param_label' => $this->l('Invalid parameter value label'),
-            'phone_unknown' => $this->l('A phone number is not associated with a user account or payee'),
-            'payment_refused' => $this->l(
+            'illegal_params'             => $this->l('Required payment options are not available or have invalid values.'),
+            'illegal_param_label'        => $this->l('Invalid parameter value label'),
+            'phone_unknown'              => $this->l('A phone number is not associated with a user account or payee'),
+            'payment_refused'            => $this->l(
                 'The store refused to accept payment (for example, a user tried '.
                 'to pay for a product that isn\'t in the store)'
             ),
-            'limit_exceeded' => $this->l(
+            'limit_exceeded'             => $this->l(
                 'Exceeded one of the limits on operations: on the amount of the '.
                 'transaction for authorization token issued; transaction amount for the period of time'.
                 ' for the token issued by the authorization; Yandeks.Deneg restrictions '.
                 'for different types of operations.'
             ),
-            'authorization_reject' => $this->l(
+            'authorization_reject'       => $this->l(
                 'In payment authorization is denied. Possible reasons are:'.
                 ' transaction with the current parameters is not available to the user; person does not'.
                 ' accept the Agreement on the use of the service "shops".'
             ),
-            'contract_not_found' => $this->l('None exhibited a contract with a given request_id'),
-            'not_enough_funds' => $this->l(
+            'contract_not_found'         => $this->l('None exhibited a contract with a given request_id'),
+            'not_enough_funds'           => $this->l(
                 'Insufficient funds in the account of the payer. '.
                 'Need to recharge and carry out a new delivery'
             ),
-            'not-enough-funds' => $this->l(
+            'not-enough-funds'           => $this->l(
                 'Insufficient funds in the account of the payer.'.
                 ' Need to recharge and carry out a new delivery'
             ),
@@ -2318,89 +2325,90 @@ class Yamodule extends PaymentModuleCore
                 'The requested method of payment (money_source) '.
                 'is not available for this payment'
             ),
-            'illegal_param_csc' => $this->l('Tsutstvuet or an invalid parameter value cs'),
-            'payment_refused' => $this->l('Shop for whatever reason, refused to accept payment.')
+            'illegal_param_csc'          => $this->l('Tsutstvuet or an invalid parameter value cs'),
+            'payment_refused'            => $this->l('Shop for whatever reason, refused to accept payment.'),
         );
         if (array_key_exists($error, $error_array)) {
             $return = $error_array[$error];
         } else {
             $return = $error;
         }
+
         return $return;
     }
 
     public function getErr($id)
     {
         $error = array(
-            '0' => $this->l('Technical error or refund denied for this method of payment'),
-            '10' => $this->l('Error parsing XML document. '),
-            '50' => $this->l(
+            '0'    => $this->l('Technical error or refund denied for this method of payment'),
+            '10'   => $this->l('Error parsing XML document. '),
+            '50'   => $this->l(
                 'It is impossible to open the digital signature PKCS#7 '.
                 'data integrity error digital signature'
             ),
-            '51' => $this->l(
+            '51'   => $this->l(
                 'The TSA is not confirmed (the data of the digital signature'.
                 ' do not match with the transferred document)'
             ),
-            '53' => $this->l('The request signed by the certificate that is unknown to Yandex.Money'),
-            '55' => $this->l('Have expired certificate store'),
-            '110' => $this->l('The store does not have rights to perform the operation requested.'),
-            '111' => $this->l('Invalid value for the requestDT'),
-            '112' => $this->l('Incorrect value of the invoiceId parameter'),
-            '113' => $this->l('Invalid value for parameter shopId'),
-            '114' => $this->l('Invalid value for the orderNumber'),
-            '115' => $this->l('Invalid value for the clientorderid parameter'),
-            '117' => $this->l('Invalid value for status parameter'),
-            '118' => $this->l('Invalid parameter value from'),
-            '119' => $this->l('Invalid parameter value till'),
-            '120' => $this->l('Invalid value for the orderId'),
-            '200' => $this->l('Invalid value for the outputFormat'),
-            '201' => $this->l('Invalid parameter value csvdelimiter parameter'),
-            '202' => $this->l('Invalid parameter value orderCreatedDatetimeGreaterOrEqual'),
-            '203' => $this->l('Invalid parameter value orderCreatedDatetimeLessOrEqual'),
-            '204' => $this->l('Invalid parameter value paid'),
-            '205' => $this->l('Incorrect value параметраpaymentDatetimeGreaterOrequal'),
-            '206' => $this->l('Incorrect value параметраpaymentDatetimeLessOrEqual'),
-            '207' => $this->l('Incorrect value параметраoutputFields'),
-            '208' => $this->l('In a query specified an empty range creation time order'),
-            '209' => $this->l('Is specified in the request is too large a range of the order creation time'),
-            '210' => $this->l('In a query specified an empty range time of order payment'),
-            '211' => $this->l('Is specified in the request is too large a time range of order payment'),
-            '212' => $this->l('The logical contradiction between the range of dates of payment and the "paid"'),
-            '213' => $this->l('There are no condition sample'),
-            '214' => $this->l('In the query by order number (orderNumber) do not specify the ID of the shop (shopId)'),
-            '215' => $this->l(
+            '53'   => $this->l('The request signed by the certificate that is unknown to Yandex.Money'),
+            '55'   => $this->l('Have expired certificate store'),
+            '110'  => $this->l('The store does not have rights to perform the operation requested.'),
+            '111'  => $this->l('Invalid value for the requestDT'),
+            '112'  => $this->l('Incorrect value of the invoiceId parameter'),
+            '113'  => $this->l('Invalid value for parameter shopId'),
+            '114'  => $this->l('Invalid value for the orderNumber'),
+            '115'  => $this->l('Invalid value for the clientorderid parameter'),
+            '117'  => $this->l('Invalid value for status parameter'),
+            '118'  => $this->l('Invalid parameter value from'),
+            '119'  => $this->l('Invalid parameter value till'),
+            '120'  => $this->l('Invalid value for the orderId'),
+            '200'  => $this->l('Invalid value for the outputFormat'),
+            '201'  => $this->l('Invalid parameter value csvdelimiter parameter'),
+            '202'  => $this->l('Invalid parameter value orderCreatedDatetimeGreaterOrEqual'),
+            '203'  => $this->l('Invalid parameter value orderCreatedDatetimeLessOrEqual'),
+            '204'  => $this->l('Invalid parameter value paid'),
+            '205'  => $this->l('Incorrect value параметраpaymentDatetimeGreaterOrequal'),
+            '206'  => $this->l('Incorrect value параметраpaymentDatetimeLessOrEqual'),
+            '207'  => $this->l('Incorrect value параметраoutputFields'),
+            '208'  => $this->l('In a query specified an empty range creation time order'),
+            '209'  => $this->l('Is specified in the request is too large a range of the order creation time'),
+            '210'  => $this->l('In a query specified an empty range time of order payment'),
+            '211'  => $this->l('Is specified in the request is too large a time range of order payment'),
+            '212'  => $this->l('The logical contradiction between the range of dates of payment and the "paid"'),
+            '213'  => $this->l('There are no condition sample'),
+            '214'  => $this->l('In the query by order number (orderNumber) do not specify the ID of the shop (shopId)'),
+            '215'  => $this->l(
                 'In the request for transaction number'.
                 ' (invoiceId) is not specified, the ID of the shop (shopId)'
             ),
-            '216' => $this->l('The result contains too many items'),
-            '217' => $this->l('Invalid value for the partial'),
-            '402' => $this->l('Incorrect value amount'),
-            '403' => $this->l('Invalid currency value'),
-            '404' => $this->l('Invalid value the reason for the return'),
-            '405' => $this->l('Non-unique operation number'),
-            '410' => $this->l('The order is not paid. A refund is impossible'),
-            '411' => $this->l('Unsuccessful delivery status notification translation'),
-            '412' => $this->l('The transfer currency differs from specified in the request'),
-            '413' => $this->l('The refund amount specified in the request, exceeds the amount of the transfer'),
-            '414' => $this->l('The translation was returned earlier'),
-            '415' => $this->l('The order with the specified transaction number (invoiceId) missing'),
-            '416' => $this->l('Insufficient funds for the operation'),
-            '417' => $this->l('The payer\'s account is closed. A refund isn\'t possible.'),
-            '418' => $this->l('Payer\'s account blocked. A refund isn\'t possible.'),
-            '419' => $this->l('The remaining amount after the refund of part of the translation is less then 1 ruble'),
-            '424' => $this->l('Forbidden refund part of the amount for this payment method'),
-            '601' => $this->l('Not allowed to make payments with Bank cards in favour of the store'),
-            '602' => $this->l('Repeat this payment is prohibited'),
-            '603' => $this->l('For this operation mandatory orderNumber'),
-            '604' => $this->l('Invalid parameter value cvv'),
-            '606' => $this->l('The operation of this map is prohibited'),
-            '607' => $this->l('Limit exceeded. The operation cannot be performed on the map'),
-            '608' => $this->l('Insufficient funds for the transaction on the card'),
-            '609' => $this->l('Technical error. The operation cannot be performed on the map'),
-            '611' => $this->l('Has expired the Bank card'),
-            '612' => $this->l('The operation of this map is prohibited'),
-            '1000' => $this->l('Technical error')
+            '216'  => $this->l('The result contains too many items'),
+            '217'  => $this->l('Invalid value for the partial'),
+            '402'  => $this->l('Incorrect value amount'),
+            '403'  => $this->l('Invalid currency value'),
+            '404'  => $this->l('Invalid value the reason for the return'),
+            '405'  => $this->l('Non-unique operation number'),
+            '410'  => $this->l('The order is not paid. A refund is impossible'),
+            '411'  => $this->l('Unsuccessful delivery status notification translation'),
+            '412'  => $this->l('The transfer currency differs from specified in the request'),
+            '413'  => $this->l('The refund amount specified in the request, exceeds the amount of the transfer'),
+            '414'  => $this->l('The translation was returned earlier'),
+            '415'  => $this->l('The order with the specified transaction number (invoiceId) missing'),
+            '416'  => $this->l('Insufficient funds for the operation'),
+            '417'  => $this->l('The payer\'s account is closed. A refund isn\'t possible.'),
+            '418'  => $this->l('Payer\'s account blocked. A refund isn\'t possible.'),
+            '419'  => $this->l('The remaining amount after the refund of part of the translation is less then 1 ruble'),
+            '424'  => $this->l('Forbidden refund part of the amount for this payment method'),
+            '601'  => $this->l('Not allowed to make payments with Bank cards in favour of the store'),
+            '602'  => $this->l('Repeat this payment is prohibited'),
+            '603'  => $this->l('For this operation mandatory orderNumber'),
+            '604'  => $this->l('Invalid parameter value cvv'),
+            '606'  => $this->l('The operation of this map is prohibited'),
+            '607'  => $this->l('Limit exceeded. The operation cannot be performed on the map'),
+            '608'  => $this->l('Insufficient funds for the transaction on the card'),
+            '609'  => $this->l('Technical error. The operation cannot be performed on the map'),
+            '611'  => $this->l('Has expired the Bank card'),
+            '612'  => $this->l('The operation of this map is prohibited'),
+            '1000' => $this->l('Technical error'),
         );
 
         if (!isset($error[$id])) {
