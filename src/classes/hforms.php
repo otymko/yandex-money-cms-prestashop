@@ -831,8 +831,8 @@ class Hforms
                                     'val'  => 1,
                                 ),
                                 array(
-                                    'id'   => 'QP',
-                                    'name' => $this->l('Payment through a trusted payment (Kuppi.ru).'),
+                                    'id'   => 'CR',
+                                    'name' => $this->l('Pay in Parts'),
                                     'val'  => 1,
                                 ),
 

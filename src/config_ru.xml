@@ -2,7 +2,7 @@
 <module>
 	<name>yamodule</name>
 	<displayName><![CDATA[Y.CMS Prestashop]]></displayName>
-	<version><![CDATA[1.4.5]]></version>
+	<version><![CDATA[1.4.6]]></version>
 	<description><![CDATA[Яндекс.Деньги, Яндекс.Касса, Яндекс.Метрика, Яндекс.Маркет, Заказы в Маркете]]></description>
 	<author><![CDATA[Яндекс.Деньги]]></author>
 	<tab><![CDATA[payments_gateways]]></tab>
