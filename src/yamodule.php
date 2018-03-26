@@ -100,7 +100,7 @@ class Yamodule extends PaymentModuleCore
 
         $this->name            = 'yamodule';
         $this->tab             = 'payments_gateways';
-        $this->version         = '1.4.6';
+        $this->version         = '1.4.7';
         $this->author          = 'Яндекс.Деньги';
         $this->need_instance   = 1;
         $this->bootstrap       = 1;
@@ -2204,8 +2204,20 @@ class Yamodule extends PaymentModuleCore
         $ret['goods'] = $products;
         $data         = '<script>
                 $(window).load(function() {
-                    if(celi_order)
-                        metrikaReach(\'metrikaOrder\', '.Tools::jsonEncode($ret).');
+                    if(celi_order) {
+                        window.dataLayer = window.dataLayer || [];
+                        
+                        dataLayer.push({
+                            "ecommerce": {
+                                "purchase": {
+                                    "actionField": {
+                                        "id" : "'.$ret['order_id'].'"
+                                    },
+                                    "products": '.Tools::jsonEncode($products).'
+                                }
+                            }
+                        });                        
+                    }
                 });
                 </script>
         ';
