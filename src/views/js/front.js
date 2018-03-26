@@ -9,6 +9,8 @@
 */
 
 $(document).ready(function(){
+    window.dataLayer = window.dataLayer || [];
+
     if(typeof celi_wishlist != 'undefined' && celi_wishlist && typeof WishlistCart != 'undefined') {
         WishlistCart = function (id, action, id_product, id_product_attribute, quantity, id_wishlist) {
             old_WishlistCart(id, action, id_product, id_product_attribute, quantity, id_wishlist);
@@ -39,7 +41,20 @@ $(document).ready(function(){
                 dataType : "json",
                 data: 'action=add_cart&id_product=' + idProduct + '&quantity=' + quantity + '&token=' + static_token + '&id_product_attribute=' + idCombination,
                 success: function(data) {
-                    metrikaReach('metrikaCart', data.params);
+                    dataLayer.push({
+                        "ecommerce": {
+                            "add": {
+                                "products": [
+                                    {
+                                        "id": idProduct,
+                                        "name": data.params.name,
+                                        "price": data.params.price,
+                                        "quantity": quantity
+                                    }
+                                ]
+                            }
+                        }
+                    });
                 }
             });
         }
